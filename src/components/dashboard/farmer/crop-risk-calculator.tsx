@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -24,7 +25,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bug, Calculator, Info, Leaf, Loader2 } from "lucide-react";
+import { Bug, Calculator, Info, Loader2 } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const formSchema = z.object({
