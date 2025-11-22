@@ -11,12 +11,34 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, L
 import { Truck, Warehouse, Route, Clock, Fuel, Map, FileCheck, CircleDot, Archive, Thermometer, Shield } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
+import { ScrollArea } from '@/components/ui/scroll-area';
 
 const storageData = [
     { name: "Pune Central", capacity: 5000, load: 85 },
     { name: "Nashik Hub", capacity: 8000, load: 60 },
     { name: "Nagpur South", capacity: 4000, load: 95 },
+    { name: "Mumbai West", capacity: 12000, load: 75 },
+    { name: "Bengaluru East", capacity: 15000, load: 80 },
+    { name: "Hyderabad North", capacity: 10000, load: 55 },
+    { name: "Chennai Port", capacity: 20000, load: 90 },
+    { name: "Kolkata Hub", capacity: 18000, load: 65 },
+    { name: "Delhi NCR", capacity: 25000, load: 88 },
+    { name: "Jaipur Agri", capacity: 6000, load: 70 },
+    { name: "Ahmedabad Mega", capacity: 22000, load: 50 },
+    { name: "Indore Central", capacity: 7500, load: 92 },
+    { name: "Lucknow Logistics", capacity: 9000, load: 45 },
+    { name: "Patna East", capacity: 5500, load: 85 },
+    { name: "Bhopal Hub", capacity: 6500, load: 78 },
+    { name: "Chandigarh North", capacity: 4500, load: 60 },
+    { name: "Raipur Central", capacity: 8500, load: 98 },
+    { name: "Guwahati Hub", capacity: 11000, load: 70 },
+    { name: "Bhubaneswar Coastal", capacity: 9500, load: 55 },
+    { name: "Visakhapatnam Port", capacity: 13000, load: 82 },
+    { name: "Kochi Logistics", capacity: 7000, load: 90 },
+    { name: "Surat Diamond", capacity: 10000, load: 40 },
+    { name: "Kanpur Tannery", capacity: 8000, load: 85 }
 ];
+
 
 const fleetData = [
     { id: 'TR-101', driver: 'S. Jadhav', capacity: '10 MT', status: 'Available' },
@@ -77,17 +99,19 @@ export default function SupplyChainPage() {
                         <CardTitle className="text-sm font-medium flex items-center gap-2"><Warehouse/> Cold-Storage Load Balancer</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <div className="space-y-4">
-                            {storageData.map(storage => (
-                                <div key={storage.name}>
-                                    <div className="flex justify-between text-xs mb-1">
-                                        <span className="font-semibold">{storage.name}</span>
-                                        <span className="text-muted-foreground">{storage.load}% Full</span>
+                        <ScrollArea className="h-[200px]">
+                            <div className="space-y-4 pr-4">
+                                {storageData.map(storage => (
+                                    <div key={storage.name}>
+                                        <div className="flex justify-between text-xs mb-1">
+                                            <span className="font-semibold">{storage.name}</span>
+                                            <span className="text-muted-foreground">{storage.load}% Full</span>
+                                        </div>
+                                        <Progress value={storage.load} />
                                     </div>
-                                    <Progress value={storage.load} />
-                                </div>
-                            ))}
-                        </div>
+                                ))}
+                            </div>
+                        </ScrollArea>
                     </CardContent>
                 </Card>
                 <Card>
@@ -229,3 +253,5 @@ export default function SupplyChainPage() {
         </div>
     );
 }
+
+    
