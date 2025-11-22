@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -6,12 +7,18 @@ import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Bug, Send, BarChart, Check, Eye, Map, Info, Siren } from 'lucide-react';
+import { Bug, Send, Check, Eye, Map, Siren } from 'lucide-react';
 import StatCard from '@/components/shared/stat-card';
 import cropsData from "@/data/crops.json";
 import { useToast } from '@/hooks/use-toast';
 
 const cropOptions = cropsData.crops.map(c => ({ value: c.name, label: c.name }));
+
+const heatmapData = [
+    { id: 1, risk: 'high', size: 'large' }, { id: 2, risk: 'low', size: 'small' }, { id: 3, risk: 'medium', size: 'medium' }, { id: 4, risk: 'low', size: 'small' },
+    { id: 5, risk: 'medium', size: 'medium' }, { id: 6, risk: 'high', size: 'large' }, { id: 7, risk: 'low', size: 'small' }, { id: 8, risk: 'low', size: 'small' },
+    { id: 9, risk: 'low', size: 'small' }, { id: 10, risk: 'medium', size: 'medium' }, { id: 11, risk: 'low', size: 'small' }, { id: 12, risk: 'high', size: 'large' },
+];
 
 export default function AdvisoriesPage() {
     const [selectedCrop, setSelectedCrop] = useState<string>('');
@@ -35,6 +42,24 @@ export default function AdvisoriesPage() {
             description: `Your advisory has been broadcast to the selected group: ${advisoryTarget}.`,
         });
         setAdvisoryMessage('');
+    };
+
+    const getRiskClass = (risk: string) => {
+        switch (risk) {
+            case 'high': return 'bg-red-500';
+            case 'medium': return 'bg-amber-400';
+            case 'low': return 'bg-green-500';
+            default: return 'bg-gray-400';
+        }
+    };
+
+    const getSizeClass = (size: string) => {
+        switch (size) {
+            case 'large': return 'w-8 h-8';
+            case 'medium': return 'w-6 h-6';
+            case 'small': return 'w-4 h-4';
+            default: return 'w-3 h-3';
+        }
     };
 
     return (
@@ -116,22 +141,19 @@ export default function AdvisoriesPage() {
                         <CardDescription>Mock visualization of at-risk areas.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="grid grid-cols-6 grid-rows-4 gap-1.5 bg-secondary/30 p-2 rounded-lg aspect-video">
-                            {Array.from({ length: 24 }).map((_, i) => (
-                                <div key={i} className={`rounded-sm ${
-                                    [4, 5, 11].includes(i) ? 'bg-red-500/80' : 
-                                    [1, 9, 14, 21].includes(i) ? 'bg-amber-400/70' :
-                                    'bg-green-300/40'
-                                }`}>
-                                    {i === 4 && <span className="text-[8px] text-white p-0.5">High</span>}
-                                    {i === 9 && <span className="text-[8px] text-black/70 p-0.5">Med</span>}
-                                </div>
-                            ))}
+                        <div className="relative w-full aspect-video bg-secondary/30 rounded-lg p-4 flex items-center justify-center">
+                            <div className="grid grid-cols-4 gap-8">
+                                {heatmapData.map(point => (
+                                    <div key={point.id} className="flex items-center justify-center">
+                                        <div className={`${getSizeClass(point.size)} ${getRiskClass(point.risk)} rounded-full opacity-70`}></div>
+                                    </div>
+                                ))}
+                            </div>
                         </div>
-                        <div className="flex justify-end gap-4 mt-2 text-xs items-center">
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-green-300/40"></div> Low Risk</div>
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-amber-400/70"></div> Med Risk</div>
-                            <div className="flex items-center gap-1"><div className="w-3 h-3 rounded-full bg-red-500/80"></div> High Risk</div>
+                        <div className="flex justify-end gap-4 mt-4 text-xs items-center">
+                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-green-500"></div> Low Risk</div>
+                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-amber-400"></div> Med Risk</div>
+                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500"></div> High Risk</div>
                         </div>
                     </CardContent>
                 </Card>
