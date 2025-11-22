@@ -1,3 +1,6 @@
+"use client";
+
+import { useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -6,12 +9,46 @@ import StatCard from "../shared/stat-card";
 import { Users, AlertCircle, CheckCircle, Mail } from "lucide-react";
 import farmerData from "@/data/farmers.json";
 import { FarmerProfile } from "@/lib/types";
-
-const farmers: FarmerProfile[] = farmerData.farmers;
-const totalFarmers = farmers.length;
-const issuesCount = farmers.reduce((acc, farmer) => acc + farmer.issues.length, 0);
+import { useToast } from "@/hooks/use-toast";
+import { Textarea } from "../ui/textarea";
 
 export default function AgentDashboard() {
+  const { toast } = useToast();
+  const [farmers, setFarmers] = useState<FarmerProfile[]>(farmerData.farmers);
+  const [advisoryMessage, setAdvisoryMessage] = useState("");
+
+  const totalFarmers = farmers.length;
+  const issuesCount = farmers.reduce((acc, farmer) => acc + farmer.issues.length, 0);
+
+  const handleUpdateStatus = (farmerId: number) => {
+    setFarmers(prevFarmers =>
+      prevFarmers.map(farmer =>
+        farmer.id === farmerId ? { ...farmer, issues: [] } : farmer
+      )
+    );
+    toast({
+      title: "Status Updated",
+      description: "Farmer issues have been resolved.",
+    });
+  };
+
+  const handleSendAdvisory = () => {
+    if (!advisoryMessage.trim()) {
+        toast({
+            variant: "destructive",
+            title: "Cannot send empty advisory",
+        });
+        return;
+    }
+    console.log("Sending advisory:", advisoryMessage);
+    toast({
+        title: "Advisory Sent",
+        description: "Your message has been sent to the target farmers.",
+    });
+    setAdvisoryMessage("");
+  };
+
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -66,15 +103,21 @@ export default function AgentDashboard() {
                   </TableCell>
                   <TableCell>{farmer.region}</TableCell>
                   <TableCell>
-                    <div className="flex flex-col gap-1">
-                      {farmer.issues.map((issue, index) => (
-                        <Badge key={index} variant="outline" className="text-amber-700 border-amber-300">{issue}</Badge>
-                      ))}
-                    </div>
+                    {farmer.issues.length > 0 ? (
+                        <div className="flex flex-col gap-1">
+                        {farmer.issues.map((issue, index) => (
+                            <Badge key={index} variant="outline" className="text-amber-700 border-amber-300">{issue}</Badge>
+                        ))}
+                        </div>
+                    ) : (
+                        <Badge variant="secondary">No open issues</Badge>
+                    )}
                   </TableCell>
                   <TableCell>{farmer.last_visit ? farmer.last_visit : <Badge variant="destructive">Pending</Badge>}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">Update Status</Button>
+                    <Button variant="outline" size="sm" onClick={() => handleUpdateStatus(farmer.id)} disabled={farmer.issues.length === 0}>
+                        Update Status
+                    </Button>
                   </TableCell>
                 </TableRow>
               ))}
@@ -89,12 +132,16 @@ export default function AgentDashboard() {
             <CardDescription>Send advisories to farmers.</CardDescription>
           </CardHeader>
           <CardContent>
-             {/* Placeholder for a form to send advisories */}
              <div className="flex flex-col gap-4">
-                <textarea placeholder="Write your advisory message here..." className="p-2 border rounded-md min-h-24 bg-background"></textarea>
+                <Textarea 
+                    placeholder="Write your advisory message here..." 
+                    className="min-h-24"
+                    value={advisoryMessage}
+                    onChange={(e) => setAdvisoryMessage(e.target.value)}
+                />
                 <div className="flex justify-between items-center">
                     <p className="text-sm text-muted-foreground">Target: All Farmers in Maharashtra</p>
-                    <Button>Send Advisory</Button>
+                    <Button onClick={handleSendAdvisory}>Send Advisory</Button>
                 </div>
              </div>
           </CardContent>
