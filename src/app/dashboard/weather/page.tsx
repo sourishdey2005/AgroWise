@@ -2,17 +2,21 @@
 
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { AlertTriangle, Cloud, Droplets, Thermometer, Bug } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "recharts";
+import { AlertTriangle, Cloud, Droplets, Thermometer, Bug, Wind, Sun } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid, AreaChart, Area } from "recharts";
 import StatCard from "@/components/shared/stat-card";
 import weatherData from '@/data/weather.json';
 import rainfallData from '@/data/rainfall.json';
+import weatherForecastData from '@/data/weather-forecast.json';
 import type { Weather } from "@/lib/types";
 import WaterRequirementCalculator from "@/components/dashboard/farmer/water-requirement-calculator";
 import EvapotranspirationCalculator from "@/components/dashboard/farmer/evapotranspiration-calculator";
 
 const initialWeather = weatherData.weather[0];
 const initialRainfallPrediction = rainfallData.prediction;
+const initialTempForecast = weatherForecastData.forecasts.temperature;
+const initialHumidityForecast = weatherForecastData.forecasts.humidity;
+
 
 // Function to generate a random number within a range
 const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -28,7 +32,11 @@ const getPestForecast = (weather: Weather) => {
 export default function WeatherPage() {
   const [weather, setWeather] = useState<Weather>(initialWeather);
   const [rainfallPrediction, setRainfallPrediction] = useState(initialRainfallPrediction);
+  const [tempForecast, setTempForecast] = useState(initialTempForecast);
+  const [humidityForecast, setHumidityForecast] = useState(initialHumidityForecast);
   const [soilMoisture, setSoilMoisture] = useState(45);
+  const [windSpeed, setWindSpeed] = useState(15);
+  const [uvIndex, setUvIndex] = useState(9);
   
   useEffect(() => {
     const interval = setInterval(() => {
@@ -43,8 +51,14 @@ export default function WeatherPage() {
       // Simulate rainfall prediction changes
       setRainfallPrediction(prev => prev.map((p, i) => ({ ...p, rainfall: getRandomInt(0, i === 0 ? 5 : 20) })));
 
+      // Simulate forecast changes
+      setTempForecast(prev => prev.map(f => ({ ...f, temp: f.temp + getRandom(-0.5, 0.5) })));
+      setHumidityForecast(prev => prev.map(f => ({ ...f, humidity: f.humidity + getRandom(-1, 1) })));
+
       // Simulate other metrics
       setSoilMoisture(p => Math.min(100, Math.max(0, p + getRandom(-2, 2))));
+      setWindSpeed(ws => Math.max(0, ws + getRandom(-1, 1)));
+      setUvIndex(uv => Math.max(0, Math.min(11, uv + getRandom(-0.5, 0.5))));
       
     }, 3000); // Update every 3 seconds
 
@@ -56,7 +70,7 @@ export default function WeatherPage() {
   return (
     <div className="grid gap-6 animate-in fade-in duration-500">
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Weather & Environment</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Weather &amp; Environment</h1>
             <p className="text-muted-foreground">
             Monitor hyperlocal weather, soil conditions, and environmental factors.
             </p>
@@ -64,9 +78,9 @@ export default function WeatherPage() {
       <Card>
         <CardHeader>
           <CardTitle>Hyperlocal Weather - {weather.district}</CardTitle>
-          <CardDescription>Current conditions and pest forecast.</CardDescription>
+          <CardDescription>Current conditions and short-term forecast.</CardDescription>
         </CardHeader>
-        <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <CardContent className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
           <StatCard
             title="Temperature"
             value={weather.temperature}
@@ -91,6 +105,18 @@ export default function WeatherPage() {
             icon={<Bug className="h-6 w-6 text-muted-foreground" />}
             description="Current pest activity risk"
             badgeColor={pestForecast.color}
+          />
+          <StatCard
+            title="Wind Speed"
+            value={`${windSpeed.toFixed(1)} km/h`}
+            icon={<Wind className="h-6 w-6 text-muted-foreground" />}
+            description="Current wind speed"
+          />
+          <StatCard
+            title="UV Index"
+            value={uvIndex.toFixed(1)}
+            icon={<Sun className="h-6 w-6 text-muted-foreground" />}
+            description="Sun intensity"
           />
         </CardContent>
       </Card>
@@ -122,13 +148,13 @@ export default function WeatherPage() {
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={200}>
-              <LineChart data={rainfallPrediction}>
+              <AreaChart data={rainfallPrediction}>
                 <CartesianGrid strokeDasharray="3 3" />
                 <XAxis dataKey="day" fontSize={12} tickLine={false} axisLine={false} />
                 <YAxis fontSize={12} tickLine={false} axisLine={false} unit="mm" />
                 <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
-                <Line type="monotone" dataKey="rainfall" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
-              </LineChart>
+                <Area type="monotone" dataKey="rainfall" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.2)" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              </AreaChart>
             </ResponsiveContainer>
           </CardContent>
         </Card>
@@ -162,6 +188,43 @@ export default function WeatherPage() {
                       </div>
                   </div>
               </div>
+          </CardContent>
+        </Card>
+      </div>
+
+       <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>7-Day Temperature Forecast</CardTitle>
+            <CardDescription>Maximum temperature forecast for the week.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={tempForecast}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis fontSize={12} tickLine={false} axisLine={false} unit="°C" domain={['dataMin - 2', 'dataMax + 2']}/>
+                <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                <Line type="monotone" dataKey="temp" stroke="hsl(var(--destructive))" strokeWidth={2} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>7-Day Humidity Forecast</CardTitle>
+            <CardDescription>Relative humidity forecast for the week.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <AreaChart data={humidityForecast}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis fontSize={12} tickLine={false} axisLine={false} unit="%" domain={[0, 100]}/>
+                <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                <Area type="monotone" dataKey="humidity" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2) / 0.2)" strokeWidth={2} />
+              </AreaChart>
+            </ResponsiveContainer>
           </CardContent>
         </Card>
       </div>

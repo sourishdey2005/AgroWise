@@ -1,0 +1,22 @@
+{
+  "forecasts": {
+    "temperature": [
+      { "day": "Day 1", "temp": 38 },
+      { "day": "Day 2", "temp": 39 },
+      { "day": "Day 3", "temp": 41 },
+      { "day": "Day 4", "temp": 40 },
+      { "day": "Day 5", "temp": 37 },
+      { "day": "Day 6", "temp": 36 },
+      { "day": "Day 7", "temp": 38 }
+    ],
+    "humidity": [
+        { "day": "Day 1", "humidity": 25 },
+        { "day": "Day 2", "humidity": 22 },
+        { "day": "Day 3", "humidity": 20 },
+        { "day": "Day 4", "humidity": 28 },
+        { "day": "Day 5", "humidity": 35 },
+        { "day": "Day 6", "humidity": 40 },
+        { "day": "Day 7", "humidity": 38 }
+    ]
+  }
+}
