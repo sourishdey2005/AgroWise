@@ -12,6 +12,7 @@ import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recha
 import { Search, UserCheck, CalendarDays, ClipboardList, MessageSquare, BarChart2 } from 'lucide-react';
 import farmerData from '@/data/farmers.json';
 import { FarmerProfile } from '@/lib/types';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 const initialFarmers: FarmerProfile[] = farmerData.farmers;
 
