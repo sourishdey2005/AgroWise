@@ -6,9 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import StatCard from '@/components/shared/stat-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ResponsiveContainer, BarChart, LineChart, PieChart, Pie, Cell, Tooltip, Legend, Bar, Line, XAxis, YAxis, CartesianGrid } from 'recharts';
-import { Landmark, Banknote, FileCheck, FileX, BarChart as BarChartIcon, TrendingUp, Users, Award, Clock, ArrowRightLeft, Computer, UserCheck } from 'lucide-react';
+import { ResponsiveContainer, BarChart, LineChart, PieChart, Pie, Cell, Tooltip, Legend, Bar, Line, XAxis, YAxis, CartesianGrid, Area, AreaChart } from 'recharts';
+import { Landmark, Banknote, FileCheck, FileX, BarChart as BarChartIcon, TrendingUp, Users, Award, Clock, ArrowRightLeft, Computer, UserCheck, Megaphone, Repeat, Star, AreaChart as AreaChartIcon } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
+import { Alert, AlertTitle, AlertDescription } from '@/components/ui/alert';
+
 
 const portfolioOverview = {
     totalValue: 55000000,
@@ -73,6 +75,25 @@ const applicationSourceData = [
     { name: 'Agent', value: 35, fill: 'hsl(var(--secondary))' },
 ];
 
+const productProfitabilityData = [
+    { name: 'KCC', profit: 4.2 },
+    { name: 'Crop Loan', profit: 5.8 },
+    { name: 'Machinery', profit: 3.1 },
+    { name: 'Livestock', profit: 2.5 },
+];
+
+const campaignImpactData = [
+    { week: 'W-4', apps: 45 }, { week: 'W-3', apps: 48 }, { week: 'W-2', apps: 50 },
+    { week: 'Campaign', apps: 85 },
+    { week: 'W+1', apps: 75 }, { week: 'W+2', apps: 68 }, { week: 'W+3', apps: 65 },
+];
+
+const pipelineForecastData = [
+    { month: 'Jul', actual: 480, forecast: 490 },
+    { month: 'Aug', forecast: 520 },
+    { month: 'Sep', forecast: 550 },
+];
+
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8'];
 
@@ -82,7 +103,7 @@ export default function PortfolioPerformancePage() {
         <div className="grid gap-6 animate-in fade-in duration-500">
             <div>
                 <h1 className="text-2xl font-bold tracking-tight">Portfolio & Performance</h1>
-                <p className="text-muted-foreground">Analyze loan portfolio metrics and branch performance.</p>
+                <p className="text-muted-foreground">Analyze loan portfolio metrics, growth strategies, and branch performance.</p>
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -339,7 +360,73 @@ export default function PortfolioPerformancePage() {
                 </Card>
             </div>
 
+            <div className="grid md:grid-cols-3 gap-6">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><AreaChartIcon />Loan Pipeline Predictor</CardTitle>
+                        <CardDescription>Forecasted loan application volume.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <AreaChart data={pipelineForecastData}>
+                                <CartesianGrid strokeDasharray="3 3" />
+                                <XAxis dataKey="month" />
+                                <YAxis />
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                <Legend />
+                                <Area type="monotone" dataKey="actual" name="Actual" stroke="hsl(var(--primary))" fill="hsl(var(--primary) / 0.2)" />
+                                <Area type="monotone" dataKey="forecast" name="Forecast" stroke="hsl(var(--chart-2))" fill="hsl(var(--chart-2) / 0.2)" />
+                            </AreaChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Megaphone />Campaign Impact</CardTitle>
+                        <CardDescription>Loan applications before and after the KCC campaign.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <BarChart data={campaignImpactData}>
+                                <XAxis dataKey="week" />
+                                <YAxis />
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                <Bar dataKey="apps" name="Applications" fill="hsl(var(--primary))" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><TrendingUp />Product-wise Profitability</CardTitle>
+                        <CardDescription>Profit margin (in %) by loan type.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                             <BarChart data={productProfitabilityData}>
+                                <XAxis dataKey="name" />
+                                <YAxis unit="%" />
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value}%`} />
+                                <Bar dataKey="profit" name="Profit Margin" fill="hsl(var(--primary))" />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                 <Alert>
+                    <Repeat className="h-4 w-4" />
+                    <AlertTitle>Restructuring Alert</AlertTitle>
+                    <AlertDescription>
+                        Drought in Vidarbha may require restructuring for 25 crop loans.
+                    </AlertDescription>
+                </Alert>
+                <StatCard title="Farmer Interaction Score" value="4.7/5" icon={<Star className="h-6 w-6 text-muted-foreground" />} description="Overall customer satisfaction" />
+                <StatCard title="Auto-Underwriting Speed" value="+35%" icon={<Computer className="h-6 w-6 text-muted-foreground" />} description="Faster than manual process" />
+                <StatCard title="Approval TAT" value="4.2 Days" icon={<Clock className="h-6 w-6 text-muted-foreground" />} description="Average loan approval time" />
+            </div>
+
         </div>
     );
-
-    
+}
