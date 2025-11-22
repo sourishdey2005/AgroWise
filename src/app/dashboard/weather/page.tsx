@@ -99,8 +99,8 @@ export default function WeatherPage() {
         </div>
       <Card>
         <CardHeader>
-          <CardTitle>Hyperlocal Weather - {weather.district}</CardTitle>
-          <CardDescription>Current conditions and short-term forecast.</CardDescription>
+          <CardTitle>Local Weather</CardTitle>
+          <CardDescription>Current conditions for {weather.district} and short-term forecast.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6 md:grid-cols-3 lg:grid-cols-6">
           <StatCard
