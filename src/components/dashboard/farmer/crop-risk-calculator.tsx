@@ -54,7 +54,7 @@ export default function CropRiskCalculator() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  const onSubmit = (values: z.infer<typeof formSchema>) => {
     setIsLoading(true);
     setResult(null);
 
@@ -86,7 +86,7 @@ export default function CropRiskCalculator() {
       setResult({ score, level, advice, color });
       setIsLoading(false);
     }, 1000);
-  }
+  };
 
   return (
     <Card className="rounded-2xl shadow-sm">
