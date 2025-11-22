@@ -1,8 +1,9 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Recycle, Footprints, Droplets, Shield, AlertTriangle } from 'lucide-react';
+import { Recycle, Footprints, Droplets, Shield, AlertTriangle, Siren, Map, Bug, ShieldCheck, Bird } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid, AreaChart, Area } from "recharts";
@@ -22,21 +23,39 @@ export default function SustainabilityPage() {
     const [farmingScore, setFarmingScore] = useState(78);
     const [waterEfficiency, setWaterEfficiency] = useState(85);
     const [fertilizerStatus, setFertilizerStatus] = useState({ level: 'Optimal', variant: 'secondary' });
+    const [diseaseSeverity, setDiseaseSeverity] = useState(22);
+    const [pesticideStatus, setPesticideStatus] = useState({ level: 'Safe', variant: 'secondary' as 'secondary' | 'destructive' | 'outline' });
+    const [biodiversityIndex, setBiodiversityIndex] = useState(68);
+    const [beneficialInsects, setBeneficialInsects] = useState(150);
+
 
     useEffect(() => {
         const interval = setInterval(() => {
             setCarbonFootprint(f => Math.max(0.5, f + getRandom(-0.05, 0.05)));
             setFarmingScore(s => Math.min(100, Math.max(0, s + getRandom(-1, 1))));
             setWaterEfficiency(w => Math.min(100, Math.max(0, w + getRandom(-1.5, 1.5))));
+            setDiseaseSeverity(d => Math.min(100, Math.max(0, d + getRandom(-2, 2))));
+            setBiodiversityIndex(b => Math.min(100, Math.max(0, b + getRandom(-0.5, 0.5))));
+            setBeneficialInsects(i => Math.max(50, i + getRandom(-5, 5)));
+
             
-            const randomStatus = getRandom(0, 10);
-            if (randomStatus > 9) {
+            const randomFertilizer = getRandom(0, 10);
+            if (randomFertilizer > 9) {
                  setFertilizerStatus({ level: 'Overuse Detected', variant: 'destructive' });
-            } else if (randomStatus > 8) {
+            } else if (randomFertilizer > 8) {
                  setFertilizerStatus({ level: 'Slightly High', variant: 'outline' });
             }
             else {
                  setFertilizerStatus({ level: 'Optimal', variant: 'secondary' });
+            }
+
+            const randomPesticide = getRandom(0, 10);
+            if (randomPesticide > 9.5) {
+                setPesticideStatus({ level: 'High Risk', variant: 'destructive' });
+            } else if (randomPesticide > 8) {
+                setPesticideStatus({ level: 'Caution', variant: 'outline' });
+            } else {
+                setPesticideStatus({ level: 'Safe', variant: 'secondary' });
             }
 
         }, 4000);
@@ -120,6 +139,36 @@ export default function SustainabilityPage() {
         </Card>
       </div>
 
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+         <Card>
+            <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium"><ShieldCheck className="w-5 h-5"/> Pesticide Usage</CardTitle>
+            </CardHeader>
+            <CardContent>
+                 <Badge variant={pesticideStatus.variant as any}>{pesticideStatus.level}</Badge>
+                 <p className="text-xs text-muted-foreground mt-2">Based on last application and weather.</p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium"><Bug className="w-5 h-5" /> Beneficial Insects</CardTitle>
+            </CardHeader>
+            <CardContent>
+                <p className="text-3xl font-bold">{Math.round(beneficialInsects)} <span className="text-sm text-muted-foreground">/ trap</span></p>
+                <p className="text-xs text-muted-foreground mt-1">Population is stable.</p>
+            </CardContent>
+        </Card>
+        <Card>
+            <CardHeader className="pb-4">
+                <CardTitle className="flex items-center gap-2 text-sm font-medium"><Bird className="w-5 h-5"/> Biodiversity Index</CardTitle>
+            </CardHeader>
+            <CardContent>
+                 <p className="text-3xl font-bold">{Math.round(biodiversityIndex)} <span className="text-sm text-muted-foreground">/ 100</span></p>
+                 <p className="text-xs text-muted-foreground mt-1">Healthy mix of flora and fauna.</p>
+            </CardContent>
+        </Card>
+      </div>
+
        <Card>
         <CardHeader>
           <CardTitle className="flex items-center gap-2"><Recycle /> Soil Organic Carbon Tracker</CardTitle>
@@ -137,6 +186,45 @@ export default function SustainabilityPage() {
           </ResponsiveContainer>
         </CardContent>
       </Card>
+      
+      <div className="grid gap-6 md:grid-cols-2">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Siren/> Crop Disease Severity</CardTitle>
+                    <CardDescription>Overall disease pressure on your primary crop.</CardDescription>
+                </CardHeader>
+                <CardContent className="flex items-center justify-center">
+                    <div className="relative h-32 w-32">
+                        <svg className="h-full w-full" viewBox="0 0 36 36">
+                            <path className="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeWidth="3"/>
+                            <path className={diseaseSeverity > 70 ? "text-red-500" : diseaseSeverity > 40 ? "text-amber-500" : "text-green-500"} strokeDasharray={`${diseaseSeverity}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeWidth="3" strokeLinecap="round"/>
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-4xl font-bold">{Math.round(diseaseSeverity)}%</span>
+                             <span className="text-xs text-muted-foreground">{diseaseSeverity > 70 ? "High" : diseaseSeverity > 40 ? "Medium" : "Low"}</span>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Map/> Field Hotspot Identifier</CardTitle>
+                    <CardDescription>Areas with consistently lower yield (mock).</CardDescription>
+                </CardHeader>
+                <CardContent>
+                     <div className="grid grid-cols-8 grid-rows-4 gap-1 bg-secondary/50 p-2 rounded-md aspect-video">
+                        {Array.from({ length: 32 }).map((_, i) => (
+                             <div key={i} className={`rounded-sm ${
+                                 (i === 10 || i === 11 || i === 18) ? 'bg-red-400/80' : 'bg-green-300/60'
+                             }`}>
+                                {i === 10 && <span className="text-xs p-1 text-white/90">Low Yield</span>}
+                             </div>
+                        ))}
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
 
     </div>
   );
