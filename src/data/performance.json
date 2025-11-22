@@ -1,0 +1,15 @@
+{
+    "visitData": [
+        { "name": "Week 1", "scheduled": 10, "completed": 8 },
+        { "name": "Week 2", "scheduled": 12, "completed": 10 },
+        { "name": "Week 3", "scheduled": 10, "completed": 9 },
+        { "name": "This Week", "scheduled": 8, "completed": 5 }
+    ],
+    "leaderboard": [
+        { "rank": 1, "name": "Anjali Mehta", "score": 94 },
+        { "rank": 2, "name": "Rajesh Gupta", "score": 91 },
+        { "rank": 3, "name": "You", "score": 88 },
+        { "rank": 4, "name": "Sandeep Reddy", "score": 85 },
+        { "rank": 5, "name": "Priya Singh", "score": 82 }
+    ]
+}

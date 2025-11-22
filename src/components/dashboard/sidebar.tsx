@@ -22,6 +22,7 @@ const navItems = {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/agent/farmer-management', icon: FileText, label: 'Farmer Management' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
+    { href: '/dashboard/performance', icon: BarChart, label: 'Performance Metrics' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
