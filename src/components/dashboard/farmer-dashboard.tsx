@@ -104,14 +104,16 @@ export default function FarmerDashboard() {
         <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {recommendedCrops.map((crop) => (
             <Card key={crop.id} className="overflow-hidden">
-              <img src={crop.image} alt={crop.name} data-ai-hint="crop" width="400" height="200" className="h-40 w-full object-cover" />
-              <div className="p-4">
-                <h3 className="font-semibold text-lg">{crop.name}</h3>
-                <p className="text-sm text-muted-foreground">Soil: {crop.soil_type}</p>
-                <div className="mt-2 flex flex-wrap gap-2">
+              <CardHeader>
+                <CardTitle>{crop.name}</CardTitle>
+                <CardDescription>Soil: {crop.soil_type}</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-wrap gap-2">
+                  <span className="text-sm font-semibold">Fertilizers:</span>
                   {crop.fertilizers.slice(0, 2).map(f => <Badge key={f} variant="secondary">{f}</Badge>)}
                 </div>
-              </div>
+              </CardContent>
             </Card>
           ))}
         </CardContent>
