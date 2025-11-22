@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -45,6 +45,7 @@ const navItems = {
     { href: '/dashboard/bank/portfolio-performance', icon: BarChart, label: 'Portfolio & Performance' },
     { href: '/dashboard/bank/fraud-compliance', icon: ShieldAlert, label: 'Fraud & Compliance' },
     { href: '/dashboard/bank/advanced-analytics', icon: BrainCircuit, label: 'Advanced Analytics & Modeling' },
+    { href: '/dashboard/bank/external-risk', icon: Shield, label: 'External Risk Monitoring' },
   ],
 };
 
