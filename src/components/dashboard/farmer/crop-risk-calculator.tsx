@@ -40,7 +40,7 @@ type RiskResult = {
   color: string;
 };
 
-export default function CropRiskCalculator() {
+const CropRiskCalculator = () => {
   const [isLoading, setIsLoading] = React.useState(false);
   const [result, setResult] = React.useState<RiskResult | null>(null);
 
@@ -235,4 +235,6 @@ export default function CropRiskCalculator() {
       </CardContent>
     </Card>
   );
-}
+};
+
+export default CropRiskCalculator;
