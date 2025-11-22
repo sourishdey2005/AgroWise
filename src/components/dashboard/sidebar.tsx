@@ -1,4 +1,3 @@
-
 "use client";
 
 import Link from 'next/link';
@@ -28,6 +27,7 @@ const navItems = {
     { href: '/dashboard/agent/village-insights', icon: Map, label: 'Village Insights' },
     { href: '/dashboard/agent/trade-intelligence', icon: TrendingUp, label: 'Trade Intelligence' },
     { href: '/dashboard/agent/supply-chain', icon: Truck, label: 'Supply Chain' },
+    { href: '/dashboard/agent/finance', icon: Landmark, label: 'Finance & Ops' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
