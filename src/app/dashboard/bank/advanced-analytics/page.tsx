@@ -76,6 +76,17 @@ const regionalExposureData = [
 
 export default function AdvancedAnalyticsPage() {
     const [healthScore, setHealthScore] = useState(78);
+    const [loanAmount, setLoanAmount] = useState(150000);
+    const [yieldPrediction, setYieldPrediction] = useState(95);
+    const [suggestedEmi, setSuggestedEmi] = useState(8500);
+
+    const handleCalculateEmi = () => {
+        // Mock calculation
+        const baseEmi = loanAmount * 0.02; // Simple base EMI
+        const yieldFactor = yieldPrediction / 100;
+        const newEmi = baseEmi * yieldFactor * 0.5; // Arbitrary calculation
+        setSuggestedEmi(newEmi);
+    };
 
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
@@ -276,18 +287,19 @@ export default function AdvancedAnalyticsPage() {
                     <CardTitle className="flex items-center gap-2"><Calculator/> Dynamic EMI Affordability Calculator</CardTitle>
                     <CardDescription>Adjusts EMI based on real-time crop yield predictions.</CardDescription>
                 </CardHeader>
-                <CardContent className="grid md:grid-cols-3 gap-4 items-end">
+                <CardContent className="grid md:grid-cols-4 gap-4 items-end">
                     <div>
                         <label className="text-sm font-medium">Loan Amount (₹)</label>
-                        <Input type="number" defaultValue="150000" />
+                        <Input type="number" value={loanAmount} onChange={(e) => setLoanAmount(Number(e.target.value))} />
                     </div>
                      <div>
                         <label className="text-sm font-medium">Yield Prediction (%)</label>
-                        <Input type="number" defaultValue="95" />
+                        <Input type="number" value={yieldPrediction} onChange={(e) => setYieldPrediction(Number(e.target.value))} />
                     </div>
+                    <Button onClick={handleCalculateEmi}>Calculate</Button>
                      <div className="text-center bg-secondary p-4 rounded-md">
                         <p className="text-muted-foreground">Suggested Max EMI</p>
-                        <p className="text-2xl font-bold text-primary">₹8,500 / month</p>
+                        <p className="text-2xl font-bold text-primary">₹{suggestedEmi.toLocaleString('en-IN', { maximumFractionDigits: 0 })} / month</p>
                     </div>
                 </CardContent>
             </Card>
@@ -295,3 +307,5 @@ export default function AdvancedAnalyticsPage() {
         </div>
     );
 }
+
+    
