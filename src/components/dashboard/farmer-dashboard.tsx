@@ -4,21 +4,25 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor } from "lucide-react";
+import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
 import soilData from '@/data/soil.json';
 import mandiData from '@/data/mandi_prices.json';
+import rainfallData from '@/data/rainfall.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather } from "@/lib/types";
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
+import WaterRequirementCalculator from "./farmer/water-requirement-calculator";
 
 // Mock data fetching
 const weather = weatherData.weather[0];
 const recommendedCrops = cropsData.crops.slice(0, 3);
 const soilAdvice = soilData.soils[0];
 const marketPrices = mandiData.prices.slice(0, 5);
+const rainfallPrediction = rainfallData.prediction;
+
 
 // Mock function to calculate risk score
 const calculateHealthRisk = (weather: Weather): { score: number; label: string, color: string } => {
@@ -53,36 +57,44 @@ export default function FarmerDashboard() {
   const pestForecast = getPestForecast(weather);
   const growthStage = { current: 5, total: 10, label: "Vegetative Stage" };
   const harvestReadiness = 75;
+  const soilMoisture = 45; // Mock soil moisture percentage
 
   return (
     <div className="grid gap-6">
-      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          title="Temperature"
-          value={weather.temperature}
-          icon={<Thermometer className="h-6 w-6 text-muted-foreground" />}
-          description="Current avg temperature"
-        />
-        <StatCard
-          title="Humidity"
-          value={weather.humidity}
-          icon={<Droplets className="h-6 w-6 text-muted-foreground" />}
-          description="Relative humidity"
-        />
-        <StatCard
-          title="Rainfall"
-          value={weather.rainfall_probability}
-          icon={<Cloud className="h-6 w-6 text-muted-foreground" />}
-          description="Chance of rain today"
-        />
-         <StatCard
-          title="Pest Forecast"
-          value={pestForecast.level}
-          icon={<Bug className="h-6 w-6 text-muted-foreground" />}
-          description="Current pest activity risk"
-          badgeColor={pestForecast.color}
-        />
-      </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Hyperlocal Weather - {weather.district}</CardTitle>
+          <CardDescription>Current conditions and pest forecast.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+          <StatCard
+            title="Temperature"
+            value={weather.temperature}
+            icon={<Thermometer className="h-6 w-6 text-muted-foreground" />}
+            description="Current avg temperature"
+          />
+          <StatCard
+            title="Humidity"
+            value={weather.humidity}
+            icon={<Droplets className="h-6 w-6 text-muted-foreground" />}
+            description="Relative humidity"
+          />
+          <StatCard
+            title="Rainfall"
+            value={weather.rainfall_probability}
+            icon={<Cloud className="h-6 w-6 text-muted-foreground" />}
+            description="Chance of rain today"
+          />
+          <StatCard
+            title="Pest Forecast"
+            value={pestForecast.level}
+            icon={<Bug className="h-6 w-6 text-muted-foreground" />}
+            description="Current pest activity risk"
+            badgeColor={pestForecast.color}
+          />
+        </CardContent>
+      </Card>
+
 
        <Card className="rounded-2xl shadow-sm bg-destructive/10 border-destructive/20">
           <CardHeader>
@@ -100,6 +112,60 @@ export default function FarmerDashboard() {
             </p>
           </CardContent>
         </Card>
+      
+      <div className="grid gap-6 lg:grid-cols-2">
+        <Card>
+          <CardHeader>
+            <CardTitle>5-Day Rainfall Prediction</CardTitle>
+            <CardDescription>Estimated rainfall (in mm) for the coming days.</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={200}>
+              <LineChart data={rainfallPrediction}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="day" fontSize={12} tickLine={false} axisLine={false} />
+                <YAxis fontSize={12} tickLine={false} axisLine={false} unit="mm" />
+                <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                <Line type="monotone" dataKey="rainfall" stroke="hsl(var(--primary))" strokeWidth={2} dot={{ r: 4 }} activeDot={{ r: 6 }} />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardHeader>
+            <CardTitle>Soil Moisture Estimation</CardTitle>
+            <CardDescription>Mock estimation of water content in the soil.</CardDescription>
+          </CardHeader>
+          <CardContent>
+              <div className="flex items-center justify-center h-full">
+                  <div className="relative h-32 w-32">
+                      <svg className="h-full w-full" viewBox="0 0 36 36">
+                          <path
+                              className="text-secondary"
+                              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              strokeWidth="3"
+                          />
+                          <path
+                              className="text-blue-500"
+                              strokeDasharray={`${soilMoisture}, 100`}
+                              d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                              fill="none"
+                              strokeWidth="3"
+                              strokeLinecap="round"
+                          />
+                      </svg>
+                      <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className="text-4xl font-bold text-blue-500">{soilMoisture}%</span>
+                          <span className="text-xs text-muted-foreground">Optimal</span>
+                      </div>
+                  </div>
+              </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <WaterRequirementCalculator />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2 rounded-2xl shadow-sm">

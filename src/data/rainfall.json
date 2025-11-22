@@ -1,0 +1,12 @@
+
+{
+    "prediction": [
+        { "day": "Today", "rainfall": 2 },
+        { "day": "Day 2", "rainfall": 5 },
+        { "day": "Day 3", "rainfall": 0 },
+        { "day": "Day 4", "rainfall": 15 },
+        { "day": "Day 5", "rainfall": 8 }
+    ]
+}
+
+    

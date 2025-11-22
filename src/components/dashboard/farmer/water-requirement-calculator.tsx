@@ -21,36 +21,40 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Textarea } from "@/components/ui/textarea";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Bug, Calculator, Info, Loader2 } from "lucide-react";
+import { Droplets, Info, Loader2, Calculator } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   cropName: z.string().min(1, "Please select a crop"),
-  soilMoisture: z.enum(["dry", "optimal", "wet"]),
-  pestSpotted: z.enum(["none", "low", "high"]),
-  diseaseSymptoms: z.string().optional(),
+  growthStage: z.enum(["initial", "development", "mid-season", "late-season"]),
+  temperature: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().positive("Temperature must be a positive number")
+  ),
+  humidity: z.preprocess(
+    (a) => parseFloat(z.string().parse(a)),
+    z.number().min(0).max(100, "Humidity must be between 0 and 100")
+  ),
 });
 
-type RiskResult = {
-  score: number;
-  level: "Low" | "Medium" | "High";
+type CalculatorResult = {
+  waterNeeded: number;
   advice: string;
-  color: string;
 };
 
-export default function CropRiskCalculator() {
+export default function WaterRequirementCalculator() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [result, setResult] = React.useState<RiskResult | null>(null);
+  const [result, setResult] = React.useState<CalculatorResult | null>(null);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       cropName: "",
-      soilMoisture: "optimal",
-      pestSpotted: "none",
-      diseaseSymptoms: "",
+      growthStage: "development",
+      temperature: 35,
+      humidity: 60,
     },
   });
 
@@ -58,32 +62,31 @@ export default function CropRiskCalculator() {
     setIsLoading(true);
     setResult(null);
 
-    // Mock calculation logic
-    let score = 0;
-    if (values.soilMoisture === "dry") score += 20;
-    if (values.soilMoisture === "wet") score += 30;
-    if (values.pestSpotted === "low") score += 25;
-    if (values.pestSpotted === "high") score += 50;
-    if (values.diseaseSymptoms && values.diseaseSymptoms.length > 10) score += 40;
+    // Mock calculation logic (very simplified)
+    let baseWater = 25; // Base water in mm
+    if (values.cropName === "rice" || values.cropName === "sugarcane") {
+        baseWater = 40;
+    }
+
+    let stageMultiplier = 1.0;
+    if (values.growthStage === 'development') stageMultiplier = 1.2;
+    if (values.growthStage === 'mid-season') stageMultiplier = 1.5;
+    if (values.growthStage === 'late-season') stageMultiplier = 0.8;
+
+    let tempFactor = values.temperature > 30 ? (values.temperature - 30) / 5 : 0;
+    let humidityFactor = values.humidity < 50 ? (50 - values.humidity) / 10 : 0;
     
-    score = Math.min(score, 100);
+    const waterNeeded = Math.round(baseWater * stageMultiplier + tempFactor + humidityFactor);
 
-    let level: RiskResult["level"] = "Low";
-    let advice = "Conditions seem optimal. Continue regular monitoring.";
-    let color = "text-green-500";
-
-    if (score > 70) {
-      level = "High";
-      advice = "Immediate action required. High pest/disease pressure detected. Consider consulting an agent and applying recommended treatments.";
-      color = "text-red-500";
-    } else if (score > 40) {
-      level = "Medium";
-      advice = "Potential issues detected. Increase monitoring for pests and diseases. Ensure proper irrigation based on soil moisture.";
-      color = "text-amber-500";
+    let advice = "Standard irrigation recommended. Monitor soil moisture levels.";
+    if (waterNeeded > 45) {
+        advice = "High water requirement. Ensure frequent irrigation to avoid crop stress.";
+    } else if (waterNeeded < 20) {
+        advice = "Low water requirement. Be cautious of over-watering.";
     }
 
     setTimeout(() => {
-      setResult({ score, level, advice, color });
+      setResult({ waterNeeded, advice });
       setIsLoading(false);
     }, 1000);
   }
@@ -92,11 +95,11 @@ export default function CropRiskCalculator() {
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
-          <Calculator className="text-primary" />
-          <span>Interactive Crop Risk Calculator</span>
+          <Droplets className="text-primary" />
+          <span>Water Requirement Calculator</span>
         </CardTitle>
         <CardDescription>
-          Enter your field observations to get a real-time risk assessment.
+          Estimate the weekly water requirement for your crop based on current conditions.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -129,64 +132,55 @@ export default function CropRiskCalculator() {
               />
               <FormField
                 control={form.control}
-                name="soilMoisture"
+                name="growthStage"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Soil Moisture Level</FormLabel>
+                    <FormLabel>Crop Growth Stage</FormLabel>
                      <Select onValueChange={field.onChange} defaultValue={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select moisture level" />
+                          <SelectValue placeholder="Select growth stage" />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="dry">Dry</SelectItem>
-                        <SelectItem value="optimal">Optimal</SelectItem>
-                        <SelectItem value="wet">Wet / Waterlogged</SelectItem>
+                        <SelectItem value="initial">Initial Stage</SelectItem>
+                        <SelectItem value="development">Development Stage</SelectItem>
+                        <SelectItem value="mid-season">Mid-Season</SelectItem>
+                        <SelectItem value="late-season">Late Season</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              <FormField
-                control={form.control}
-                name="pestSpotted"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Pest Activity</FormLabel>
-                     <Select onValueChange={field.onChange} defaultValue={field.value}>
-                      <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select pest activity level" />
-                        </Trigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectItem value="none">None Seen</SelectItem>
-                        <SelectItem value="low">Low (A few spots)</SelectItem>
-                        <SelectItem value="high">High (Widespread)</SelectItem>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={form.control}
-                name="diseaseSymptoms"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Disease Symptoms (Optional)</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        placeholder="e.g., Yellow spots on leaves, wilting stems..."
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
+              <div className="grid grid-cols-2 gap-4">
+                <FormField
+                    control={form.control}
+                    name="temperature"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Avg. Temp (°C)</FormLabel>
+                        <FormControl>
+                        <Input type="number" placeholder="e.g., 35" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+                 <FormField
+                    control={form.control}
+                    name="humidity"
+                    render={({ field }) => (
+                    <FormItem>
+                        <FormLabel>Avg. Humidity (%)</FormLabel>
+                        <FormControl>
+                        <Input type="number" placeholder="e.g., 60" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                    </FormItem>
+                    )}
+                />
+              </div>
               <Button type="submit" disabled={isLoading}>
                 {isLoading ? (
                   <>
@@ -196,7 +190,7 @@ export default function CropRiskCalculator() {
                 ) : (
                   <>
                     <Calculator className="mr-2 h-4 w-4" />
-                    Calculate Risk
+                    Calculate Water Needs
                   </>
                 )}
               </Button>
@@ -206,24 +200,23 @@ export default function CropRiskCalculator() {
           <div className="bg-secondary/50 rounded-lg p-6 flex items-center justify-center">
             {!result && !isLoading && (
                <div className="text-center text-muted-foreground">
-                <Bug className="mx-auto h-12 w-12" />
-                <p className="mt-4">Your risk assessment will appear here.</p>
+                <Droplets className="mx-auto h-12 w-12" />
+                <p className="mt-4">Your water requirement will appear here.</p>
               </div>
             )}
              {isLoading && (
               <div className="flex flex-col items-center justify-center h-full text-muted-foreground">
                 <Loader2 className="h-8 w-8 animate-spin mb-4" />
-                <p>Analyzing your inputs...</p>
+                <p>Analyzing conditions...</p>
               </div>
             )}
             {result && (
               <div className="text-center animate-in fade-in duration-500">
-                  <p className="text-muted-foreground">Calculated Risk Score</p>
-                  <p className={`text-7xl font-bold my-2 ${result.color}`}>{result.score}</p>
-                  <p className={`text-2xl font-semibold mb-4 ${result.color}`}>{result.level} Risk</p>
-                  <Alert className="text-left">
+                  <p className="text-muted-foreground">Estimated Water Needed</p>
+                  <p className={`text-7xl font-bold my-2 text-blue-500`}>{result.waterNeeded} <span className="text-2xl">mm/week</span></p>
+                  <Alert className="text-left mt-4">
                     <Info className="h-4 w-4"/>
-                    <AlertTitle>Recommendation</AlertTitle>
+                    <AlertTitle>Irrigation Advice</AlertTitle>
                     <AlertDescription>
                      {result.advice}
                     </AlertDescription>
