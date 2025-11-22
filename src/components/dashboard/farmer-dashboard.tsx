@@ -11,6 +11,7 @@ import soilData from '@/data/soil.json';
 import mandiData from '@/data/mandi_prices.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather } from "@/lib/types";
+import CropRiskCalculator from "./farmer/crop-risk-calculator";
 
 // Mock data fetching
 const weather = weatherData.weather[0];
@@ -136,9 +137,9 @@ export default function FarmerDashboard() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <ShieldCheck className="text-primary" />
-                <span>Crop Health Risk</span>
+                <span>Weather Health Risk</span>
               </CardTitle>
-               <CardDescription>Current risk score for your crops</CardDescription>
+               <CardDescription>Risk score based on weather forecast</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-center">
@@ -170,6 +171,8 @@ export default function FarmerDashboard() {
         </div>
       </div>
       
+      <CropRiskCalculator />
+
       <Card className="rounded-2xl shadow-sm">
         <CardHeader>
           <CardTitle>Smart Crop Recommendations</CardTitle>
