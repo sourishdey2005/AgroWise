@@ -25,12 +25,19 @@ const fleetData = [
 ];
 
 const mandiTimeData: Record<string, number> = { 
-    'Pune': 45, 
-    'Nashik': 60, 
-    'Nagpur': 35,
-    'Ludhiana': 55,
-    'Kanpur': 70,
+    'Pune': 45, 'Nashik': 60, 'Nagpur': 35, 'Ludhiana': 55, 'Kanpur': 70,
+    'Mumbai': 80, 'Delhi': 90, 'Kolkata': 85, 'Chennai': 75, 'Bengaluru': 65,
+    'Hyderabad': 70, 'Ahmedabad': 50, 'Jaipur': 40, 'Lucknow': 60, 'Indore': 45,
+    'Bhopal': 50, 'Patna': 65, 'Ranchi': 55, 'Guwahati': 95, 'Bhubaneswar': 70,
+    'Raipur': 60, 'Chandigarh': 50, 'Dehradun': 45, 'Shimla': 75, 'Srinagar': 100,
+    'Jammu': 80, 'Amritsar': 60, 'Jalandhar': 55, 'Patiala': 50, 'Hisar': 45,
+    'Rohtak': 40, 'Sonipat': 35, 'Meerut': 50, 'Agra': 55, 'Varanasi': 65,
+    'Allahabad': 60, 'Gorakhpur': 70, 'Jodhpur': 45, 'Udaipur': 50, 'Kota': 40,
+    'Gwalior': 55, 'Jabalpur': 60, 'Ujjain': 50, 'Surat': 45, 'Vadodara': 40,
+    'Rajkot': 35, 'Aurangabad': 50, 'Solapur': 45, 'Kolhapur': 55, 'Amravati': 40,
+    'Thane': 75, 'Visakhapatnam': 80, 'Vijayawada': 70
 };
+
 
 const spoilageData = [
     { day: 0, spoilage: 0 }, { day: 1, spoilage: 0.5 }, { day: 2, spoilage: 1 },
@@ -105,7 +112,7 @@ export default function SupplyChainPage() {
                     </CardHeader>
                     <CardContent>
                         <div className="flex justify-between items-baseline">
-                           <p>Distance: <Input type="number" value={distance} onChange={e => setDistance(Number(e.target.value))} className="w-24 inline-block ml-2" /> km</p>
+                           <div className="flex items-center gap-2">Distance: <Input type="number" value={distance} onChange={e => setDistance(Number(e.target.value))} className="w-24 inline-block" /> km</div>
                            <p className="text-lg font-bold">₹{fuelCost.toFixed(2)}/L</p>
                         </div>
                         <p className="text-2xl font-bold text-primary text-center mt-4">Total: ₹{totalFuelCost}</p>
