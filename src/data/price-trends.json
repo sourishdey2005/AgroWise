@@ -1,0 +1,19 @@
+{
+    "trends": {
+        "wheat_7_day": [
+            { "day": "Day 1", "price": 2080 },
+            { "day": "Day 2", "price": 2095 },
+            { "day": "Day 3", "price": 2105 },
+            { "day": "Day 4", "price": 2090 },
+            { "day": "Day 5", "price": 2110 },
+            { "day": "Day 6", "price": 2125 },
+            { "day": "Today", "price": 2150 }
+        ],
+        "wheat_30_day": [
+            { "day": "Wk 1", "price": 2050 },
+            { "day": "Wk 2", "price": 2065 },
+            { "day": "Wk 3", "price": 2085 },
+            { "day": "Today", "price": 2150 }
+        ]
+    }
+}
