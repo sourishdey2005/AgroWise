@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -28,7 +29,6 @@ import { Input } from "@/components/ui/input";
 const formSchema = z.object({
   cropName: z.string().min(1, "Please select a crop"),
   growthStage: z.enum(["initial", "development", "mid-season", "late-season"]),
-  // Use z.coerce.number to handle values coming from inputs (strings) and coerce them to numbers
   temperature: z.coerce.number().positive("Temperature must be a positive number"),
   humidity: z.coerce.number().min(0, "Humidity must be >= 0").max(100, "Humidity must be between 0 and 100"),
 });

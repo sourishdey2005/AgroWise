@@ -32,7 +32,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 
-import { Droplets, Info, Loader2, Calculator } from "lucide-react";
+import { Droplets, Info, Loader2, Calculator, Wind } from "lucide-react";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
@@ -40,18 +40,13 @@ import { Input } from "@/components/ui/input";
 const formSchema = z.object({
   cropName: z.string().min(1, "Please select a crop"),
   growthStage: z.enum(["initial", "development", "mid-season", "late-season"]),
-  temperature: z.preprocess(
-    (a) => parseFloat(String(a)),
-    z.number().positive()
-  ),
-  humidity: z.preprocess(
-    (a) => parseFloat(String(a)),
-    z.number().min(0).max(100)
-  ),
+  temperature: z.coerce.number().positive(),
+  humidity: z.coerce.number().min(0).max(100),
+  windSpeed: z.coerce.number().min(0, "Wind speed must be a positive number"),
 });
 
 type CalculatorResult = {
-  waterNeeded: number;
+  riskScore: number;
   advice: string;
 };
 
@@ -66,6 +61,7 @@ export default function CropRiskCalculator() {
       growthStage: "development",
       temperature: 35,
       humidity: 60,
+      windSpeed: 5,
     },
   });
 
@@ -73,32 +69,29 @@ export default function CropRiskCalculator() {
     setIsLoading(true);
     setResult(null);
 
-    let baseWater = 25;
-    if (values.cropName === "rice" || values.cropName === "sugarcane")
-      baseWater = 40;
+    // Mock calculation for risk
+    let riskScore = 0;
+    if (values.cropName === "rice" || values.cropName === "sugarcane") riskScore += 10;
+    
+    if (values.temperature > 38) riskScore += 25;
+    else if(values.temperature > 32) riskScore += 15;
 
-    let stageMultiplier = 1.0;
-    if (values.growthStage === "development") stageMultiplier = 1.2;
-    if (values.growthStage === "mid-season") stageMultiplier = 1.5;
-    if (values.growthStage === "late-season") stageMultiplier = 0.8;
+    if(values.humidity > 75) riskScore += 20;
+    else if(values.humidity < 40) riskScore += 10;
+    
+    if(values.windSpeed > 15) riskScore += 15;
 
-    let tempFactor =
-      values.temperature > 30 ? (values.temperature - 30) / 5 : 0;
-    let humidityFactor =
-      values.humidity < 50 ? (50 - values.humidity) / 10 : 0;
+    if (values.growthStage === "development" || values.growthStage === "mid-season") riskScore += 10;
+    
+    riskScore = Math.min(100, riskScore);
 
-    const waterNeeded = Math.round(
-      baseWater * stageMultiplier + tempFactor + humidityFactor
-    );
-
-    let advice = "Standard irrigation recommended.";
-    if (waterNeeded > 45)
-      advice = "High water requirement. Increase irrigation frequency.";
-    if (waterNeeded < 20)
-      advice = "Low water requirement. Avoid over-watering.";
+    let advice = "Low risk. Standard monitoring advised.";
+    if (riskScore > 70) advice = "High risk. Potential for significant pest/disease issues. Increase monitoring and consider protective measures.";
+    else if (riskScore > 40) advice = "Medium risk. Conditions are favorable for some pests or diseases. Monitor crops closely.";
+    
 
     setTimeout(() => {
-      setResult({ waterNeeded, advice });
+      setResult({ riskScore, advice });
       setIsLoading(false);
     }, 1000);
   }
@@ -111,7 +104,7 @@ export default function CropRiskCalculator() {
           Crop Risk Calculator
         </CardTitle>
         <CardDescription>
-          Estimate crop risk based on various factors.
+          Estimate crop risk based on environmental factors.
         </CardDescription>
       </CardHeader>
 
@@ -125,7 +118,7 @@ export default function CropRiskCalculator() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Select Crop</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select crop" />
@@ -150,7 +143,7 @@ export default function CropRiskCalculator() {
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Growth Stage</FormLabel>
-                    <Select onValueChange={field.onChange}>
+                    <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select stage" />
@@ -168,7 +161,7 @@ export default function CropRiskCalculator() {
                 )}
               />
 
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-3 gap-4">
                 <FormField
                   name="temperature"
                   control={form.control}
@@ -189,6 +182,19 @@ export default function CropRiskCalculator() {
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Humidity (%)</FormLabel>
+                      <FormControl>
+                        <Input type="number" {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                 <FormField
+                  control={form.control}
+                  name="windSpeed"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Wind (km/h)</FormLabel>
                       <FormControl>
                         <Input type="number" {...field} />
                       </FormControl>
@@ -232,12 +238,12 @@ export default function CropRiskCalculator() {
             {result && (
               <div className="text-center">
                 <p className="text-muted-foreground">Estimated Risk Score</p>
-                <p className="text-6xl font-bold my-2 text-amber-500">
-                  {result.waterNeeded}
+                <p className={`text-6xl font-bold my-2 ${result.riskScore > 70 ? 'text-destructive' : result.riskScore > 40 ? 'text-amber-500' : 'text-green-600'}`}>
+                  {result.riskScore}
                   <span className="text-xl"> / 100</span>
                 </p>
 
-                <Alert className="text-left mt-4" variant="destructive">
+                <Alert className="text-left mt-4" variant={result.riskScore > 70 ? "destructive" : "default"}>
                   <Info className="h-4 w-4" />
                   <AlertTitle>Risk Analysis</AlertTitle>
                   <AlertDescription>{result.advice}</AlertDescription>
