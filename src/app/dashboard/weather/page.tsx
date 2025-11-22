@@ -12,8 +12,8 @@ import weatherForecastData from '@/data/weather-forecast.json';
 import type { Weather } from "@/lib/types";
 import WaterRequirementCalculator from "@/components/dashboard/farmer/water-requirement-calculator";
 import EvapotranspirationCalculator from "@/components/dashboard/farmer/evapotranspiration-calculator";
+import { useAuth } from "@/hooks/use-auth";
 
-const initialWeather = weatherData.weather[0];
 const initialRainfallPrediction = rainfallData.prediction;
 const initialTempForecast = weatherForecastData.forecasts.temperature;
 const initialHumidityForecast = weatherForecastData.forecasts.humidity;
@@ -31,6 +31,10 @@ const getPestForecast = (weather: Weather) => {
 }
 
 export default function WeatherPage() {
+  const { user } = useAuth();
+  
+  const initialWeather = weatherData.weather.find(w => w.district === user?.region) || weatherData.weather[0];
+
   const [weather, setWeather] = useState<Weather>(initialWeather);
   const [rainfallPrediction, setRainfallPrediction] = useState(initialRainfallPrediction);
   const [tempForecast, setTempForecast] = useState(initialTempForecast);
