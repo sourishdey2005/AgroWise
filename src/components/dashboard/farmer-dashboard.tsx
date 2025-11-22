@@ -5,7 +5,8 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "lucide-react";
+import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor } from "lucide-react";
+import { BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid, Bar } from "recharts";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
@@ -386,3 +387,5 @@ export default function FarmerDashboard() {
     </div>
   );
 }
+
+    
