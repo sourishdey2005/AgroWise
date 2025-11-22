@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -6,8 +7,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import StatCard from '@/components/shared/stat-card';
-import { Leaf, TestTube, Lightbulb, BarChart, Check } from 'lucide-react';
-import { ResponsiveContainer, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { Leaf, TestTube, Lightbulb, BarChart as BarChartIcon, Check } from 'lucide-react';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { useFarmers } from '@/hooks/use-farmers';
 import { useToast } from '@/hooks/use-toast';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -88,7 +89,7 @@ export default function SoilEnvironmentPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><BarChart /> Village Soil Health Overview</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><BarChartIcon /> Village Soil Health Overview</CardTitle>
                     <CardDescription>Distribution of soil types in your region.</CardDescription>
                 </CardHeader>
                 <CardContent>
