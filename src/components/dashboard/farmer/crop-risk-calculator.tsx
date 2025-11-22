@@ -159,7 +159,7 @@ export default function CropRiskCalculator() {
                       <FormControl>
                         <SelectTrigger>
                           <SelectValue placeholder="Select pest activity level" />
-                        </Trigger>
+                        </SelectTrigger>
                       </FormControl>
                       <SelectContent>
                         <SelectItem value="none">None Seen</SelectItem>
