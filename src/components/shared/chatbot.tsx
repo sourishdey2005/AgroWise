@@ -14,6 +14,7 @@ type Message = {
   text: string;
   sender: 'user' | 'bot';
   isTyping?: boolean;
+  suggestedQuestions?: string[];
 };
 
 const preloadedQuestions = [
@@ -59,25 +60,27 @@ export default function Chatbot() {
     }
   }, [messages]);
 
-  const handleSend = async () => {
-    if (input.trim() === '' || isLoading) return;
+  const handleSend = async (question?: string) => {
+    const currentInput = question || input;
+    if (currentInput.trim() === '' || isLoading) return;
 
     const userMessage: Message = {
       id: Date.now(),
-      text: input,
+      text: currentInput,
       sender: 'user',
     };
 
-    setMessages(prev => [...prev, userMessage, { id: Date.now() + 1, text: '', sender: 'bot', isTyping: true }]);
+    setMessages(prev => [...prev.map(m => ({ ...m, suggestedQuestions: [] })), userMessage, { id: Date.now() + 1, text: '', sender: 'bot', isTyping: true }]);
     setInput('');
     setIsLoading(true);
 
     try {
-      const response = await askChatbot({ question: input });
+      const response = await askChatbot({ question: currentInput });
       const botMessage: Message = {
         id: Date.now() + 2,
         text: response.answer,
         sender: 'bot',
+        suggestedQuestions: response.suggestedQuestions,
       };
       setMessages(prev => prev.filter(m => !m.isTyping).concat(botMessage));
     } catch (error) {
@@ -94,37 +97,7 @@ export default function Chatbot() {
   };
   
   const handlePreloadedQuestion = (question: string) => {
-    setInput(question);
-    // Directly call handleSend logic with the selected question
-    const userMessage: Message = {
-      id: Date.now(),
-      text: question,
-      sender: 'user',
-    };
-
-    setMessages(prev => [...prev, userMessage, { id: Date.now() + 1, text: '', sender: 'bot', isTyping: true }]);
-    setInput('');
-    setIsLoading(true);
-
-    askChatbot({ question })
-      .then(response => {
-        const botMessage: Message = {
-          id: Date.now() + 2,
-          text: response.answer,
-          sender: 'bot',
-        };
-        setMessages(prev => prev.filter(m => !m.isTyping).concat(botMessage));
-      })
-      .catch(error => {
-        console.error('Chatbot error:', error);
-        const errorMessage: Message = {
-          id: Date.now() + 2,
-          text: "I'm sorry, I'm having trouble connecting. Please try again later.",
-          sender: 'bot',
-        };
-         setMessages(prev => prev.filter(m => !m.isTyping).concat(errorMessage));
-      })
-      .finally(() => setIsLoading(false));
+    handleSend(question);
   };
 
 
@@ -154,42 +127,53 @@ export default function Chatbot() {
             <CardContent className="flex-1 overflow-hidden p-0">
               <ScrollArea className="h-full" ref={scrollAreaRef}>
                  <div className="p-6 space-y-4">
-                    {messages.map(message => (
+                    {messages.map((message, msgIndex) => (
+                      <div key={message.id}>
                         <div
-                        key={message.id}
-                        className={cn(
-                            'flex gap-3 text-sm',
-                            message.sender === 'user' ? 'justify-end' : 'justify-start'
-                        )}
+                          className={cn(
+                              'flex gap-3 text-sm',
+                              message.sender === 'user' ? 'justify-end' : 'justify-start'
+                          )}
                         >
-                        {message.sender === 'bot' && (
-                            <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center">
-                            <Bot className="h-5 w-5 text-primary" />
-                            </div>
-                        )}
-                        <div
-                            className={cn(
-                            'rounded-lg px-4 py-2 max-w-[80%]',
-                            message.sender === 'user'
-                                ? 'bg-primary text-primary-foreground'
-                                : 'bg-muted'
-                            )}
-                        >
-                            {message.isTyping ? (
-                                <div className="flex items-center gap-2">
-                                    <Loader2 className="h-4 w-4 animate-spin" />
-                                    <span>Typing...</span>
-                                </div>
-                            ) : (
-                                message.text
-                            )}
+                          {message.sender === 'bot' && (
+                              <div className="h-8 w-8 rounded-full bg-primary/20 flex items-center justify-center flex-shrink-0">
+                              <Bot className="h-5 w-5 text-primary" />
+                              </div>
+                          )}
+                          <div
+                              className={cn(
+                              'rounded-lg px-4 py-2 max-w-[80%]',
+                              message.sender === 'user'
+                                  ? 'bg-primary text-primary-foreground'
+                                  : 'bg-muted'
+                              )}
+                          >
+                              {message.isTyping ? (
+                                  <div className="flex items-center gap-2">
+                                      <Loader2 className="h-4 w-4 animate-spin" />
+                                      <span>Typing...</span>
+                                  </div>
+                              ) : (
+                                  message.text
+                              )}
+                          </div>
+                          {message.sender === 'user' && (
+                              <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0">
+                                <User className="h-5 w-5 text-muted-foreground" />
+                              </div>
+                          )}
                         </div>
-                         {message.sender === 'user' && (
-                            <div className="h-8 w-8 rounded-full bg-muted flex items-center justify-center">
-                            <User className="h-5 w-5 text-muted-foreground" />
-                            </div>
+                        
+                        {message.sender === 'bot' && message.suggestedQuestions && message.suggestedQuestions.length > 0 && (
+                          <div className="space-y-2 pt-4 ml-11">
+                              {message.suggestedQuestions.map((q, i) => (
+                                  <Button key={i} variant="outline" size="sm" className="w-full justify-start h-auto" onClick={() => handlePreloadedQuestion(q)} disabled={isLoading}>
+                                      <span className="text-wrap text-left">{q}</span>
+                                  </Button>
+                              ))}
+                          </div>
                         )}
-                        </div>
+                      </div>
                     ))}
                     {messages.length === 1 && (
                         <div className="space-y-2 pt-4">
