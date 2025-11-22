@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from 'react';
@@ -12,6 +13,9 @@ const weatherImpactData = [
   { region: 'Coastal AP', recoveryRate: 92, risk: 'Cyclone' },
   { region: 'Punjab', recoveryRate: 98, risk: 'Normal' },
   { region: 'Assam', recoveryRate: 88, risk: 'Flood' },
+  { region: 'Kerala', recoveryRate: 90, risk: 'Heavy Rain' },
+  { region: 'Rajasthan', recoveryRate: 82, risk: 'Drought' },
+  { region: 'West Bengal', recoveryRate: 94, risk: 'Cyclone' },
 ];
 
 export default function ExternalRiskPage() {
@@ -93,7 +97,8 @@ export default function ExternalRiskPage() {
                                 contentStyle={{ backgroundColor: 'hsl(var(--background))' }}
                                 formatter={(value, name, props) => {
                                     const { payload } = props;
-                                    return [`${value}% (Risk: ${payload.risk})`, "Recovery Rate"];
+                                    const risk = payload.risk || 'N/A';
+                                    return [`${value}% (Risk: ${risk})`, "Recovery Rate"];
                                 }}
                                 labelFormatter={(label) => `Region: ${label}`}
                              />
