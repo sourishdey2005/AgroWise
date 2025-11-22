@@ -1,0 +1,237 @@
+
+"use client";
+
+import { useState } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ResponsiveContainer, BarChart, LineChart, PieChart, Pie, Cell, Tooltip, Legend, Bar, Line, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, FunnelChart, Funnel, LabelList } from 'recharts';
+import { BrainCircuit, Landmark, Banknote, FileCheck, FileX, BarChart as BarChartIcon, TrendingUp, Filter, Map, Clock, Users, ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
+import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+
+const loanFunnelData = [
+  { value: 100, name: 'Applications', fill: '#8884d8' },
+  { value: 80, name: 'Verification', fill: '#83a6ed' },
+  { value: 50, name: 'Sanctioned', fill: '#8dd1e1' },
+  { value: 45, name: 'Disbursed', fill: '#82ca9d' },
+  { value: 44, name: 'Repaying', fill: '#a4de6c' },
+];
+
+const npaTrendData = [
+    { name: '2022', past: 4.5, current: 4.5 },
+    { name: '2023', past: 3.8, current: 3.8 },
+    { name: 'Q1 \'24', past: 3.2, current: 3.2 },
+    { name: 'Q2 \'24', current: 2.9, projected: 2.7 },
+    { name: 'Q3 \'24', projected: 2.5 },
+    { name: 'Q4 \'24', projected: 2.4 },
+];
+
+const recoveryData = [
+    { month: 0, remaining: 100 },
+    { month: 6, remaining: 85 },
+    { month: 12, remaining: 68 },
+    { month: 18, remaining: 45 },
+    { month: 24, remaining: 22 },
+    { month: 30, remaining: 5 },
+    { month: 36, remaining: 0 },
+];
+
+const cropRiskData = [
+  { crop: 'Sugarcane', risk: 20, profitability: 80 },
+  { crop: 'Cotton', risk: 60, profitability: 70 },
+  { crop: 'Soybean', risk: 40, profitability: 60 },
+  { crop: 'Wheat', risk: 15, profitability: 50 },
+  { crop: 'Grapes', risk: 75, profitability: 90 },
+];
+
+const loanCycleData = [
+    { month: 'Jan', demand: 10 }, { month: 'Feb', demand: 12 }, { month: 'Mar', demand: 15 },
+    { month: 'Apr', demand: 25 }, { month: 'May', demand: 40 }, { month: 'Jun', demand: 80, season: 'Kharif Peak' },
+    { month: 'Jul', demand: 70 }, { month: 'Aug', demand: 50 }, { month: 'Sep', demand: 30 },
+    { month: 'Oct', demand: 60, season: 'Rabi Peak' }, { month: 'Nov', demand: 55 }, { month: 'Dec', demand: 20 },
+];
+
+const interBranchData = [
+    ['State', 'Pune', 'Nashik', 'Nagpur', 'Mumbai'],
+    ['NPA %', 3.8, 4.5, 4.1, 2.9],
+    ['Disbursed (Cr)', 12, 9.5, 10.5, 15],
+    ['TAT (days)', 5, 7, 6, 4],
+];
+
+const agentEfficiencyData = [
+    { agent: 'A. Mehta', turnaround: 4, approvalRate: 85, sanctioned: 1.2 },
+    { agent: 'R. Gupta', turnaround: 6, approvalRate: 78, sanctioned: 0.9 },
+    { agent: 'S. Reddy', turnaround: 5, approvalRate: 81, sanctioned: 1.1 },
+]
+
+export default function AdvancedAnalyticsPage() {
+    const [healthScore, setHealthScore] = useState(78);
+
+    return (
+        <div className="grid gap-6 animate-in fade-in duration-500">
+            <div>
+                <h1 className="text-2xl font-bold tracking-tight">Advanced Portfolio Analytics</h1>
+                <p className="text-muted-foreground">AI-driven insights and visualizations for the loan portfolio.</p>
+            </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Loan Application Funnel</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <ResponsiveContainer width="100%" height={200}>
+                        <FunnelChart>
+                            <Tooltip />
+                            <Funnel dataKey="value" data={loanFunnelData} isAnimationActive>
+                                <LabelList position="right" fill="#000" stroke="none" dataKey="name" />
+                            </Funnel>
+                        </FunnelChart>
+                    </ResponsiveContainer>
+                </CardContent>
+            </Card>
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><Map/> Geo-Mapped Loan Exposure</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-center p-0">
+                        <img src="https://picsum.photos/seed/indiamap/600/400" data-ai-hint="India map" alt="India map with hotspots" className="rounded-b-lg" />
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><TrendingUp/> NPA Trendline & Forecast</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                         <ResponsiveContainer width="100%" height={150}>
+                            <LineChart data={npaTrendData}>
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value}%`} />
+                                <Line type="monotone" dataKey="past" name="Past NPA" stroke="hsl(var(--muted-foreground))" strokeDasharray="5 5" />
+                                <Line type="monotone" dataKey="current" name="Current NPA" stroke="hsl(var(--primary))" />
+                                <Line type="monotone" dataKey="projected" name="Projected NPA" stroke="hsl(var(--primary))" strokeDasharray="3 3" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><Clock/> Projected Loan Recovery</CardTitle>
+                    </CardHeader>
+                     <CardContent>
+                         <ResponsiveContainer width="100%" height={150}>
+                            <LineChart data={recoveryData}>
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value}%`} />
+                                <Line type="monotone" dataKey="remaining" name="% Remaining" stroke="hsl(var(--chart-2))" />
+                            </LineChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </div>
+            
+            <div className="grid gap-6 md:grid-cols-2">
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Crop Type vs. Credit Risk</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                           <ScatterChart>
+                                <CartesianGrid />
+                                <XAxis type="number" dataKey="risk" name="Risk Score" unit="/100" />
+                                <YAxis type="number" dataKey="profitability" name="Profitability" unit="/100"/>
+                                <Tooltip cursor={{ strokeDasharray: '3 3' }} contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                <Legend />
+                                <Scatter name="Crops" data={cropRiskData} fill="hsl(var(--primary))" />
+                            </ScatterChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Crop-Season Loan Cycle Forecast</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={250}>
+                           <BarChart data={loanCycleData}>
+                                <XAxis dataKey="month" fontSize={12} />
+                                <YAxis />
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                <Bar dataKey="demand" fill="hsl(var(--primary))" />
+                           </BarChart>
+                        </ResponsiveContainer>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Agent Loan Handling Efficiency</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                       <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Agent</TableHead>
+                                    <TableHead>Turnaround</TableHead>
+                                    <TableHead>Approval %</TableHead>
+                                    <TableHead>Sanctioned (Cr)</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {agentEfficiencyData.map(d => (
+                                    <TableRow key={d.agent}>
+                                        <TableCell>{d.agent}</TableCell>
+                                        <TableCell>{d.turnaround} days</TableCell>
+                                        <TableCell>{d.approvalRate}%</TableCell>
+                                        <TableCell>{d.sanctioned}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle>Average Financial Health Score</CardTitle>
+                    </CardHeader>
+                    <CardContent className="flex items-center justify-center">
+                        <div className="relative h-32 w-32">
+                            <svg className="h-full w-full" viewBox="0 0 36 36">
+                                <path className="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeWidth="3.5" />
+                                <path className="text-green-500" strokeDasharray={`${healthScore}, 100`} d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" strokeWidth="3.5" strokeLinecap="round" />
+                            </svg>
+                            <div className="absolute inset-0 flex flex-col items-center justify-center">
+                                <span className="text-4xl font-bold text-green-500">{healthScore}</span>
+                            </div>
+                        </div>
+                    </CardContent>
+                </Card>
+            </div>
+            
+            <Card>
+                <CardHeader>
+                    <CardTitle>Inter-branch Performance Heat Grid</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                {interBranchData[0].map((header, i) => <TableHead key={i}>{header}</TableHead>)}
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {interBranchData.slice(1).map((row, i) => (
+                                <TableRow key={i}>
+                                    {row.map((cell, j) => <TableCell key={j} className={j > 0 ? 'font-mono' : 'font-medium'}>{cell}</TableCell>)}
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+
+        </div>
+    );
+}
