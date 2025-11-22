@@ -8,11 +8,19 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
-import { Calculator, FileText, Link as LinkIcon, BarChart, Banknote } from 'lucide-react';
+import { Calculator, FileText, Link as LinkIcon, BarChart, Banknote, CheckCircle, XCircle } from 'lucide-react';
 import { LoanApplication } from "@/lib/types";
 import loanData from "@/data/loans.json";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useToast } from "@/hooks/use-toast";
 
-const loans: LoanApplication[] = loanData.applications;
 
 const getStatusVariant = (status: LoanApplication['status']) => {
   switch (status) {
@@ -23,9 +31,13 @@ const getStatusVariant = (status: LoanApplication['status']) => {
 };
 
 export default function LoanManagementPage() {
+    const [loans, setLoans] = useState<LoanApplication[]>(loanData.applications);
     const [loanAmount, setLoanAmount] = useState(150000);
     const [creditScore, setCreditScore] = useState(720);
     const [eligible, setEligible] = useState<boolean | null>(null);
+    const [selectedLoan, setSelectedLoan] = useState<LoanApplication | null>(null);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const { toast } = useToast();
 
     const calculateEligibility = () => {
         if (loanAmount <= 200000 && creditScore >= 650) {
@@ -36,6 +48,21 @@ export default function LoanManagementPage() {
     };
     
     const riskScore = Math.min(10, Math.max(1, 10 - Math.floor(creditScore / 100)));
+
+    const handleReviewClick = (loan: LoanApplication) => {
+        setSelectedLoan(loan);
+        setIsDialogOpen(true);
+    };
+
+    const handleLoanStatusChange = (loanId: number, status: 'approved' | 'rejected') => {
+        setLoans(loans.map(l => l.id === loanId ? { ...l, status: status } : l));
+        setIsDialogOpen(false);
+        toast({
+            title: `Loan ${status.charAt(0).toUpperCase() + status.slice(1)}`,
+            description: `The loan for ${selectedLoan?.farmerName} has been ${status}.`,
+        });
+    };
+
 
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
@@ -138,7 +165,7 @@ export default function LoanManagementPage() {
                                     </TableCell>
                                     <TableCell>{loan.date}</TableCell>
                                     <TableCell className="text-right">
-                                        <Button variant="outline" size="sm">Review</Button>
+                                        <Button variant="outline" size="sm" onClick={() => handleReviewClick(loan)}>Review</Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
@@ -146,6 +173,49 @@ export default function LoanManagementPage() {
                     </Table>
                 </CardContent>
             </Card>
+
+             {selectedLoan && (
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Review Loan for {selectedLoan.farmerName}</DialogTitle>
+                            <DialogDescription>
+                                Application ID: {selectedLoan.id} | Date: {selectedLoan.date}
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Amount:</span>
+                                <span className="col-span-3 font-bold text-lg">₹{selectedLoan.amount.toLocaleString('en-IN')}</span>
+                            </div>
+                             <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Credit Score:</span>
+                                <span className="col-span-3 font-bold">{selectedLoan.creditScore}</span>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Status:</span>
+                                <div className="col-span-3">
+                                    <Badge variant={getStatusVariant(selectedLoan.status)}>{selectedLoan.status}</Badge>
+                                </div>
+                            </div>
+                            {selectedLoan.comments && (
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <span className="text-right col-span-1 text-sm font-medium">Comments:</span>
+                                    <p className="col-span-3 text-sm text-muted-foreground">{selectedLoan.comments}</p>
+                                </div>
+                            )}
+                        </div>
+                        <DialogFooter>
+                            <Button variant="destructive" onClick={() => handleLoanStatusChange(selectedLoan.id, 'rejected')} disabled={selectedLoan.status !== 'pending'}>
+                               <XCircle className="mr-2 h-4 w-4" /> Reject
+                            </Button>
+                             <Button onClick={() => handleLoanStatusChange(selectedLoan.id, 'approved')} disabled={selectedLoan.status !== 'pending'}>
+                               <CheckCircle className="mr-2 h-4 w-4" /> Approve
+                            </Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            )}
         </div>
     );
 }
