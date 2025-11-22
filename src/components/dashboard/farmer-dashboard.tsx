@@ -4,7 +4,7 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal } from "lucide-react";
+import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal, FlaskConical, Power, AlertTriangle, Droplets } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import mandiData from '@/data/mandi_prices.json';
 import { Progress } from "@/components/ui/progress";
@@ -12,6 +12,8 @@ import type { Weather, MandiPrice } from "@/lib/types";
 import weatherData from '@/data/weather.json';
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { Switch } from "../ui/switch";
+import { Badge } from "../ui/badge";
 
 
 // Function to generate a random number within a range
@@ -50,6 +52,9 @@ export default function FarmerDashboard() {
   const [harvestReadiness, setHarvestReadiness] = useState(75);
   const [growthStage, setGrowthStage] = useState({ current: 5, total: 10, label: "Vegetative Stage" });
   const [weather, setWeather] = useState<Weather>(initialWeather);
+  const [soilPh, setSoilPh] = useState(6.8);
+  const [waterPumpOn, setWaterPumpOn] = useState(false);
+  const [waterTankLevel, setWaterTankLevel] = useState(70);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -63,6 +68,9 @@ export default function FarmerDashboard() {
       // Simulate other metrics
       setYieldPrediction(p => Math.min(100, Math.max(0, p + getRandom(-0.5, 0.5))));
       setHarvestReadiness(p => Math.min(100, Math.max(0, p + 0.1)));
+      setSoilPh(p => Math.min(8, Math.max(5, p + getRandom(-0.05, 0.05))));
+      setWaterTankLevel(p => Math.min(100, Math.max(0, p + getRandom(-1, 1))));
+
       
       // Simulate growth stage progress
       setGrowthStage(prev => {
@@ -80,6 +88,12 @@ export default function FarmerDashboard() {
   
   const { score: healthRiskScore, label: riskLabel, color: riskColor } = calculateHealthRisk(weather);
   const healthRiskStroke = healthRiskScore;
+
+  const getPhLabel = (ph: number) => {
+    if (ph < 6.5) return 'Slightly Acidic';
+    if (ph > 7.5) return 'Slightly Alkaline';
+    return 'Neutral';
+  };
 
   return (
     <div className="grid gap-6">
@@ -168,6 +182,47 @@ export default function FarmerDashboard() {
         </div>
       </div>
       
+      <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><FlaskConical className="text-primary" /> Soil pH Monitor</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <p className="text-5xl font-bold">{soilPh.toFixed(1)}</p>
+                    <p className="text-sm text-muted-foreground">{getPhLabel(soilPh)}</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Power className="text-primary" /> Water Pump</CardTitle>
+                </CardHeader>
+                <CardContent className="flex flex-col items-center justify-center">
+                    <Switch checked={waterPumpOn} onCheckedChange={setWaterPumpOn} aria-label="Toggle Water Pump"/>
+                    <p className="text-sm mt-2 text-muted-foreground">{waterPumpOn ? "Pump is ON" : "Pump is OFF"}</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><AlertTriangle className="text-destructive" /> Livestock Feed</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <p className="text-center font-semibold text-destructive">Feed level is low for Cow Shed #2.</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Droplets className="text-primary" /> Tank Water Level</CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-center">
+                        <p className="text-5xl font-bold text-blue-500">{Math.round(waterTankLevel)}%</p>
+                        <p className="text-sm text-muted-foreground">Est. 3 days until empty</p>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
+
+
       <div className="grid gap-6 md:grid-cols-2">
         <Card className="rounded-2xl shadow-sm">
           <CardHeader>
@@ -327,3 +382,5 @@ export default function FarmerDashboard() {
     </div>
   );
 }
+
+    

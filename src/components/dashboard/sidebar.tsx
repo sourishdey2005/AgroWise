@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
 import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine } from 'lucide-react';
 import type { User } from '@/lib/types';
+import { Cow } from 'lucide-react';
 
 const navItems = {
   farmer: [
@@ -14,6 +15,7 @@ const navItems = {
     { href: '/dashboard/market-analytics', icon: TrendingUp, label: 'Market Analytics' },
     { href: '/dashboard/farm-management', icon: ClipboardList, label: 'Farm Management' },
     { href: '/dashboard/sowing-harvest', icon: Combine, label: 'Sowing & Harvest' },
+    { href: '/dashboard/livestock', icon: Cow, label: 'Livestock' },
   ],
   agent: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
@@ -77,3 +79,5 @@ export function DashboardSidebar({ user }: { user: User }) {
     </TooltipProvider>
   );
 }
+
+    
