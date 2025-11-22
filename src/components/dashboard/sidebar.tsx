@@ -20,16 +20,13 @@ const navItems = {
   ],
   agent: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/farmers', icon: Users, label: 'Farmers' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/statistics', icon: BarChart, label: 'Statistics' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/loans', icon: Landmark, label: 'Loans' },
   ],
 };
 
