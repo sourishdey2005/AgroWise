@@ -40,6 +40,7 @@ const navItems = {
     { href: '/dashboard/bank/loan-management', icon: FileText, label: 'Loan Management' },
     { href: '/dashboard/bank/scheme-coordination', icon: Book, label: 'Scheme Coordination' },
     { href: '/dashboard/bank/repayment-finance', icon: Coins, label: 'Repayment & Finance' },
+    { href: '/dashboard/bank/portfolio-performance', icon: BarChart, label: 'Portfolio & Performance' },
   ],
 };
 
