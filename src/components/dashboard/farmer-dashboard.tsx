@@ -4,7 +4,8 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "lucide-react";
+import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "recharts";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
@@ -286,7 +287,7 @@ export default function FarmerDashboard() {
             <CardContent>
                  <div className="flex items-center justify-center">
                     <div className="relative h-32 w-32">
-                        <svg className="h-full w-full" viewBox="0 0 36 36">
+                        <svg className="h-full w-full" viewBox="0_0_36_36">
                             <path
                                 className="text-secondary"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -339,5 +340,7 @@ export default function FarmerDashboard() {
     </div>
   );
 }
+
+    
 
     
