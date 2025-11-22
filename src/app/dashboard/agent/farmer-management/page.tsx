@@ -10,11 +10,9 @@ import { Calendar } from '@/components/ui/calendar';
 import { Textarea } from '@/components/ui/textarea';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { Search, UserCheck, CalendarDays, ClipboardList, MessageSquare, BarChart2 } from 'lucide-react';
-import farmerData from '@/data/farmers.json';
+import { useFarmers } from '@/hooks/use-farmers';
 import { FarmerProfile } from '@/lib/types';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-
-const initialFarmers: FarmerProfile[] = farmerData.farmers;
 
 const visitCompletionData = [
     { name: 'Week 1', completed: 4, scheduled: 5 },
@@ -24,7 +22,7 @@ const visitCompletionData = [
 ];
 
 export default function FarmerManagementPage() {
-    const [farmers, setFarmers] = useState<FarmerProfile[]>(initialFarmers);
+    const { farmers, setFarmers } = useFarmers();
     const [searchTerm, setSearchTerm] = useState('');
     const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
     

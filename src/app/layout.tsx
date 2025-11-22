@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
+import { FarmerProvider } from '@/context/farmer-context';
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from '@/lib/utils';
 import Chatbot from '@/components/shared/chatbot';
@@ -24,9 +25,11 @@ export default function RootLayout({
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
         <AuthProvider>
-          {children}
-          <Chatbot />
-          <Toaster />
+          <FarmerProvider>
+            {children}
+            <Chatbot />
+            <Toaster />
+          </FarmerProvider>
         </AuthProvider>
       </body>
     </html>

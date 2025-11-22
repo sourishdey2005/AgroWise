@@ -7,14 +7,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import StatCard from "../shared/stat-card";
 import { Users, AlertCircle, CheckCircle, Mail } from "lucide-react";
-import farmerData from "@/data/farmers.json";
-import { FarmerProfile } from "@/lib/types";
+import { useFarmers } from "@/hooks/use-farmers";
 import { useToast } from "@/hooks/use-toast";
 import { Textarea } from "../ui/textarea";
 
 export default function AgentDashboard() {
   const { toast } = useToast();
-  const [farmers, setFarmers] = useState<FarmerProfile[]>(farmerData.farmers);
+  const { farmers, setFarmers } = useFarmers();
   const [advisoryMessage, setAdvisoryMessage] = useState("");
 
   const totalFarmers = farmers.length;
