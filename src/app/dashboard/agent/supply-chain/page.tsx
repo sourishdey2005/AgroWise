@@ -7,7 +7,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, LineChart, Line, PieChart, Pie, Cell, Legend } from 'recharts';
 import { Truck, Warehouse, Route, Clock, Fuel, Map, FileCheck, CircleDot, Archive, Thermometer, Shield } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Progress } from '@/components/ui/progress';
@@ -71,6 +71,15 @@ const inventoryAgeData = [
     { lot: 'ON-05-24', age: 5, status: 'Fresh' },
     { lot: 'PT-04-24', age: 12, status: 'Aging' },
 ];
+
+const farmClusterData = [
+    { name: 'Cluster A (Wheat)', value: 8, crop: 'Wheat' },
+    { name: 'Cluster B (Sugarcane)', value: 12, crop: 'Sugarcane' },
+    { name: 'Cluster C (Onion)', value: 7, crop: 'Onion' },
+    { name: 'Cluster D (Mixed Veg)', value: 5, crop: 'Vegetables' },
+];
+
+const CLUSTER_COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function SupplyChainPage() {
     const [fuelCost, setFuelCost] = useState(95.50);
@@ -228,30 +237,52 @@ export default function SupplyChainPage() {
                 </Card>
             </div>
 
-            <Card>
-                <CardHeader><CardTitle className="flex items-center gap-2"><Map/> Farm Cluster Mapping</CardTitle></CardHeader>
-                <CardContent className="flex justify-center items-center bg-secondary/30 rounded-lg aspect-video p-4">
-                     <div className="w-full h-full flex justify-around items-center">
-                        <div className="text-center">
-                            <p className="font-bold">Cluster A</p>
-                            <CircleDot className="text-blue-500 my-2"/>
-                            <p className="text-xs">3 Farms</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="font-bold">Cluster B</p>
-                            <CircleDot className="text-green-500 my-2"/>
-                            <p className="text-xs">5 Farms</p>
-                        </div>
-                        <div className="text-center">
-                            <p className="font-bold">Cluster C</p>
-                            <CircleDot className="text-red-500 my-2"/>
-                            <p className="text-xs">2 Farms</p>
-                        </div>
-                    </div>
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Map/> Farm Cluster Mapping & Distribution</CardTitle>
+                    <CardDescription>Visualization of farm clusters and their primary crop focus.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid md:grid-cols-2 gap-6 items-center">
+                    <ResponsiveContainer width="100%" height={250}>
+                        <PieChart>
+                            <Pie
+                                data={farmClusterData}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                outerRadius={100}
+                                fill="#8884d8"
+                                dataKey="value"
+                                nameKey="name"
+                            >
+                                {farmClusterData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={CLUSTER_COLORS[index % CLUSTER_COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Cluster</TableHead>
+                                <TableHead># of Farms</TableHead>
+                                <TableHead>Dominant Crop</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            {farmClusterData.map(cluster => (
+                                <TableRow key={cluster.name}>
+                                    <TableCell className="font-medium">{cluster.name.split(' (')[0]}</TableCell>
+                                    <TableCell>{cluster.value}</TableCell>
+                                    <TableCell>{cluster.crop}</TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
                 </CardContent>
             </Card>
         </div>
     );
 }
-
-    
