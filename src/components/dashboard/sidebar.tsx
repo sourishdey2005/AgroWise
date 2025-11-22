@@ -2,26 +2,26 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell } from 'lucide-react';
 import type { User } from '@/lib/types';
-import { Logo } from '../shared/logo';
 
 const navItems = {
   farmer: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '#', icon: Leaf, label: 'My Crops' },
+    { href: '/dashboard/my-crops', icon: Leaf, label: 'My Crops' },
   ],
   agent: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '#', icon: Users, label: 'Farmers' },
+    { href: '/dashboard/farmers', icon: Users, label: 'Farmers' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '#', icon: BarChart, label: 'Statistics' },
+    { href: '/dashboard/statistics', icon: BarChart, label: 'Statistics' },
+    { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '#', icon: Banknote, label: 'Loans' },
+    { href: '/dashboard/loans', icon: Landmark, label: 'Loans' },
   ],
 };
 
@@ -58,7 +58,7 @@ export function DashboardSidebar({ user }: { user: User }) {
           <Tooltip>
             <TooltipTrigger asChild>
               <Link
-                href="#"
+                href="/dashboard/settings"
                 className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
               >
                 <Settings className="h-5 w-5" />
