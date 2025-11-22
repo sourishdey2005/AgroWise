@@ -3,6 +3,7 @@ import './globals.css';
 import { AuthProvider } from '@/context/auth-context';
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from '@/lib/utils';
+import Chatbot from '@/components/shared/chatbot';
 
 export const metadata: Metadata = {
   title: 'AgroWise',
@@ -24,6 +25,7 @@ export default function RootLayout({
       <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
         <AuthProvider>
           {children}
+          <Chatbot />
           <Toaster />
         </AuthProvider>
       </body>
