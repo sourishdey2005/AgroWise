@@ -24,7 +24,13 @@ const fleetData = [
     { id: 'TR-103', driver: 'R. Singh', capacity: '10 MT', status: 'Available' },
 ];
 
-const mandiTimeData = { 'Pune': 45, 'Nashik': 60, 'Nagpur': 35 };
+const mandiTimeData: Record<string, number> = { 
+    'Pune': 45, 
+    'Nashik': 60, 
+    'Nagpur': 35,
+    'Ludhiana': 55,
+    'Kanpur': 70,
+};
 
 const spoilageData = [
     { day: 0, spoilage: 0 }, { day: 1, spoilage: 0.5 }, { day: 2, spoilage: 1 },
@@ -40,6 +46,7 @@ const inventoryAgeData = [
 export default function SupplyChainPage() {
     const [fuelCost, setFuelCost] = useState(95.50);
     const [distance, setDistance] = useState(150);
+    const [selectedMandi, setSelectedMandi] = useState('Pune');
 
     useEffect(() => {
         const interval = setInterval(() => {
@@ -81,7 +88,7 @@ export default function SupplyChainPage() {
                         <CardTitle className="text-sm font-medium flex items-center gap-2"><Clock /> Loading/Unloading Time</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <Select defaultValue='Pune'>
+                        <Select value={selectedMandi} onValueChange={setSelectedMandi}>
                             <SelectTrigger>
                                 <SelectValue />
                             </SelectTrigger>
@@ -89,7 +96,7 @@ export default function SupplyChainPage() {
                                 {Object.keys(mandiTimeData).map(mandi => <SelectItem key={mandi} value={mandi}>{mandi} Mandi</SelectItem>)}
                             </SelectContent>
                         </Select>
-                        <p className="text-3xl font-bold text-center mt-4">~{mandiTimeData['Pune']} min</p>
+                        <p className="text-3xl font-bold text-center mt-4">~{mandiTimeData[selectedMandi]} min</p>
                     </CardContent>
                 </Card>
                 <Card>
