@@ -4,7 +4,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield, Workflow } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
