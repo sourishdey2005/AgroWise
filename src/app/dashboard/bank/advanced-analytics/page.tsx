@@ -4,10 +4,12 @@
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ResponsiveContainer, BarChart, LineChart, PieChart, Pie, Cell, Tooltip, Legend, Bar, Line, XAxis, YAxis, CartesianGrid, ScatterChart, Scatter, FunnelChart, Funnel, LabelList } from 'recharts';
-import { BrainCircuit, Landmark, Banknote, FileCheck, FileX, BarChart as BarChartIcon, TrendingUp, Filter, Map, Clock, Users, ArrowDown, ArrowRight, ArrowUp } from 'lucide-react';
+import { BrainCircuit, Landmark, Banknote, FileCheck, FileX, BarChart as BarChartIcon, TrendingUp, Filter, Map, Clock, Users, ArrowDown, ArrowRight, ArrowUp, Scale, Shield, Calculator, Percent } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 const loanFunnelData = [
   { value: 100, name: 'Applications', fill: '#8884d8' },
@@ -70,9 +72,11 @@ export default function AdvancedAnalyticsPage() {
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Advanced Portfolio Analytics</h1>
-                <p className="text-muted-foreground">AI-driven insights and visualizations for the loan portfolio.</p>
+                <h1 className="text-2xl font-bold tracking-tight">Advanced Analytics & Modeling</h1>
+                <p className="text-muted-foreground">AI-driven insights, financial models, and portfolio visualizations.</p>
             </div>
+
+            <h2 className="text-xl font-semibold tracking-tight text-primary mt-4">Portfolio Visualizations</h2>
 
             <Card>
                 <CardHeader>
@@ -229,6 +233,47 @@ export default function AdvancedAnalyticsPage() {
                             ))}
                         </TableBody>
                     </Table>
+                </CardContent>
+            </Card>
+
+             <h2 className="text-xl font-semibold tracking-tight text-primary mt-4">Credit Risk & Financial Modeling</h2>
+
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+                <Card>
+                    <CardHeader><CardTitle className="text-sm font-medium flex items-center gap-2"><Shield/> Creditworthiness</CardTitle></CardHeader>
+                    <CardContent><p className="text-3xl font-bold text-green-600">High</p><p className="text-xs text-muted-foreground">AI Prediction for Farmer ID 123</p></CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader><CardTitle className="text-sm font-medium flex items-center gap-2"><Percent/> Default Probability</CardTitle></CardHeader>
+                    <CardContent><p className="text-3xl font-bold text-amber-500">8%</p><p className="text-xs text-muted-foreground">Confidence: 92%</p></CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-sm font-medium flex items-center gap-2"><TrendingUp/> Market Risk</CardTitle></CardHeader>
+                    <CardContent><p className="text-3xl font-bold text-amber-500">Medium</p><p className="text-xs text-muted-foreground">Due to falling onion prices</p></CardContent>
+                </Card>
+                <Card>
+                    <CardHeader><CardTitle className="text-sm font-medium flex items-center gap-2"><Landmark/> Collateral Value</CardTitle></CardHeader>
+                    <CardContent><p className="text-2xl font-bold text-primary">+3%</p><p className="text-xs text-muted-foreground">Projected 6-month increase</p></CardContent>
+                </Card>
+            </div>
+             <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Calculator/> Dynamic EMI Affordability Calculator</CardTitle>
+                    <CardDescription>Adjusts EMI based on real-time crop yield predictions.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid md:grid-cols-3 gap-4 items-end">
+                    <div>
+                        <label className="text-sm font-medium">Loan Amount (₹)</label>
+                        <Input type="number" defaultValue="150000" />
+                    </div>
+                     <div>
+                        <label className="text-sm font-medium">Yield Prediction (%)</label>
+                        <Input type="number" defaultValue="95" />
+                    </div>
+                     <div className="text-center bg-secondary p-4 rounded-md">
+                        <p className="text-muted-foreground">Suggested Max EMI</p>
+                        <p className="text-2xl font-bold text-primary">₹8,500 / month</p>
+                    </div>
                 </CardContent>
             </Card>
 

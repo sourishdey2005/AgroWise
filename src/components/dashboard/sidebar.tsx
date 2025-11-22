@@ -44,7 +44,7 @@ const navItems = {
     { href: '/dashboard/bank/repayment-finance', icon: Coins, label: 'Repayment & Finance' },
     { href: '/dashboard/bank/portfolio-performance', icon: BarChart, label: 'Portfolio & Performance' },
     { href: '/dashboard/bank/fraud-compliance', icon: ShieldAlert, label: 'Fraud & Compliance' },
-    { href: '/dashboard/bank/advanced-analytics', icon: BrainCircuit, label: 'Advanced Analytics' },
+    { href: '/dashboard/bank/advanced-analytics', icon: BrainCircuit, label: 'Advanced Analytics & Modeling' },
   ],
 };
 
