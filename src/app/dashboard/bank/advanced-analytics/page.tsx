@@ -66,6 +66,14 @@ const agentEfficiencyData = [
     { agent: 'S. Reddy', turnaround: 5, approvalRate: 81, sanctioned: 1.1 },
 ]
 
+const regionalExposureData = [
+    { name: 'Maharashtra', exposure: 40 },
+    { name: 'Punjab', exposure: 25 },
+    { name: 'U.P.', exposure: 20 },
+    { name: 'Karnataka', exposure: 15 },
+];
+
+
 export default function AdvancedAnalyticsPage() {
     const [healthScore, setHealthScore] = useState(78);
 
@@ -97,10 +105,17 @@ export default function AdvancedAnalyticsPage() {
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                  <Card>
                     <CardHeader>
-                        <CardTitle className="text-sm font-medium flex items-center gap-2"><Map/> Geo-Mapped Loan Exposure</CardTitle>
+                        <CardTitle className="text-sm font-medium flex items-center gap-2"><Map/> Regional Loan Exposure</CardTitle>
                     </CardHeader>
-                    <CardContent className="flex items-center justify-center p-0">
-                        <img src="https://picsum.photos/seed/indiamap/600/400" data-ai-hint="India map" alt="India map with hotspots" className="rounded-b-lg" />
+                    <CardContent>
+                        <ResponsiveContainer width="100%" height={150}>
+                            <BarChart data={regionalExposureData} layout="vertical" margin={{ left: 10, right: 10 }}>
+                                <XAxis type="number" hide />
+                                <YAxis type="category" dataKey="name" stroke="#888888" fontSize={12} tickLine={false} axisLine={false} />
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value} Cr`} />
+                                <Bar dataKey="exposure" fill="hsl(var(--primary))" radius={4} />
+                            </BarChart>
+                        </ResponsiveContainer>
                     </CardContent>
                 </Card>
                 <Card>
