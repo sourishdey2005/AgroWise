@@ -59,7 +59,8 @@ export interface FarmerProfile {
   phone: string;
   region: string;
   issues: string[];
-  last_visit?: string;
+  last_visit?: string | null;
+  profile_score?: number;
 }
 
 export interface LoanApplication {

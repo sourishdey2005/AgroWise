@@ -20,6 +20,7 @@ const navItems = {
   ],
   agent: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/dashboard/agent/farmer-management', icon: FileText, label: 'Farmer Management' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
