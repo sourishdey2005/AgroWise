@@ -1,0 +1,67 @@
+{
+    "applications": [
+        {
+            "id": 1,
+            "farmerId": 1,
+            "farmerName": "Ramesh Kumar",
+            "amount": 150000,
+            "status": "pending",
+            "creditScore": 720,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "date": "2024-05-10"
+        },
+        {
+            "id": 2,
+            "farmerId": 2,
+            "farmerName": "Sita Devi",
+            "amount": 200000,
+            "status": "approved",
+            "creditScore": 780,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "comments": "Strong credit history and consistent crop yield.",
+            "date": "2024-04-25"
+        },
+        {
+            "id": 3,
+            "farmerId": 3,
+            "farmerName": "Arjun Singh",
+            "amount": 120000,
+            "status": "rejected",
+            "creditScore": 610,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "comments": "Low credit score and incomplete documentation.",
+            "date": "2024-05-01"
+        },
+        {
+            "id": 4,
+            "farmerId": 5,
+            "farmerName": "Amit Patel",
+            "amount": 300000,
+            "status": "pending",
+            "creditScore": 750,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "date": "2024-05-18"
+        },
+        {
+            "id": 5,
+            "farmerId": 13,
+            "farmerName": "Kavita Reddy",
+            "amount": 80000,
+            "status": "approved",
+            "creditScore": 690,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "comments": "Eligible under small farmer scheme.",
+            "date": "2024-04-15"
+        },
+        {
+            "id": 6,
+            "farmerId": 14,
+            "farmerName": "Manoj Tiwari",
+            "amount": 100000,
+            "status": "pending",
+            "creditScore": 650,
+            "landDocumentsUrl": "/mock-document.pdf",
+            "date": "2024-05-20"
+        }
+    ]
+}

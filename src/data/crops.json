@@ -1,0 +1,114 @@
+{
+  "crops": [
+    {
+      "id": 1,
+      "name": "Basmati Rice",
+      "ideal_temperature": "20°C - 35°C",
+      "soil_type": "Alluvial Soil, Clay Loam",
+      "rainfall": "110-150 cm",
+      "fertilizers": ["Urea", "DAP", "NPK 12:32:16"],
+      "diseases": ["Rice blast", "Brown spot", "Sheath blight"],
+      "pest_control": ["Neem solution", "Chlorantraniliprole"],
+      "image": "https://picsum.photos/seed/rice/400/300"
+    },
+    {
+      "id": 2,
+      "name": "Wheat",
+      "ideal_temperature": "15°C - 25°C",
+      "soil_type": "Loamy Soil",
+      "rainfall": "50-90 cm",
+      "fertilizers": ["Urea", "SSP", "MOP"],
+      "diseases": ["Rust", "Smut", "Powdery mildew"],
+      "pest_control": ["Propiconazole", "Thiamethoxam"],
+      "image": "https://picsum.photos/seed/wheat/400/300"
+    },
+    {
+      "id": 3,
+      "name": "Sugarcane",
+      "ideal_temperature": "20°C - 30°C",
+      "soil_type": "Heavy Loam, Black Cotton Soil",
+      "rainfall": "75-120 cm",
+      "fertilizers": ["Urea", "Potash", "Pressmud"],
+      "diseases": ["Red Rot", "Whip Smut"],
+      "pest_control": ["Phorate", "Chlorpyrifos"],
+      "image": "https://picsum.photos/seed/sugarcane/400/300"
+    },
+    {
+      "id": 4,
+      "name": "Cotton",
+      "ideal_temperature": "21°C - 30°C",
+      "soil_type": "Black Soil, Alluvial Soil",
+      "rainfall": "50-100 cm",
+      "fertilizers": ["DAP", "Urea", "Magnesium Sulphate"],
+      "diseases": ["Boll Rot", "Leaf Blight"],
+      "pest_control": ["Pink Bollworm Pheromone Traps", "Spinosad"],
+      "image": "https://picsum.photos/seed/cotton/400/300"
+    },
+    {
+      "id": 5,
+      "name": "Soybean",
+      "ideal_temperature": "25°C - 32°C",
+      "soil_type": "Sandy Loam, Clay Loam",
+      "rainfall": "60-75 cm",
+      "fertilizers": ["Rhizobium Culture", "DAP", "Gypsum"],
+      "diseases": ["Soybean Mosaic Virus", "Charcoal Rot"],
+      "pest_control": ["Imidacloprid", "Bacillus thuringiensis"],
+      "image": "https://picsum.photos/seed/soybean/400/300"
+    },
+    {
+      "id": 6,
+      "name": "Maize (Corn)",
+      "ideal_temperature": "21°C - 27°C",
+      "soil_type": "Well-drained Loamy Soil",
+      "rainfall": "50-100 cm",
+      "fertilizers": ["Urea", "Zinc Sulphate", "Boron"],
+      "diseases": ["Downy Mildew", "Stalk Rot"],
+      "pest_control": ["Fall Armyworm Lures", "Carbofuran"],
+      "image": "https://picsum.photos/seed/maize/400/300"
+    },
+    {
+      "id": 7,
+      "name": "Potato",
+      "ideal_temperature": "15°C - 20°C",
+      "soil_type": "Sandy Loam",
+      "rainfall": "50-75 cm",
+      "fertilizers": ["Farm Yard Manure", "NPK 15:15:15", "Ammonium Sulphate"],
+      "diseases": ["Late Blight", "Black Scurf"],
+      "pest_control": ["Mancozeb", "Imidacloprid"],
+      "image": "https://picsum.photos/seed/potato/400/300"
+    },
+    {
+      "id": 8,
+      "name": "Tomato",
+      "ideal_temperature": "21°C - 24°C",
+      "soil_type": "Sandy Loam",
+      "rainfall": "40-60 cm",
+      "fertilizers": ["Calcium Nitrate", "Boron", "NPK 19:19:19"],
+      "diseases": ["Early Blight", "Fusarium Wilt"],
+      "pest_control": ["Spinosad", "Neem Oil"],
+      "image": "https://picsum.photos/seed/tomato/400/300"
+    },
+    {
+      "id": 9,
+      "name": "Onion",
+      "ideal_temperature": "13°C - 24°C",
+      "soil_type": "Red Loam to Clay Loam",
+      "rainfall": "65-75 cm",
+      "fertilizers": ["Sulphur", "Urea", "Potassium Sulphate"],
+      "diseases": ["Purple Blotch", "Downy Mildew"],
+      "pest_control": ["Mancozeb", "Lambda-cyhalothrin"],
+      "image": "https://picsum.photos/seed/onion/400/300"
+    },
+    {
+      "id": 10,
+      "name": "Mustard",
+      "ideal_temperature": "10°C - 25°C",
+      "soil_type": "Light to Heavy Loam",
+      "rainfall": "25-40 cm",
+      "fertilizers": ["Urea", "SSP", "Gypsum"],
+      "diseases": ["White Rust", "Alternaria Blight"],
+      "pest_control": ["Aphid Traps", "Dimethoate"],
+      "image": "https://picsum.photos/seed/mustard/400/300"
+    }
+  ]
+}

@@ -1,0 +1,60 @@
+{
+  "farmers": [
+    {
+      "id": 1,
+      "name": "Ramesh Kumar",
+      "phone": "9876543210",
+      "region": "Punjab",
+      "issues": ["Rice blast observed in patches", "Requesting soil test"],
+      "last_visit": "2024-05-01"
+    },
+    {
+      "id": 2,
+      "name": "Sita Devi",
+      "phone": "9876543211",
+      "region": "Maharashtra",
+      "issues": ["Low yield in last soybean crop", "Water scarcity concerns"],
+      "last_visit": "2024-04-22"
+    },
+    {
+      "id": 3,
+      "name": "Arjun Singh",
+      "phone": "9876543212",
+      "region": "Uttar Pradesh",
+      "issues": ["Sugarcane Red Rot symptoms", "Fertilizer dosage query"],
+      "last_visit": "2024-05-10"
+    },
+    {
+      "id": 4,
+      "name": "Priya Sharma",
+      "phone": "9876543213",
+      "region": "Karnataka",
+      "issues": ["Fall armyworm attack on maize"],
+      "last_visit": null
+    },
+    {
+      "id": 5,
+      "name": "Amit Patel",
+      "phone": "9876543214",
+      "region": "Gujarat",
+      "issues": ["Pink bollworm in cotton fields"],
+      "last_visit": "2024-05-15"
+    },
+    {
+      "id": 13,
+      "name": "Kavita Reddy",
+      "phone": "9876543215",
+      "region": "Andhra Pradesh",
+      "issues": ["Chilli crop showing leaf curl virus", "Needs advice on pesticides"],
+      "last_visit": "2024-05-05"
+    },
+    {
+      "id": 14,
+      "name": "Manoj Tiwari",
+      "phone": "9876543216",
+      "region": "Bihar",
+      "issues": ["Low moisture in soil for wheat planting"],
+      "last_visit": null
+    }
+  ]
+}

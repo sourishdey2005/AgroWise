@@ -1,0 +1,32 @@
+{
+    "schemes": [
+        {
+            "id": 1,
+            "title": "Pradhan Mantri Kisan Samman Nidhi (PM-KISAN)",
+            "description": "An income support scheme for all landholding farmer families.",
+            "eligibility": "All landholding farmer families.",
+            "link": "#"
+        },
+        {
+            "id": 2,
+            "title": "Pradhan Mantri Fasal Bima Yojana (PMFBY)",
+            "description": "Crop insurance scheme to provide insurance coverage and financial support to the farmers in the event of failure of any of the notified crop.",
+            "eligibility": "All farmers including sharecroppers and tenant farmers growing notified crops in the notified areas.",
+            "link": "#"
+        },
+        {
+            "id": 3,
+            "title": "Kisan Credit Card (KCC) Scheme",
+            "description": "Provides farmers with timely access to credit for their cultivation and other needs.",
+            "eligibility": "Farmers, animal husbandry and fisheries farmers.",
+            "link": "#"
+        },
+        {
+            "id": 4,
+            "title": "Soil Health Card Scheme",
+            "description": "A scheme to provide every farmer with a soil health card, which will help them in deciding the quality of their soil and the type of crops they should sow.",
+            "eligibility": "All farmers across the country.",
+            "link": "#"
+        }
+    ]
+}

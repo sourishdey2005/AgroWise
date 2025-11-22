@@ -1,0 +1,52 @@
+{
+    "soils": [
+        {
+            "id": 1,
+            "name": "Alluvial Soil",
+            "description": "Rich in humus, potash, and lime. Highly fertile and suitable for a wide variety of crops. Found in the Indo-Gangetic plains.",
+            "recommended_crops": ["Basmati Rice", "Wheat", "Sugarcane", "Maize", "Potato"]
+        },
+        {
+            "id": 2,
+            "name": "Black Soil (Regur)",
+            "description": "High in clay content, retains moisture. Rich in iron, magnesia, and alumina. Ideal for cotton cultivation. Found in Deccan plateau.",
+            "recommended_crops": ["Cotton", "Sugarcane", "Soybean", "Wheat", "Jowar"]
+        },
+        {
+            "id": 3,
+            "name": "Red and Yellow Soil",
+            "description": "Develops on crystalline igneous rocks. Reddish due to iron diffusion. Often less fertile but responds well to fertilizers. Found in parts of Odisha, Chhattisgarh.",
+            "recommended_crops": ["Millets", "Pulses", "Linseed", "Tobacco", "Potato"]
+        },
+        {
+            "id": 4,
+            "name": "Laterite Soil",
+            "description": "Rich in iron and aluminum. Becomes hard when dry. Suitable for plantation crops. Found in Western Ghats, Eastern Ghats.",
+            "recommended_crops": ["Tea", "Coffee", "Cashew", "Rubber", "Coconut"]
+        },
+        {
+            "id": 5,
+            "name": "Arid (Desert) Soil",
+            "description": "Sandy in texture and saline in nature. Low in moisture and humus. Requires irrigation. Found in Western Rajasthan.",
+            "recommended_crops": ["Barley", "Millets (Bajra)", "Pulses", "Guar"]
+        },
+        {
+            "id": 6,
+            "name": "Mountain Soil",
+            "description": "Varies in depth and texture. Often loamy and silty. Rich in humus but can be acidic. Found in Himalayan region.",
+            "recommended_crops": ["Apples", "Maize", "Barley", "Tea", "Spices"]
+        },
+        {
+            "id": 7,
+            "name": "Loamy Soil",
+            "description": "A mix of sand, silt, and clay. Good drainage and moisture retention. Considered ideal for most crops. Found across India.",
+            "recommended_crops": ["Wheat", "Sugarcane", "Vegetables", "Pulses", "Cotton"]
+        },
+        {
+            "id": 8,
+            "name": "Clay Loam",
+            "description": "Higher clay content than loamy soil. Good nutrient holding capacity but can be heavy. Needs good management.",
+            "recommended_crops": ["Basmati Rice", "Sugarcane", "Soybean", "Wheat"]
+        }
+    ]
+}

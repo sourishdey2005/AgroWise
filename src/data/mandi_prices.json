@@ -1,0 +1,17 @@
+{
+    "prices": [
+        { "id": 1, "crop": "Wheat", "region": "Punjab", "min_price": 2015, "max_price": 2150, "date": "2024-05-20" },
+        { "id": 2, "crop": "Basmati Rice", "region": "Punjab", "min_price": 3500, "max_price": 4200, "date": "2024-05-20" },
+        { "id": 3, "crop": "Cotton", "region": "Gujarat", "min_price": 6800, "max_price": 7500, "date": "2024-05-20" },
+        { "id": 4, "crop": "Soybean", "region": "Maharashtra", "min_price": 4500, "max_price": 4800, "date": "2024-05-20" },
+        { "id": 5, "crop": "Sugarcane", "region": "Uttar Pradesh", "min_price": 340, "max_price": 360, "date": "2024-05-20" },
+        { "id": 6, "crop": "Maize", "region": "Karnataka", "min_price": 2050, "max_price": 2200, "date": "2024-05-19" },
+        { "id": 7, "crop": "Potato", "region": "Uttar Pradesh", "min_price": 1800, "max_price": 2100, "date": "2024-05-19" },
+        { "id": 8, "crop": "Tomato", "region": "Maharashtra", "min_price": 2500, "max_price": 3200, "date": "2024-05-19" },
+        { "id": 9, "crop": "Onion", "region": "Maharashtra", "min_price": 2200, "max_price": 2800, "date": "2024-05-18" },
+        { "id": 10, "crop": "Mustard", "region": "Rajasthan", "min_price": 5400, "max_price": 5650, "date": "2024-05-18" },
+        { "id": 11, "crop": "Wheat", "region": "Haryana", "min_price": 2000, "max_price": 2100, "date": "2024-05-20" },
+        { "id": 12, "crop": "Cotton", "region": "Maharashtra", "min_price": 6700, "max_price": 7300, "date": "2024-05-19" },
+        { "id": 13, "crop": "Basmati Rice", "region": "Haryana", "min_price": 3400, "max_price": 4000, "date": "2024-05-19" }
+    ]
+}

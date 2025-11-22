@@ -1,0 +1,64 @@
+{
+    "fertilizers": [
+        {
+            "id": 1,
+            "name": "Urea",
+            "composition": "46% Nitrogen",
+            "suitable_for": ["Basmati Rice", "Wheat", "Maize", "Sugarcane", "Cotton"]
+        },
+        {
+            "id": 2,
+            "name": "DAP (Di-Ammonium Phosphate)",
+            "composition": "18% Nitrogen, 46% Phosphorus",
+            "suitable_for": ["Soybean", "Cotton", "Wheat", "Pulses", "Basmati Rice"]
+        },
+        {
+            "id": 3,
+            "name": "SSP (Single Super Phosphate)",
+            "composition": "16% Phosphorus, 11% Sulphur",
+            "suitable_for": ["Mustard", "Groundnut", "Pulses", "Wheat"]
+        },
+        {
+            "id": 4,
+            "name": "MOP (Muriate of Potash)",
+            "composition": "60% Potassium",
+            "suitable_for": ["Sugarcane", "Potato", "Fruits", "Vegetables", "Wheat"]
+        },
+        {
+            "id": 5,
+            "name": "NPK 12:32:16",
+            "composition": "12% N, 32% P, 16% K",
+            "suitable_for": ["Basmati Rice", "Soybean", "Potato", "Cotton"]
+        },
+        {
+            "id": 6,
+            "name": "NPK 19:19:19",
+            "composition": "19% N, 19% P, 19% K",
+            "suitable_for": ["Tomato", "Vegetables", "Fruits", "Flowers"]
+        },
+        {
+            "id": 7,
+            "name": "Zinc Sulphate",
+            "composition": "21% or 33% Zinc",
+            "suitable_for": ["Maize", "Basmati Rice", "Paddy", "Wheat"]
+        },
+        {
+            "id": 8,
+            "name": "Gypsum",
+            "composition": "Calcium Sulphate",
+            "suitable_for": ["Groundnut", "Mustard", "Soybean", "Improving saline soils"]
+        },
+        {
+            "id": 9,
+            "name": "Boron",
+            "composition": "20% Boron",
+            "suitable_for": ["Tomato", "Maize", "Cauliflower", "Fruits"]
+        },
+        {
+            "id": 10,
+            "name": "Farm Yard Manure (FYM)",
+            "composition": "Organic Matter, N, P, K",
+            "suitable_for": ["All crops", "Potato", "Vegetables"]
+        }
+    ]
+}
