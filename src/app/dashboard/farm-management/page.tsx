@@ -15,7 +15,7 @@ const tasks = {
   daily: [
     { id: 1, name: "Check irrigation system", completed: true },
     { id: 2, name: "Scout for pests in Block A", completed: false },
-    { id: 3, name "Monitor soil moisture", completed: true },
+    { id: 3, name: "Monitor soil moisture", completed: true },
   ],
   weekly: [
     { id: 1, name: "Apply fertilizer to wheat crop", completed: false },
