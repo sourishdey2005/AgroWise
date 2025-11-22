@@ -1,7 +1,7 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Cloud, Sun, Thermometer, Wind, DollarSign, Book, Droplets } from "lucide-react";
+import { Cloud, Sun, Thermometer, Wind, DollarSign, Book, Droplets, Leaf } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
