@@ -6,6 +6,7 @@ import StatCard from "../shared/stat-card";
 import { HandCoins, Hourglass, CheckCircle, XCircle } from "lucide-react";
 import { LoanApplication } from "@/lib/types";
 import loanData from "@/data/loans.json";
+import Link from "next/link";
 
 const loans: LoanApplication[] = loanData.applications;
 
@@ -57,8 +58,8 @@ export default function BankDashboard() {
 
       <Card className="rounded-2xl shadow-sm">
         <CardHeader>
-          <CardTitle>Farmer Loan Applications</CardTitle>
-          <CardDescription>Review and process pending loan applications.</CardDescription>
+          <CardTitle>Recent Loan Applications</CardTitle>
+          <CardDescription>A snapshot of the most recent applications. For more details, visit the Loan Management section.</CardDescription>
         </CardHeader>
         <CardContent>
           <Table>
@@ -66,27 +67,23 @@ export default function BankDashboard() {
               <TableRow>
                 <TableHead>Farmer Name</TableHead>
                 <TableHead>Amount</TableHead>
-                <TableHead>Credit Score</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Date</TableHead>
                 <TableHead className="text-right">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {loans.map((loan) => (
+              {loans.slice(0, 3).map((loan) => (
                 <TableRow key={loan.id}>
                   <TableCell className="font-medium">{loan.farmerName}</TableCell>
                   <TableCell>₹{loan.amount.toLocaleString('en-IN')}</TableCell>
-                  <TableCell>{loan.creditScore}</TableCell>
                   <TableCell>
                     <Badge variant={getStatusVariant(loan.status)}>
                       {loan.status.charAt(0).toUpperCase() + loan.status.slice(1)}
                     </Badge>
                   </TableCell>
-                  <TableCell>{loan.date}</TableCell>
                   <TableCell className="text-right">
-                    <Button variant="outline" size="sm">
-                      Review
+                    <Button variant="outline" size="sm" asChild>
+                      <Link href="/dashboard/bank/loan-management">Review</Link>
                     </Button>
                   </TableCell>
                 </TableRow>

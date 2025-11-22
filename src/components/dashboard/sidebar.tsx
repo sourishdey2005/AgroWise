@@ -26,7 +26,7 @@ const navItems = {
     { href: '/dashboard/soil-environment', icon: Leaf, label: 'Soil & Environment' },
     { href: '/dashboard/agent/village-insights', icon: Map, label: 'Village Insights' },
     { href: '/dashboard/agent/trade-intelligence', icon: TrendingUp, label: 'Trade Intelligence' },
-    { href: 'src/app/dashboard/agent/supply-chain', icon: Truck, label: 'Supply Chain' },
+    { href: '/dashboard/agent/supply-chain', icon: Truck, label: 'Supply Chain' },
     { href: '/dashboard/agent/finance', icon: Landmark, label: 'Finance & Ops' },
     { href: '/dashboard/agent/quality-insights', icon: ShieldCheck, label: 'Quality Insights' },
   ],
@@ -36,6 +36,7 @@ const navItems = {
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
+    { href: '/dashboard/bank/loan-management', icon: FileText, label: 'Loan Management' },
   ],
 };
 
