@@ -1,28 +1,42 @@
+
 "use client";
 
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Progress } from "@/components/ui/progress";
+import { Input } from "@/components/ui/input";
 import { Calendar } from "@/components/ui/calendar";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tractor, DollarSign, Package, Wrench, Droplets, Calendar as CalendarIcon } from "lucide-react";
-import React from "react";
+import { Tractor, DollarSign, Package, Wrench, Droplets, PlusCircle } from "lucide-react";
+import React, { useState, useEffect } from "react";
 
-const tasks = {
+type Task = {
+  id: number;
+  name: string;
+  completed: boolean;
+};
+
+type Tasks = {
+  daily: Task[];
+  weekly: Task[];
+};
+
+const initialTasks: Tasks = {
   daily: [
     { id: 1, name: "Check irrigation system", completed: true },
     { id: 2, name: "Scout for pests in Block A", completed: false },
     { id: 3, name: "Monitor soil moisture", completed: true },
   ],
   weekly: [
-    { id: 1, name: "Apply fertilizer to wheat crop", completed: false },
-    { id: 2, name: "Review market prices for corn", completed: true },
-    { id: 3, name: "Plan next week's tasks", completed: false },
+    { id: 4, name: "Apply fertilizer to wheat crop", completed: false },
+    { id: 5, name: "Review market prices for corn", completed: true },
+    { id: 6, name: "Plan next week's tasks", completed: false },
   ],
 };
+
+const FARM_TASKS_STORAGE_KEY = 'farmTasksData';
 
 const ledger = [
   { id: 1, date: "2024-05-20", description: "Sold 10 quintals of wheat", type: "income", amount: 21500 },
@@ -46,7 +60,49 @@ const irrigationSchedule = [
 ];
 
 export default function FarmManagementPage() {
-    const [date, setDate] = React.useState<Date | undefined>(new Date());
+    const [tasks, setTasks] = useState<Tasks>(initialTasks);
+    const [newTaskName, setNewTaskName] = useState({ daily: "", weekly: "" });
+
+    useEffect(() => {
+        try {
+            const savedTasks = localStorage.getItem(FARM_TASKS_STORAGE_KEY);
+            if (savedTasks) {
+                setTasks(JSON.parse(savedTasks));
+            }
+        } catch (error) {
+            console.error("Failed to parse tasks from localStorage", error);
+        }
+    }, []);
+
+    useEffect(() => {
+        try {
+            localStorage.setItem(FARM_TASKS_STORAGE_KEY, JSON.stringify(tasks));
+        } catch (error) {
+            console.error("Failed to save tasks to localStorage", error);
+        }
+    }, [tasks]);
+
+    const handleAddTask = (type: 'daily' | 'weekly') => {
+        const name = newTaskName[type].trim();
+        if (name) {
+            const newTask: Task = {
+                id: Date.now(),
+                name,
+                completed: false,
+            };
+            setTasks(prev => ({ ...prev, [type]: [...prev[type], newTask] }));
+            setNewTaskName(prev => ({ ...prev, [type]: "" }));
+        }
+    };
+
+    const handleToggleTask = (type: 'daily' | 'weekly', taskId: number) => {
+        setTasks(prev => ({
+            ...prev,
+            [type]: prev[type].map(task =>
+                task.id === taskId ? { ...task, completed: !task.completed } : task
+            ),
+        }));
+    };
     
   return (
     <div className="grid gap-6 animate-in fade-in duration-500">
@@ -70,32 +126,54 @@ export default function FarmManagementPage() {
               <TabsTrigger value="weekly">Weekly Tasks</TabsTrigger>
             </TabsList>
             <TabsContent value="daily">
-                <Table>
-                    <TableBody>
-                        {tasks.daily.map(task => (
-                            <TableRow key={task.id}>
-                                <TableCell className="flex items-center gap-4">
-                                    <Checkbox checked={task.completed} />
-                                    <span className={task.completed ? "text-muted-foreground line-through" : ""}>{task.name}</span>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                <div className="space-y-4">
+                    <div className="flex gap-2">
+                        <Input 
+                            placeholder="Add a new daily task..."
+                            value={newTaskName.daily}
+                            onChange={(e) => setNewTaskName(prev => ({...prev, daily: e.target.value}))}
+                            onKeyDown={(e) => e.key === 'Enter' && handleAddTask('daily')}
+                        />
+                        <Button onClick={() => handleAddTask('daily')}><PlusCircle className="mr-2 h-4 w-4" /> Add</Button>
+                    </div>
+                    <Table>
+                        <TableBody>
+                            {tasks.daily.map(task => (
+                                <TableRow key={task.id}>
+                                    <TableCell className="flex items-center gap-4">
+                                        <Checkbox checked={task.completed} onCheckedChange={() => handleToggleTask('daily', task.id)}/>
+                                        <span className={task.completed ? "text-muted-foreground line-through" : ""}>{task.name}</span>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </TabsContent>
             <TabsContent value="weekly">
-                 <Table>
-                    <TableBody>
-                        {tasks.weekly.map(task => (
-                            <TableRow key={task.id}>
-                                <TableCell className="flex items-center gap-4">
-                                    <Checkbox checked={task.completed} />
-                                    <span className={task.completed ? "text-muted-foreground line-through" : ""}>{task.name}</span>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
+                 <div className="space-y-4">
+                    <div className="flex gap-2">
+                        <Input 
+                            placeholder="Add a new weekly task..."
+                            value={newTaskName.weekly}
+                            onChange={(e) => setNewTaskName(prev => ({...prev, weekly: e.target.value}))}
+                            onKeyDown={(e) => e.key === 'Enter' && handleAddTask('weekly')}
+                        />
+                        <Button onClick={() => handleAddTask('weekly')}><PlusCircle className="mr-2 h-4 w-4" /> Add</Button>
+                    </div>
+                    <Table>
+                        <TableBody>
+                            {tasks.weekly.map(task => (
+                                <TableRow key={task.id}>
+                                    <TableCell className="flex items-center gap-4">
+                                        <Checkbox checked={task.completed} onCheckedChange={() => handleToggleTask('weekly', task.id)} />
+                                        <span className={task.completed ? "text-muted-foreground line-through" : ""}>{task.name}</span>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </div>
             </TabsContent>
           </Tabs>
         </CardContent>
