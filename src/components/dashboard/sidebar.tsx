@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -41,6 +41,7 @@ const navItems = {
     { href: '/dashboard/bank/scheme-coordination', icon: Book, label: 'Scheme Coordination' },
     { href: '/dashboard/bank/repayment-finance', icon: Coins, label: 'Repayment & Finance' },
     { href: '/dashboard/bank/portfolio-performance', icon: BarChart, label: 'Portfolio & Performance' },
+    { href: '/dashboard/bank/fraud-compliance', icon: ShieldAlert, label: 'Fraud & Compliance' },
   ],
 };
 
