@@ -91,13 +91,13 @@ export default function ExternalRiskPage() {
                             <YAxis domain={[80, 100]} unit="%"/>
                             <Tooltip
                                 contentStyle={{ backgroundColor: 'hsl(var(--background))' }}
-                                formatter={(value, name) => [`${value}%`, "Recovery Rate"]}
+                                formatter={(value, name, props) => {
+                                    const { payload } = props;
+                                    return [`${value}% (Risk: ${payload.risk})`, "Recovery Rate"];
+                                }}
                                 labelFormatter={(label) => `Region: ${label}`}
                              />
-                            <Legend formatter={(value, entry) => {
-                                const { payload }: any = entry;
-                                return `${payload.payload.risk} Zone`;
-                            }}/>
+                            <Legend />
                             <Bar dataKey="recoveryRate" name="Recovery Rate" fill="hsl(var(--primary))" />
                         </BarChart>
                     </ResponsiveContainer>
