@@ -11,6 +11,7 @@ import { Bug, Send, Check, Eye, Map, Siren } from 'lucide-react';
 import StatCard from '@/components/shared/stat-card';
 import cropsData from "@/data/crops.json";
 import { useToast } from '@/hooks/use-toast';
+import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
 
 const cropOptions = cropsData.crops.map(c => ({ value: c.name, label: c.name }));
 
@@ -19,6 +20,14 @@ const heatmapData = [
     { id: 5, risk: 'medium', size: 'medium' }, { id: 6, risk: 'high', size: 'large' }, { id: 7, risk: 'low', size: 'small' }, { id: 8, risk: 'low', size: 'small' },
     { id: 9, risk: 'low', size: 'small' }, { id: 10, risk: 'medium', size: 'medium' }, { id: 11, risk: 'low', size: 'small' }, { id: 12, risk: 'high', size: 'large' },
 ];
+
+const riskDistribution = [
+    { name: 'Low Risk', value: heatmapData.filter(p => p.risk === 'low').length },
+    { name: 'Medium Risk', value: heatmapData.filter(p => p.risk === 'medium').length },
+    { name: 'High Risk', value: heatmapData.filter(p => p.risk === 'high').length },
+];
+
+const COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
 
 export default function AdvisoriesPage() {
     const [selectedCrop, setSelectedCrop] = useState<string>('');
@@ -42,24 +51,6 @@ export default function AdvisoriesPage() {
             description: `Your advisory has been broadcast to the selected group: ${advisoryTarget}.`,
         });
         setAdvisoryMessage('');
-    };
-
-    const getRiskClass = (risk: string) => {
-        switch (risk) {
-            case 'high': return 'bg-red-500';
-            case 'medium': return 'bg-amber-400';
-            case 'low': return 'bg-green-500';
-            default: return 'bg-gray-400';
-        }
-    };
-
-    const getSizeClass = (size: string) => {
-        switch (size) {
-            case 'large': return 'w-8 h-8';
-            case 'medium': return 'w-6 h-6';
-            case 'small': return 'w-4 h-4';
-            default: return 'w-3 h-3';
-        }
     };
 
     return (
@@ -137,24 +128,30 @@ export default function AdvisoriesPage() {
 
                  <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Map /> High-Risk Villages Heatmap</CardTitle>
-                        <CardDescription>Mock visualization of at-risk areas.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Map /> High-Risk Villages</CardTitle>
+                        <CardDescription>Distribution of at-risk areas.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <div className="relative w-full aspect-video bg-secondary/30 rounded-lg p-4 flex items-center justify-center">
-                            <div className="grid grid-cols-4 gap-8">
-                                {heatmapData.map(point => (
-                                    <div key={point.id} className="flex items-center justify-center">
-                                        <div className={`${getSizeClass(point.size)} ${getRiskClass(point.risk)} rounded-full opacity-70`}></div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
-                        <div className="flex justify-end gap-4 mt-4 text-xs items-center">
-                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-green-500"></div> Low Risk</div>
-                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-amber-400"></div> Med Risk</div>
-                            <div className="flex items-center gap-1.5"><div className="w-3 h-3 rounded-full bg-red-500"></div> High Risk</div>
-                        </div>
+                        <ResponsiveContainer width="100%" height={250}>
+                            <PieChart>
+                                <Pie
+                                    data={riskDistribution}
+                                    cx="50%"
+                                    cy="50%"
+                                    labelLine={false}
+                                    outerRadius={100}
+                                    fill="#8884d8"
+                                    dataKey="value"
+                                    nameKey="name"
+                                >
+                                    {riskDistribution.map((entry, index) => (
+                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                    ))}
+                                </Pie>
+                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: 'var(--radius)' }} />
+                                <Legend />
+                            </PieChart>
+                        </ResponsiveContainer>
                     </CardContent>
                 </Card>
             </div>
