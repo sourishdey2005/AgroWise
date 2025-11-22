@@ -5,7 +5,7 @@ import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor } from "lucide-react";
+import { AlertTriangle, Cloud, Droplets, ShieldCheck, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor } from "lucide-react";
 import { BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid, Bar } from "recharts";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
@@ -15,8 +15,8 @@ import mandiData from '@/data/mandi_prices.json';
 import rainfallData from '@/data/rainfall.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather, MandiPrice } from "@/lib/types";
-import CropRiskCalculator from "./farmer/crop-risk-calculator";
 import WaterRequirementCalculator from "./farmer/water-requirement-calculator";
+import EvapotranspirationCalculator from "./farmer/evapotranspiration-calculator";
 
 
 const initialWeather = weatherData.weather[0];
@@ -144,22 +144,24 @@ export default function FarmerDashboard() {
       </Card>
 
 
-       <Card className="rounded-2xl shadow-sm bg-destructive/10 border-destructive/20">
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-destructive">
-              <AlertTriangle />
-              <span>Disease Alert: Rice Blast</span>
-            </CardTitle>
-            <CardDescription className="text-destructive/90">
-              High humidity (over 25%) in your district (Ludhiana) increases the risk for Basmati Rice.
-            </CardDescription>
-          </CardHeader>
-          <CardContent>
-            <p className="text-sm text-destructive-foreground/80">
-              Please monitor your fields for gray or white spots on leaves. Consider preventive spraying with recommended fungicides if symptoms appear.
-            </p>
-          </CardContent>
-        </Card>
+       {weather.alerts && weather.alerts.length > 0 && weather.alerts[0] && (
+        <Card className="rounded-2xl shadow-sm bg-destructive/10 border-destructive/20">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-destructive">
+                <AlertTriangle />
+                <span>Weather Alert</span>
+                </CardTitle>
+                <CardDescription className="text-destructive/90">
+                {weather.district}
+                </CardDescription>
+            </CardHeader>
+            <CardContent>
+                <p className="text-sm text-destructive-foreground/80">
+                {weather.alerts[0]}
+                </p>
+            </CardContent>
+            </Card>
+        )}
       
       <div className="grid gap-6 lg:grid-cols-2">
         <Card>
@@ -214,6 +216,8 @@ export default function FarmerDashboard() {
       </div>
 
       <WaterRequirementCalculator />
+      
+      <EvapotranspirationCalculator />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2 rounded-2xl shadow-sm">
@@ -266,7 +270,7 @@ export default function FarmerDashboard() {
                 <ShieldCheck className="text-primary" />
                 <span>Weather Health Risk</span>
               </CardTitle>
-               <CardDescription>Risk score based on weather forecast</CardDescription>
+               <CardDescription>Risk score for crop disease</CardDescription>
             </CardHeader>
             <CardContent>
                 <div className="flex items-center justify-center">
@@ -352,40 +356,14 @@ export default function FarmerDashboard() {
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
                             <span className="text-4xl font-bold text-primary">{Math.round(harvestReadiness)}%</span>
+                            <span className="text-xs text-muted-foreground">Ready</span>
                         </div>
                     </div>
                 </div>
-                 <p className="text-center text-sm text-muted-foreground mt-2">Ready in approx. {Math.max(0, Math.ceil((100-harvestReadiness)/5))} weeks</p>
             </CardContent>
         </Card>
       </div>
 
-      <CropRiskCalculator />
-
-      <Card className="rounded-2xl shadow-sm">
-        <CardHeader>
-          <CardTitle>Smart Crop Recommendations</CardTitle>
-          <CardDescription>Based on your district (Ludhiana), soil (Alluvial), and current season.</CardDescription>
-        </CardHeader>
-        <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {recommendedCrops.map((crop) => (
-            <Card key={crop.id} className="overflow-hidden">
-              <CardHeader>
-                <CardTitle>{crop.name}</CardTitle>
-                <CardDescription>Soil: {crop.soil_type}</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <div className="flex flex-wrap gap-2">
-                  <span className="text-sm font-semibold">Fertilizers:</span>
-                  {crop.fertilizers.slice(0, 2).map(f => <Badge key={f} variant="secondary">{f}</Badge>)}
-                </div>
-              </CardContent>
-            </Card>
-          ))}
-        </CardContent>
-      </Card>
     </div>
   );
 }
-
-    
