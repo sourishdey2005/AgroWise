@@ -1,11 +1,11 @@
 
 "use client";
 
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart } from "lucide-react";
-import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "recharts";
+import { AlertTriangle, Cloud, Droplets, ShieldCheck, Sun, Thermometer, TrendingUp, Wind, CalendarDays, Bug, Tractor, BarChart, AreaChart, LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
@@ -13,17 +13,20 @@ import soilData from '@/data/soil.json';
 import mandiData from '@/data/mandi_prices.json';
 import rainfallData from '@/data/rainfall.json';
 import { Progress } from "@/components/ui/progress";
-import type { Weather } from "@/lib/types";
+import type { Weather, MandiPrice } from "@/lib/types";
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
 import WaterRequirementCalculator from "./farmer/water-requirement-calculator";
 
-// Mock data fetching
-const weather = weatherData.weather[0];
+
+const initialWeather = weatherData.weather[0];
 const recommendedCrops = cropsData.crops.slice(0, 3);
 const soilAdvice = soilData.soils[0];
-const marketPrices = mandiData.prices.slice(0, 5);
-const rainfallPrediction = rainfallData.prediction;
+const initialMarketPrices = mandiData.prices.slice(0, 5);
+const initialRainfallPrediction = rainfallData.prediction;
 
+// Function to generate a random number within a range
+const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
+const getRandomInt = (min: number, max: number) => Math.floor(getRandom(min, max + 1));
 
 // Mock function to calculate risk score
 const calculateHealthRisk = (weather: Weather): { score: number; label: string, color: string } => {
@@ -52,13 +55,56 @@ const getPestForecast = (weather: Weather) => {
 }
 
 export default function FarmerDashboard() {
-  const yieldPrediction = 85; 
+  const [weather, setWeather] = useState<Weather>(initialWeather);
+  const [marketPrices, setMarketPrices] = useState<MandiPrice[]>(initialMarketPrices);
+  const [rainfallPrediction, setRainfallPrediction] = useState(initialRainfallPrediction);
+  const [yieldPrediction, setYieldPrediction] = useState(85);
+  const [harvestReadiness, setHarvestReadiness] = useState(75);
+  const [soilMoisture, setSoilMoisture] = useState(45);
+  const [growthStage, setGrowthStage] = useState({ current: 5, total: 10, label: "Vegetative Stage" });
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      // Simulate weather changes
+      setWeather(prevWeather => ({
+        ...prevWeather,
+        temperature: `${getRandomInt(30, 42)}°C`,
+        humidity: `${getRandomInt(20, 80)}%`,
+        rainfall_probability: `${getRandomInt(0, 100)}%`,
+      }));
+
+      // Simulate market price fluctuations
+      setMarketPrices(prevPrices => prevPrices.map(price => ({
+        ...price,
+        min_price: Math.round(price.min_price * getRandom(0.98, 1.02)),
+        max_price: Math.round(price.max_price * getRandom(0.98, 1.02)),
+      })));
+
+      // Simulate rainfall prediction changes
+      setRainfallPrediction(prev => prev.map((p, i) => ({ ...p, rainfall: getRandomInt(0, i === 0 ? 5 : 20) })));
+
+      // Simulate other metrics
+      setYieldPrediction(p => Math.min(100, Math.max(0, p + getRandom(-0.5, 0.5))));
+      setHarvestReadiness(p => Math.min(100, Math.max(0, p + 0.1)));
+      setSoilMoisture(p => Math.min(100, Math.max(0, p + getRandom(-2, 2))));
+      
+      // Simulate growth stage progress
+      setGrowthStage(prev => {
+          const newCurrent = prev.current + 0.01;
+          if (newCurrent >= prev.total) return { ...prev, current: prev.total, label: "Maturity" };
+          if (newCurrent > 8) return { ...prev, current: newCurrent, label: "Late Season" };
+          if (newCurrent > 5) return { ...prev, current: newCurrent, label: "Mid Season" };
+          return { ...prev, current: newCurrent };
+      });
+
+    }, 3000); // Update every 3 seconds
+
+    return () => clearInterval(interval);
+  }, []);
+  
   const { score: healthRiskScore, label: riskLabel, color: riskColor } = calculateHealthRisk(weather);
   const healthRiskStroke = healthRiskScore;
   const pestForecast = getPestForecast(weather);
-  const growthStage = { current: 5, total: 10, label: "Vegetative Stage" };
-  const harvestReadiness = 75;
-  const soilMoisture = 45; // Mock soil moisture percentage
 
   return (
     <div className="grid gap-6">
@@ -157,7 +203,7 @@ export default function FarmerDashboard() {
                           />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="text-4xl font-bold text-blue-500">{soilMoisture}%</span>
+                          <span className="text-4xl font-bold text-blue-500">{Math.round(soilMoisture)}%</span>
                           <span className="text-xs text-muted-foreground">Optimal</span>
                       </div>
                   </div>
@@ -207,7 +253,7 @@ export default function FarmerDashboard() {
             </CardHeader>
             <CardContent>
               <div className="flex items-center gap-4">
-                <span className="text-4xl font-bold text-primary">{yieldPrediction}%</span>
+                <span className="text-4xl font-bold text-primary">{Math.round(yieldPrediction)}%</span>
                 <Progress value={yieldPrediction} className="h-3 w-full" />
               </div>
                <p className="text-xs text-muted-foreground mt-2">Based on current weather and soil conditions.</p>
@@ -270,7 +316,7 @@ export default function FarmerDashboard() {
                 <span>{growthStage.label}</span>
                 <span>Harvest</span>
               </div>
-              <p className="text-center text-sm">Estimated {growthStage.total - growthStage.current} weeks until next stage.</p>
+              <p className="text-center text-sm">Estimated {Math.max(0, Math.ceil(growthStage.total - growthStage.current))} weeks until next stage.</p>
             </div>
           </CardContent>
         </Card>
@@ -287,7 +333,7 @@ export default function FarmerDashboard() {
             <CardContent>
                  <div className="flex items-center justify-center">
                     <div className="relative h-32 w-32">
-                        <svg className="h-full w-full" viewBox="0_0_36_36">
+                        <svg className="h-full w-full" viewBox="0 0 36 36">
                             <path
                                 className="text-secondary"
                                 d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -304,11 +350,11 @@ export default function FarmerDashboard() {
                             />
                         </svg>
                         <div className="absolute inset-0 flex flex-col items-center justify-center">
-                            <span className="text-4xl font-bold text-primary">{harvestReadiness}%</span>
+                            <span className="text-4xl font-bold text-primary">{Math.round(harvestReadiness)}%</span>
                         </div>
                     </div>
                 </div>
-                 <p className="text-center text-sm text-muted-foreground mt-2">Ready in approx. 2 weeks</p>
+                 <p className="text-center text-sm text-muted-foreground mt-2">Ready in approx. {Math.max(0, Math.ceil((100-harvestReadiness)/5))} weeks</p>
             </CardContent>
         </Card>
       </div>
@@ -340,7 +386,3 @@ export default function FarmerDashboard() {
     </div>
   );
 }
-
-    
-
-    
