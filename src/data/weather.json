@@ -9,4 +9,6 @@
         { "id": 6, "district": "Jaipur", "temperature": "43°C", "humidity": "15%", "rainfall_probability": "0%", "alerts": ["Extreme heat advisory"] },
         { "id": 7, "district": "Patna", "temperature": "39°C", "humidity": "45%", "rainfall_probability": "20%", "alerts": [] },
         { "id": 8, "district": "Bhopal", "temperature": "37°C", "humidity": "40%", "rainfall_probability": "15%", "alerts": [] },
-        { "id": 9, "district": "Kurnool", "temperature": "35°C", "humidity": "
+        { "id": 9, "district": "Kurnool", "temperature": "35°C", "humidity": "55%", "rainfall_probability": "25%", "alerts": [] }
+    ]
+}
