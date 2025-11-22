@@ -1,12 +1,13 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Cloud, Sun, Thermometer, Wind, DollarSign, Book, Droplets, Leaf } from "lucide-react";
+import { Cloud, Sun, Thermometer, Wind, DollarSign, Book, Droplets, Leaf, ShieldCheck, TrendingUp } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import weatherData from '@/data/weather.json';
 import cropsData from '@/data/crops.json';
 import soilData from '@/data/soil.json';
 import mandiData from '@/data/mandi_prices.json';
+import { Progress } from "@/components/ui/progress";
 
 // Mock data fetching
 const weather = weatherData.weather[0];
@@ -15,6 +16,9 @@ const soilAdvice = soilData.soils[0];
 const marketPrices = mandiData.prices.slice(0, 5);
 
 export default function FarmerDashboard() {
+  const yieldPrediction = 85; // Mock prediction percentage
+  const healthRiskScore = 25; // Mock risk score
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
@@ -72,34 +76,65 @@ export default function FarmerDashboard() {
           </CardContent>
         </Card>
 
-        <Card className="rounded-2xl shadow-sm">
-          <CardHeader>
-            <CardTitle>Crop Disease Alerts</CardTitle>
-            <CardDescription>Based on weather and local reports.</CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-4">
-             <div className="flex items-center gap-4 p-4 bg-destructive/10 rounded-lg">
-                <div className="bg-destructive/20 p-2 rounded-full"><Leaf className="w-5 h-5 text-destructive"/></div>
-                <div>
-                  <p className="font-semibold">Rice Blast Alert</p>
-                  <p className="text-sm text-muted-foreground">High humidity increases risk. Monitor your fields.</p>
+        <div className="space-y-6">
+          <Card className="rounded-2xl shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TrendingUp className="text-primary" />
+                <span>Yield Prediction</span>
+              </CardTitle>
+              <CardDescription>Estimated yield for current season</CardDescription>
+            </CardHeader>
+            <CardContent>
+              <div className="flex items-center gap-4">
+                <span className="text-4xl font-bold text-primary">{yieldPrediction}%</span>
+                <Progress value={yieldPrediction} className="h-3 w-full" />
+              </div>
+               <p className="text-xs text-muted-foreground mt-2">Based on current weather and soil conditions.</p>
+            </CardContent>
+          </Card>
+           <Card className="rounded-2xl shadow-sm">
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <ShieldCheck className="text-primary" />
+                <span>Crop Health Risk</span>
+              </CardTitle>
+               <CardDescription>Current risk score for your crops</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <div className="flex items-center justify-center">
+                    <div className="relative h-32 w-32">
+                        <svg className="h-full w-full" viewBox="0 0 36 36">
+                            <path
+                                className="text-secondary"
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                strokeWidth="3"
+                            />
+                            <path
+                                className="text-destructive"
+                                strokeDasharray={`${healthRiskScore}, 100`}
+                                d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
+                                fill="none"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                            />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-3xl font-bold text-destructive">{healthRiskScore}</span>
+                            <span className="text-xs text-muted-foreground">Low Risk</span>
+                        </div>
+                    </div>
                 </div>
-            </div>
-             <div className="flex items-center gap-4 p-4 bg-yellow-500/10 rounded-lg">
-                <div className="bg-yellow-500/20 p-2 rounded-full"><Leaf className="w-5 h-5 text-yellow-600"/></div>
-                <div>
-                  <p className="font-semibold">Wheat Rust Watch</p>
-                  <p className="text-sm text-muted-foreground">Cool, damp conditions are favorable. Inspect leaves.</p>
-                </div>
-            </div>
-          </CardContent>
-        </Card>
+            </CardContent>
+          </Card>
+        </div>
       </div>
       
       <Card className="rounded-2xl shadow-sm">
         <CardHeader>
-          <CardTitle>Recommended Crops</CardTitle>
-          <CardDescription>Based on current season, soil type, and water availability.</CardDescription>
+          <CardTitle>Smart Crop Recommendations</CardTitle>
+          <CardDescription>Based on your district (Ludhiana), soil (Alluvial), and current season.</CardDescription>
         </CardHeader>
         <CardContent className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
           {recommendedCrops.map((crop) => (
