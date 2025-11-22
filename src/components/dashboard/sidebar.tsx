@@ -3,7 +3,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -25,6 +25,7 @@ const navItems = {
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
     { href: '/dashboard/performance', icon: BarChart, label: 'Performance Metrics' },
     { href: '/dashboard/soil-environment', icon: Leaf, label: 'Soil & Environment' },
+    { href: '/dashboard/agent/village-insights', icon: Map, label: 'Village Insights' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
