@@ -23,6 +23,7 @@ const navItems = {
     { href: '/dashboard/agent/farmer-management', icon: FileText, label: 'Farmer Management' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
     { href: '/dashboard/performance', icon: BarChart, label: 'Performance Metrics' },
+    { href: '/dashboard/soil-environment', icon: Leaf, label: 'Soil & Environment' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
