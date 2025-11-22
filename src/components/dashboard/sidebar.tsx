@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -26,8 +26,9 @@ const navItems = {
     { href: '/dashboard/soil-environment', icon: Leaf, label: 'Soil & Environment' },
     { href: '/dashboard/agent/village-insights', icon: Map, label: 'Village Insights' },
     { href: '/dashboard/agent/trade-intelligence', icon: TrendingUp, label: 'Trade Intelligence' },
-    { href: '/dashboard/agent/supply-chain', icon: Truck, label: 'Supply Chain' },
+    { href: 'src/app/dashboard/agent/supply-chain', icon: Truck, label: 'Supply Chain' },
     { href: '/dashboard/agent/finance', icon: Landmark, label: 'Finance & Ops' },
+    { href: '/dashboard/agent/quality-insights', icon: ShieldCheck, label: 'Quality Insights' },
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
