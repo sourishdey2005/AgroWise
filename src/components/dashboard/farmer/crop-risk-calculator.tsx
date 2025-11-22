@@ -130,6 +130,10 @@ export default function CropRiskCalculator() {
                         <SelectItem value="sugarcane">Sugarcane</SelectItem>
                         <SelectItem value="cotton">Cotton</SelectItem>
                         <SelectItem value="maize">Maize</SelectItem>
+                        <SelectItem value="soybean">Soybean</SelectItem>
+                        <SelectItem value="potato">Potato</SelectItem>
+                        <SelectItem value="tomato">Tomato</SelectItem>
+                        <SelectItem value="mustard">Mustard</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
