@@ -1,0 +1,10 @@
+
+{
+    "wheat_5_year": [
+        { "year": "2020", "min_price": 1840, "max_price": 1925 },
+        { "year": "2021", "min_price": 1975, "max_price": 2015 },
+        { "year": "2022", "min_price": 2015, "max_price": 2125 },
+        { "year": "2023", "min_price": 2125, "max_price": 2275 },
+        { "year": "2024", "min_price": 2275, "max_price": 2400 }
+    ]
+}
