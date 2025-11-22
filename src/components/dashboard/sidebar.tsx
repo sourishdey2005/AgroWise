@@ -1,4 +1,5 @@
 
+
 "use client";
 
 import Link from 'next/link';
@@ -38,6 +39,7 @@ const navItems = {
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/bank/loan-management', icon: FileText, label: 'Loan Management' },
+    { href: '/dashboard/bank/farmer-financial-insights', icon: ClipboardList, label: 'Farmer Financial Insights' },
     { href: '/dashboard/bank/scheme-coordination', icon: Book, label: 'Scheme Coordination' },
     { href: '/dashboard/bank/repayment-finance', icon: Coins, label: 'Repayment & Finance' },
     { href: '/dashboard/bank/portfolio-performance', icon: BarChart, label: 'Portfolio & Performance' },
