@@ -142,8 +142,8 @@ export default function SupplyChainPage() {
                     <CardHeader><CardTitle className="text-sm font-medium flex items-center gap-2"><FileCheck/> Inter-State Permit Checker</CardTitle></CardHeader>
                     <CardContent>
                         <div className="space-y-2">
-                            <p>Pune &rarr; Hubli: <Badge variant="secondary">Not Required</Badge></p>
-                            <p>Nagpur &rarr; Hyderabad: <Badge variant="destructive">Required</Badge></p>
+                            <div className="flex justify-between items-center"><span>Pune &rarr; Hubli: </span><Badge variant="secondary">Not Required</Badge></div>
+                            <div className="flex justify-between items-center"><span>Nagpur &rarr; Hyderabad: </span><Badge variant="destructive">Required</Badge></div>
                         </div>
                     </CardContent>
                 </Card>
