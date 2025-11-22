@@ -39,7 +39,18 @@ import { Input } from "@/components/ui/input";
 
 const formSchema = z.object({
   cropName: z.string().min(1, "Please select a crop"),
-  growthStage: z.enum(["initial", "development", "mid-season", "late-season"]),
+  growthStage: z.enum([
+    "germination",
+    "seedling",
+    "vegetative",
+    "flowering",
+    "fruiting",
+    "maturity",
+    "initial", 
+    "development", 
+    "mid-season", 
+    "late-season"
+  ]),
   temperature: z.coerce.number().positive(),
   humidity: z.coerce.number().min(0).max(100),
   windSpeed: z.coerce.number().min(0, "Wind speed must be a positive number"),
@@ -58,7 +69,7 @@ export default function CropRiskCalculator() {
     resolver: zodResolver(formSchema),
     defaultValues: {
       cropName: "",
-      growthStage: "development",
+      growthStage: "vegetative",
       temperature: 35,
       humidity: 60,
       windSpeed: 5,
@@ -81,7 +92,9 @@ export default function CropRiskCalculator() {
     
     if(values.windSpeed > 15) riskScore += 15;
 
-    if (values.growthStage === "development" || values.growthStage === "mid-season") riskScore += 10;
+    if (values.growthStage === "flowering" || values.growthStage === "fruiting" || values.growthStage === "development" || values.growthStage === "mid-season") riskScore += 15;
+    else if (values.growthStage === "seedling" || values.growthStage === "vegetative") riskScore += 10;
+    else if (values.growthStage === "germination" || values.growthStage === "initial") riskScore += 5;
     
     riskScore = Math.min(100, riskScore);
 
@@ -154,10 +167,12 @@ export default function CropRiskCalculator() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="initial">Initial</SelectItem>
-                        <SelectItem value="development">Development</SelectItem>
-                        <SelectItem value="mid-season">Mid Season</SelectItem>
-                        <SelectItem value="late-season">Late Season</SelectItem>
+                        <SelectItem value="germination">Germination</SelectItem>
+                        <SelectItem value="seedling">Seedling</SelectItem>
+                        <SelectItem value="vegetative">Vegetative</SelectItem>
+                        <SelectItem value="flowering">Flowering</SelectItem>
+                        <SelectItem value="fruiting">Fruiting</SelectItem>
+                        <SelectItem value="maturity">Maturity</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
