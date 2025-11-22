@@ -155,7 +155,7 @@ export default function SupplyChainPage() {
             
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Truck/> Driver & Fleet Allocator</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><Truck/> Driver &amp; Fleet Allocator</CardTitle>
                     <CardDescription>Assign available vehicles to farm pickups.</CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -239,7 +239,7 @@ export default function SupplyChainPage() {
 
              <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Map/> Farm Cluster Mapping & Distribution</CardTitle>
+                    <CardTitle className="flex items-center gap-2"><Map/> Farm Cluster Mapping &amp; Distribution</CardTitle>
                     <CardDescription>Visualization of farm clusters and their primary crop focus.</CardDescription>
                 </CardHeader>
                 <CardContent className="grid md:grid-cols-2 gap-6 items-center">
