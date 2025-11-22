@@ -92,9 +92,9 @@ export default function WeatherPage() {
   return (
     <div className="grid gap-6 animate-in fade-in duration-500">
         <div>
-            <h1 className="text-2xl font-bold tracking-tight">Weather &amp; Environment</h1>
+            <h1 className="text-2xl font-bold tracking-tight">Weather & Disaster Insights</h1>
             <p className="text-muted-foreground">
-            Monitor hyperlocal weather, soil conditions, and environmental factors.
+            Monitor hyperlocal weather, soil conditions, and potential disaster risks.
             </p>
         </div>
       <Card>
@@ -182,8 +182,8 @@ export default function WeatherPage() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle>Soil Moisture Estimation</CardTitle>
-            <CardDescription>Mock estimation of water content in the soil.</CardDescription>
+            <CardTitle>Village-wise Weather Risk Meter</CardTitle>
+            <CardDescription>Mock estimation of weather risk for your village.</CardDescription>
           </CardHeader>
           <CardContent>
               <div className="flex items-center justify-center h-full">
@@ -196,7 +196,7 @@ export default function WeatherPage() {
                               strokeWidth="3"
                           />
                           <path
-                              className="text-blue-500"
+                              className="text-amber-500"
                               strokeDasharray={`${soilMoisture}, 100`}
                               d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"
                               fill="none"
@@ -205,8 +205,8 @@ export default function WeatherPage() {
                           />
                       </svg>
                       <div className="absolute inset-0 flex flex-col items-center justify-center">
-                          <span className="text-4xl font-bold text-blue-500">{Math.round(soilMoisture)}%</span>
-                          <span className="text-xs text-muted-foreground">Optimal</span>
+                          <span className="text-4xl font-bold text-amber-500">{Math.round(soilMoisture)}%</span>
+                          <span className="text-xs text-muted-foreground">Moderate</span>
                       </div>
                   </div>
               </div>
