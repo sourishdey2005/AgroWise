@@ -8,8 +8,7 @@
       "rainfall": "110-150 cm",
       "fertilizers": ["Urea", "DAP", "NPK 12:32:16"],
       "diseases": ["Rice blast", "Brown spot", "Sheath blight"],
-      "pest_control": ["Neem solution", "Chlorantraniliprole"],
-      "image": "https://picsum.photos/seed/rice/400/300"
+      "pest_control": ["Neem solution", "Chlorantraniliprole"]
     },
     {
       "id": 2,
@@ -19,8 +18,7 @@
       "rainfall": "50-90 cm",
       "fertilizers": ["Urea", "SSP", "MOP"],
       "diseases": ["Rust", "Smut", "Powdery mildew"],
-      "pest_control": ["Propiconazole", "Thiamethoxam"],
-      "image": "https://picsum.photos/seed/wheat/400/300"
+      "pest_control": ["Propiconazole", "Thiamethoxam"]
     },
     {
       "id": 3,
@@ -30,8 +28,7 @@
       "rainfall": "75-120 cm",
       "fertilizers": ["Urea", "Potash", "Pressmud"],
       "diseases": ["Red Rot", "Whip Smut"],
-      "pest_control": ["Phorate", "Chlorpyrifos"],
-      "image": "https://picsum.photos/seed/sugarcane/400/300"
+      "pest_control": ["Phorate", "Chlorpyrifos"]
     },
     {
       "id": 4,
@@ -41,8 +38,7 @@
       "rainfall": "50-100 cm",
       "fertilizers": ["DAP", "Urea", "Magnesium Sulphate"],
       "diseases": ["Boll Rot", "Leaf Blight"],
-      "pest_control": ["Pink Bollworm Pheromone Traps", "Spinosad"],
-      "image": "https://picsum.photos/seed/cotton/400/300"
+      "pest_control": ["Pink Bollworm Pheromone Traps", "Spinosad"]
     },
     {
       "id": 5,
@@ -52,8 +48,7 @@
       "rainfall": "60-75 cm",
       "fertilizers": ["Rhizobium Culture", "DAP", "Gypsum"],
       "diseases": ["Soybean Mosaic Virus", "Charcoal Rot"],
-      "pest_control": ["Imidacloprid", "Bacillus thuringiensis"],
-      "image": "https://picsum.photos/seed/soybean/400/300"
+      "pest_control": ["Imidacloprid", "Bacillus thuringiensis"]
     },
     {
       "id": 6,
@@ -63,8 +58,7 @@
       "rainfall": "50-100 cm",
       "fertilizers": ["Urea", "Zinc Sulphate", "Boron"],
       "diseases": ["Downy Mildew", "Stalk Rot"],
-      "pest_control": ["Fall Armyworm Lures", "Carbofuran"],
-      "image": "https://picsum.photos/seed/maize/400/300"
+      "pest_control": ["Fall Armyworm Lures", "Carbofuran"]
     },
     {
       "id": 7,
@@ -74,8 +68,7 @@
       "rainfall": "50-75 cm",
       "fertilizers": ["Farm Yard Manure", "NPK 15:15:15", "Ammonium Sulphate"],
       "diseases": ["Late Blight", "Black Scurf"],
-      "pest_control": ["Mancozeb", "Imidacloprid"],
-      "image": "https://picsum.photos/seed/potato/400/300"
+      "pest_control": ["Mancozeb", "Imidacloprid"]
     },
     {
       "id": 8,
@@ -85,8 +78,7 @@
       "rainfall": "40-60 cm",
       "fertilizers": ["Calcium Nitrate", "Boron", "NPK 19:19:19"],
       "diseases": ["Early Blight", "Fusarium Wilt"],
-      "pest_control": ["Spinosad", "Neem Oil"],
-      "image": "https://picsum.photos/seed/tomato/400/300"
+      "pest_control": ["Spinosad", "Neem Oil"]
     },
     {
       "id": 9,
@@ -96,8 +88,7 @@
       "rainfall": "65-75 cm",
       "fertilizers": ["Sulphur", "Urea", "Potassium Sulphate"],
       "diseases": ["Purple Blotch", "Downy Mildew"],
-      "pest_control": ["Mancozeb", "Lambda-cyhalothrin"],
-      "image": "https://picsum.photos/seed/onion/400/300"
+      "pest_control": ["Mancozeb", "Lambda-cyhalothrin"]
     },
     {
       "id": 10,
@@ -107,8 +98,47 @@
       "rainfall": "25-40 cm",
       "fertilizers": ["Urea", "SSP", "Gypsum"],
       "diseases": ["White Rust", "Alternaria Blight"],
-      "pest_control": ["Aphid Traps", "Dimethoate"],
-      "image": "https://picsum.photos/seed/mustard/400/300"
+      "pest_control": ["Aphid Traps", "Dimethoate"]
+    },
+    {
+      "id": 11,
+      "name": "Jowar (Sorghum)",
+      "ideal_temperature": "26°C - 34°C",
+      "soil_type": "Sandy Loam to Clay Loam",
+      "rainfall": "40-60 cm",
+      "fertilizers": ["Urea", "DAP"],
+      "diseases": ["Grain Smut", "Anthracnose"],
+      "pest_control": ["Carbofuran"]
+    },
+    {
+      "id": 12,
+      "name": "Bajra (Pearl Millet)",
+      "ideal_temperature": "25°C - 35°C",
+      "soil_type": "Sandy Loam",
+      "rainfall": "40-50 cm",
+      "fertilizers": ["Urea", "SSP"],
+      "diseases": ["Downy Mildew", "Ergot"],
+      "pest_control": ["Thiram"]
+    },
+    {
+      "id": 13,
+      "name": "Gram (Chickpea)",
+      "ideal_temperature": "18°C - 30°C",
+      "soil_type": "Light to heavy soils",
+      "rainfall": "60-100 cm",
+      "fertilizers": ["DAP", "Rhizobium"],
+      "diseases": ["Wilt", "Ascochyta Blight"],
+      "pest_control": ["Pheromone traps for pod borer"]
+    },
+    {
+      "id": 14,
+      "name": "Groundnut (Peanut)",
+      "ideal_temperature": "25°C - 35°C",
+      "soil_type": "Sandy Loam",
+      "rainfall": "50-125 cm",
+      "fertilizers": ["Gypsum", "DAP"],
+      "diseases": ["Tikka Leaf Spot", "Rust"],
+      "pest_control": ["Chlorpyrifos"]
     }
   ]
 }

@@ -61,14 +61,13 @@ export default function MyCropsPage() {
         </CardHeader>
         <CardContent>
           {filteredCrops.length > 0 ? (
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               {filteredCrops.map((crop) => (
                 <Card key={crop.id} className="flex flex-col">
                   <CardHeader>
-                    <img src={crop.image} alt={crop.name} className="rounded-lg aspect-video object-cover" />
+                    <CardTitle>{crop.name}</CardTitle>
                   </CardHeader>
                   <CardContent className="flex-grow space-y-4">
-                    <CardTitle>{crop.name}</CardTitle>
                     <div className="space-y-2 text-sm text-muted-foreground">
                       <div className="flex items-center gap-2">
                         <Thermometer className="h-4 w-4 text-primary" />
