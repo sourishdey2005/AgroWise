@@ -4,13 +4,15 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ShieldCheck, TrendingUp, CalendarDays, Tractor } from "lucide-react";
+import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import mandiData from '@/data/mandi_prices.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather, MandiPrice } from "@/lib/types";
 import weatherData from '@/data/weather.json';
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+
 
 // Function to generate a random number within a range
 const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -36,6 +38,10 @@ const calculateHealthRisk = (weather: Weather): { score: number; label: string, 
   if (score > 40) return { score, label: "Medium Risk", color: "text-amber-500" };
   return { score, label: "Low Risk", color: "text-green-500" };
 };
+
+const profitProjectionData = [
+    { name: 'Profit', expected: 75000, potential: 95000 }
+];
 
 
 export default function FarmerDashboard() {
@@ -223,6 +229,100 @@ export default function FarmerDashboard() {
             </CardContent>
         </Card>
       </div>
+      
+       <div className="grid gap-6 md:grid-cols-3">
+            <Card className="rounded-2xl shadow-sm">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Sprout className="text-primary" /> Multi-Season Planner</CardTitle>
+                    <CardDescription>Crop suggestions for upcoming seasons.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <Table>
+                        <TableHeader>
+                            <TableRow>
+                                <TableHead>Season</TableHead>
+                                <TableHead>Suggested Crop</TableHead>
+                            </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                            <TableRow>
+                                <TableCell>Kharif (Jun-Oct)</TableCell>
+                                <TableCell>Basmati Rice, Maize</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell>Rabi (Oct-Mar)</TableCell>
+                                <TableCell>Wheat, Mustard</TableCell>
+                            </TableRow>
+                             <TableRow>
+                                <TableCell>Zaid (Mar-Jun)</TableCell>
+                                <TableCell>Moong Dal, Cucumber</TableCell>
+                            </TableRow>
+                        </TableBody>
+                    </Table>
+                </CardContent>
+            </Card>
+            <Card className="rounded-2xl shadow-sm">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Recycle className="text-primary" /> Crop Rotation Optimizer</CardTitle>
+                    <CardDescription>Improve soil health with smart rotation.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="flex items-center justify-around text-center">
+                        <div>
+                            <p className="font-bold">Year 1</p>
+                            <p className="text-sm text-muted-foreground">Rice (Deep root)</p>
+                        </div>
+                        <p className="font-bold text-primary">&rarr;</p>
+                         <div>
+                            <p className="font-bold">Year 2</p>
+                            <p className="text-sm text-muted-foreground">Legume (N-fixing)</p>
+                        </div>
+                        <p className="font-bold text-primary">&rarr;</p>
+                        <div>
+                            <p className="font-bold">Year 3</p>
+                            <p className="text-sm text-muted-foreground">Wheat (Shallow root)</p>
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+             <Card className="rounded-2xl shadow-sm">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Calculator className="text-primary" /> Input Cost Estimator</CardTitle>
+                    <CardDescription>Calculate costs per acre for Wheat.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <ul className="space-y-2 text-sm">
+                        <li className="flex justify-between"><span>Seeds:</span> <span>₹2,000</span></li>
+                        <li className="flex justify-between"><span>Fertilizers:</span> <span>₹3,500</span></li>
+                        <li className="flex justify-between"><span>Labor:</span> <span>₹4,000</span></li>
+                        <li className="flex justify-between"><span>Irrigation:</span> <span>₹1,500</span></li>
+                        <li className="flex justify-between font-bold border-t pt-2 mt-2"><span>Total:</span> <span>₹11,000</span></li>
+                    </ul>
+                </CardContent>
+            </Card>
+        </div>
+
+        <Card className="rounded-2xl shadow-sm">
+            <CardHeader>
+                <CardTitle className="flex items-center gap-2"><BarChartHorizontal className="text-primary" /> Expected Profit Projection</CardTitle>
+                <CardDescription>Expected vs. potential profit per acre for current season.</CardDescription>
+            </CardHeader>
+            <CardContent>
+                <ResponsiveContainer width="100%" height={150}>
+                    <BarChart data={profitProjectionData} layout="vertical" margin={{ left: 10, right: 30}}>
+                        <XAxis type="number" unit="₹" tickFormatter={(value) => `${value/1000}k`} />
+                        <YAxis type="category" dataKey="name" hide />
+                        <Tooltip
+                            cursor={{ fill: 'hsl(var(--muted))' }}
+                            contentStyle={{ backgroundColor: 'hsl(var(--background))' }}
+                            formatter={(value) => `₹${value.toLocaleString('en-IN')}`}
+                        />
+                        <Bar dataKey="expected" name="Expected Profit" fill="hsl(var(--primary) / 0.5)" radius={4} />
+                        <Bar dataKey="potential" name="Potential Profit" fill="hsl(var(--primary))" radius={4} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </CardContent>
+        </Card>
 
     </div>
   );
