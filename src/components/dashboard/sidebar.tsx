@@ -9,7 +9,7 @@ const navItems = {
   farmer: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/my-crops', icon: Leaf, label: 'My Crops' },
-    { href: '/dashboard/weather', icon: Thermometer, label: 'Weather' },
+    { href: '/dashboard/weather', icon: Thermometer, label: 'Weather & Environment' },
     { href: '/dashboard/market-analytics', icon: TrendingUp, label: 'Market Analytics' },
     { href: '/dashboard/farm-management', icon: ClipboardList, label: 'Farm Management' },
     { href: '/dashboard/sowing-harvest', icon: Combine, label: 'Sowing & Harvest' },
