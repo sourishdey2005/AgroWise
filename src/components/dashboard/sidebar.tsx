@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -8,7 +9,7 @@ import type { User } from '@/lib/types';
 const navItems = {
   farmer: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/my-crops', icon: Leaf, label: 'My Crops' },
+    { href: '/dashboard/my-crops', icon: Leaf, label: 'Crop Hub' },
     { href: '/dashboard/weather', icon: Thermometer, label: 'Weather & Disaster Insights' },
     { href: '/dashboard/market-analytics', icon: TrendingUp, label: 'Market Analytics' },
     { href: '/dashboard/farm-management', icon: ClipboardList, label: 'Farm Management' },

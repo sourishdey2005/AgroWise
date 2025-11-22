@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -8,7 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { DollarSign, BarChart, AlertTriangle, CheckCircle, Calculator } from "lucide-react";
+import { DollarSign, BarChart, AlertTriangle, CheckCircle, Calculator, Truck } from "lucide-react";
 import StatCard from "@/components/shared/stat-card";
 import mandiData from '@/data/mandi_prices.json';
 import priceTrendData from '@/data/price-trends.json';
@@ -16,6 +17,7 @@ import type { MandiPrice } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
+import { Progress } from "@/components/ui/progress";
 
 const initialMarketPrices = mandiData.prices.slice(0, 5);
 const trend7Day = priceTrendData.trends.wheat_7_day;
@@ -106,8 +108,8 @@ export default function MarketAnalyticsPage() {
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="lg:col-span-2 rounded-2xl shadow-sm">
           <CardHeader>
-            <CardTitle>Nearby Mandi Prices</CardTitle>
-            <CardDescription>Live prices from your local market.</CardDescription>
+            <CardTitle>Mandis with Best Prices</CardTitle>
+            <CardDescription>Live prices from your local market, sorted by max price.</CardDescription>
           </CardHeader>
           <CardContent>
             <Table>
@@ -119,7 +121,7 @@ export default function MarketAnalyticsPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {marketPrices.map((price) => (
+                {marketPrices.sort((a,b) => b.max_price - a.max_price).map((price) => (
                   <TableRow key={price.id}>
                     <TableCell className="font-medium">{price.crop}</TableCell>
                     <TableCell>₹{price.min_price.toLocaleString('en-IN')}</TableCell>
@@ -168,7 +170,7 @@ export default function MarketAnalyticsPage() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2">
                     <CheckCircle className="text-primary"/>
-                    <span>Best Selling Time</span>
+                    <span>Price Advisory Suggestion</span>
                 </CardTitle>
             </CardHeader>
             <CardContent>
@@ -251,6 +253,43 @@ export default function MarketAnalyticsPage() {
                     </p>
                 </div>
             )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+            <CardTitle className="flex items-center gap-2">
+                <Truck />
+                <span>Procurement Assistance Tracker</span>
+            </CardTitle>
+            <CardDescription>Track the status of your produce pickup request.</CardDescription>
+        </CardHeader>
+        <CardContent>
+            <div className="space-y-4">
+                <div className="flex items-center gap-4">
+                    <div className="flex flex-col items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                            <CheckCircle className="w-5 h-5"/>
+                        </div>
+                        <p className="text-xs mt-1">Requested</p>
+                    </div>
+                    <Progress value={50} className="flex-1 h-2"/>
+                    <div className="flex flex-col items-center">
+                        <div className="w-8 h-8 rounded-full bg-primary text-primary-foreground flex items-center justify-center">
+                           <Truck className="w-5 h-5"/>
+                        </div>
+                        <p className="text-xs mt-1">In Transit</p>
+                    </div>
+                     <Progress value={0} className="flex-1 h-2"/>
+                    <div className="flex flex-col items-center opacity-50">
+                        <div className="w-8 h-8 rounded-full bg-secondary text-secondary-foreground flex items-center justify-center">
+                            <CheckCircle className="w-5 h-5"/>
+                        </div>
+                        <p className="text-xs mt-1">Delivered</p>
+                    </div>
+                </div>
+                 <p className="text-center text-sm text-muted-foreground">Status: Your wheat produce pickup is scheduled. Vehicle is en route.</p>
+            </div>
         </CardContent>
       </Card>
     </div>
