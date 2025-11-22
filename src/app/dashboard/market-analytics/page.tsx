@@ -30,6 +30,9 @@ const profitabilitySchema = z.object({
   price: z.coerce.number().positive("Must be positive"),
 });
 
+const PROFITABILITY_STORAGE_KEY = 'profitabilityCalculatorData';
+
+
 export default function MarketAnalyticsPage() {
   const [marketPrices, setMarketPrices] = useState<MandiPrice[]>(initialMarketPrices);
   const [volatility, setVolatility] = useState(25);
@@ -43,6 +46,31 @@ export default function MarketAnalyticsPage() {
       price: 2150,
     },
   });
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    try {
+      const savedData = localStorage.getItem(PROFITABILITY_STORAGE_KEY);
+      if (savedData) {
+        const parsedData = JSON.parse(savedData);
+        form.reset(parsedData);
+      }
+    } catch (error) {
+        console.error("Failed to parse profitability data from localStorage", error);
+    }
+  }, [form]);
+
+  // Save to localStorage on change
+  useEffect(() => {
+    const subscription = form.watch((values) => {
+      try {
+        localStorage.setItem(PROFITABILITY_STORAGE_KEY, JSON.stringify(values));
+      } catch (error) {
+        console.error("Failed to save profitability data to localStorage", error);
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [form]);
 
 
   useEffect(() => {

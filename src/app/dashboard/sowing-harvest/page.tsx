@@ -20,12 +20,39 @@ const sowingWindow = {
     reason: "Optimal soil temperature and moisture.",
 };
 
+const SEED_RATE_STORAGE_KEY = 'seedRateCalculatorData';
+
 export default function SowingHarvestPage() {
     const [landSize, setLandSize] = useState(5);
     const [seedRate, setSeedRate] = useState(40);
     const [requiredSeed, setRequiredSeed] = useState(200);
     const [harvestTime, setHarvestTime] = useState(3600 * 4); // 4 hours in seconds
     const [germination, setGermination] = useState(92);
+
+    // Load from localStorage
+    useEffect(() => {
+        try {
+            const savedData = localStorage.getItem(SEED_RATE_STORAGE_KEY);
+            if (savedData) {
+                const { landSize: savedLandSize, seedRate: savedSeedRate } = JSON.parse(savedData);
+                if (savedLandSize) setLandSize(savedLandSize);
+                if (savedSeedRate) setSeedRate(savedSeedRate);
+            }
+        } catch (error) {
+            console.error("Failed to load seed rate data from localStorage", error);
+        }
+    }, []);
+
+    // Save to localStorage
+    useEffect(() => {
+        try {
+            const data = JSON.stringify({ landSize, seedRate });
+            localStorage.setItem(SEED_RATE_STORAGE_KEY, data);
+        } catch (error) {
+            console.error("Failed to save seed rate data to localStorage", error);
+        }
+    }, [landSize, seedRate]);
+
 
      useEffect(() => {
         const timer = setInterval(() => {

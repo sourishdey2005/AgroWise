@@ -1,7 +1,7 @@
 
 "use client";
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,31 +18,77 @@ const coldStorages = [
 
 const priceTrends = historicalPriceData.wheat_5_year;
 
+const POST_HARVEST_STORAGE_KEY = 'postHarvestData';
+
+type PostHarvestState = {
+  transportCost: { distance: number; costPerKm: number; total: number };
+  commission: { price: number; rate: number; total: number };
+  postHarvestLoss: { quantity: number; lossRate: number; total: number };
+};
+
 export default function PostHarvestPage() {
-  const [transportCost, setTransportCost] = useState({ distance: 50, costPerKm: 15, total: 750 });
-  const [commission, setCommission] = useState({ price: 2150, rate: 8, total: 172 });
-  const [postHarvestLoss, setPostHarvestLoss] = useState({ quantity: 100, lossRate: 5, total: 5 });
+  const [calculators, setCalculators] = useState<PostHarvestState>({
+    transportCost: { distance: 50, costPerKm: 15, total: 750 },
+    commission: { price: 2150, rate: 8, total: 172 },
+    postHarvestLoss: { quantity: 100, lossRate: 5, total: 5 },
+  });
+  
   const [bestDay, setBestDay] = useState({ day: "Wednesday", reason: "Highest average sale price based on last month's data." });
+
+  useEffect(() => {
+    try {
+        const savedData = localStorage.getItem(POST_HARVEST_STORAGE_KEY);
+        if (savedData) {
+            const parsed = JSON.parse(savedData);
+            setCalculators(c => ({...c, ...parsed}));
+        }
+    } catch (e) {
+        console.error("Failed to load post-harvest data from localStorage", e);
+    }
+  }, []);
+
+  const saveToLocalStorage = (data: Partial<PostHarvestState>) => {
+    try {
+        const currentData = JSON.parse(localStorage.getItem(POST_HARVEST_STORAGE_KEY) || '{}');
+        const newData = { ...currentData, ...data };
+        localStorage.setItem(POST_HARVEST_STORAGE_KEY, JSON.stringify(newData));
+    } catch (e) {
+        console.error("Failed to save post-harvest data to localStorage", e);
+    }
+  }
+
 
   const handleTransportChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValues = { ...transportCost, [name]: Number(value) };
-    newValues.total = newValues.distance * newValues.costPerKm;
-    setTransportCost(newValues);
+    setCalculators(prev => {
+        const newValues = { ...prev.transportCost, [name]: Number(value) };
+        newValues.total = newValues.distance * newValues.costPerKm;
+        const newState = { ...prev, transportCost: newValues };
+        saveToLocalStorage({ transportCost: newValues });
+        return newState;
+    });
   };
   
   const handleCommissionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValues = { ...commission, [name]: Number(value) };
-    newValues.total = (newValues.price * newValues.rate) / 100;
-    setCommission(newValues);
+     setCalculators(prev => {
+        const newValues = { ...prev.commission, [name]: Number(value) };
+        newValues.total = (newValues.price * newValues.rate) / 100;
+        const newState = { ...prev, commission: newValues };
+        saveToLocalStorage({ commission: newValues });
+        return newState;
+    });
   };
 
   const handleLossChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    const newValues = { ...postHarvestLoss, [name]: Number(value) };
-    newValues.total = (newValues.quantity * newValues.lossRate) / 100;
-    setPostHarvestLoss(newValues);
+    setCalculators(prev => {
+        const newValues = { ...prev.postHarvestLoss, [name]: Number(value) };
+        newValues.total = (newValues.quantity * newValues.lossRate) / 100;
+        const newState = { ...prev, postHarvestLoss: newValues };
+        saveToLocalStorage({ postHarvestLoss: newValues });
+        return newState;
+    });
   };
 
   return (
@@ -89,15 +135,15 @@ export default function PostHarvestPage() {
           <CardContent className="space-y-4">
               <div>
                   <label className="text-sm font-medium">Distance to Mandi (km)</label>
-                  <Input name="distance" type="number" value={transportCost.distance} onChange={handleTransportChange} />
+                  <Input name="distance" type="number" value={calculators.transportCost.distance} onChange={handleTransportChange} />
               </div>
               <div>
                   <label className="text-sm font-medium">Cost per km (₹)</label>
-                  <Input name="costPerKm" type="number" value={transportCost.costPerKm} onChange={handleTransportChange} />
+                  <Input name="costPerKm" type="number" value={calculators.transportCost.costPerKm} onChange={handleTransportChange} />
               </div>
               <div className="text-center bg-secondary p-4 rounded-md">
                 <p className="text-muted-foreground">Estimated Transport Cost</p>
-                <p className="text-2xl font-bold text-primary">₹{transportCost.total.toLocaleString('en-IN')}</p>
+                <p className="text-2xl font-bold text-primary">₹{calculators.transportCost.total.toLocaleString('en-IN')}</p>
               </div>
           </CardContent>
         </Card>
@@ -108,15 +154,15 @@ export default function PostHarvestPage() {
           <CardContent className="space-y-4">
               <div>
                   <label className="text-sm font-medium">Sale Price/Quintal (₹)</label>
-                  <Input name="price" type="number" value={commission.price} onChange={handleCommissionChange} />
+                  <Input name="price" type="number" value={calculators.commission.price} onChange={handleCommissionChange} />
               </div>
               <div>
                   <label className="text-sm font-medium">Commission Rate (%)</label>
-                  <Input name="rate" type="number" value={commission.rate} onChange={handleCommissionChange} />
+                  <Input name="rate" type="number" value={calculators.commission.rate} onChange={handleCommissionChange} />
               </div>
               <div className="text-center bg-secondary p-4 rounded-md">
                 <p className="text-muted-foreground">Predicted Commission</p>
-                <p className="text-2xl font-bold text-primary">₹{commission.total.toLocaleString('en-IN')} / Quintal</p>
+                <p className="text-2xl font-bold text-primary">₹{calculators.commission.total.toLocaleString('en-IN')} / Quintal</p>
               </div>
           </CardContent>
         </Card>
@@ -127,15 +173,15 @@ export default function PostHarvestPage() {
           <CardContent className="space-y-4">
               <div>
                   <label className="text-sm font-medium">Total Quantity (Quintal)</label>
-                  <Input name="quantity" type="number" value={postHarvestLoss.quantity} onChange={handleLossChange} />
+                  <Input name="quantity" type="number" value={calculators.postHarvestLoss.quantity} onChange={handleLossChange} />
               </div>
               <div>
                   <label className="text-sm font-medium">Est. Loss Rate (%)</label>
-                  <Input name="lossRate" type="number" value={postHarvestLoss.lossRate} onChange={handleLossChange} />
+                  <Input name="lossRate" type="number" value={calculators.postHarvestLoss.lossRate} onChange={handleLossChange} />
               </div>
               <div className="text-center bg-secondary p-4 rounded-md">
                 <p className="text-muted-foreground">Estimated Loss</p>
-                <p className="text-2xl font-bold text-destructive">{postHarvestLoss.total.toLocaleString('en-IN')} Quintal</p>
+                <p className="text-2xl font-bold text-destructive">{calculators.postHarvestLoss.total.toLocaleString('en-IN')} Quintal</p>
               </div>
           </CardContent>
         </Card>
