@@ -30,10 +30,22 @@ const getPestForecast = (weather: Weather) => {
     return { level: 'Low', color: 'bg-green-500' };
 }
 
+const getInitialWeather = (region?: string) => {
+    if (region === "Punjab") {
+        return weatherData.weather.find(w => w.district === "Ludhiana") || weatherData.weather[0];
+    }
+    if (region === "Maharashtra") {
+        return weatherData.weather.find(w => w.district === "Pune") || weatherData.weather[0];
+    }
+    // Fallback for other regions or if user has no region
+    return weatherData.weather[0];
+};
+
+
 export default function WeatherPage() {
   const { user } = useAuth();
   
-  const initialWeather = weatherData.weather.find(w => w.district === user?.region) || weatherData.weather[0];
+  const initialWeather = getInitialWeather(user?.region);
 
   const [weather, setWeather] = useState<Weather>(initialWeather);
   const [rainfallPrediction, setRainfallPrediction] = useState(initialRainfallPrediction);
@@ -69,6 +81,11 @@ export default function WeatherPage() {
 
     return () => clearInterval(interval);
   }, []);
+
+  useEffect(() => {
+    setWeather(getInitialWeather(user?.region));
+  }, [user]);
+
   
   const pestForecast = getPestForecast(weather);
 
