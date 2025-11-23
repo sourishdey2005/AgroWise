@@ -26,7 +26,7 @@ export default function SowingHarvestPage() {
     const [landSize, setLandSize] = useState(5);
     const [seedRate, setSeedRate] = useState(40);
     const [requiredSeed, setRequiredSeed] = useState(200);
-    const [harvestTime, setHarvestTime] = useState(3600 * 4); // 4 hours in seconds
+    const [harvestTimeInDays, setHarvestTimeInDays] = useState(12);
     const [germination, setGermination] = useState(92);
 
     // Load from localStorage
@@ -54,23 +54,10 @@ export default function SowingHarvestPage() {
     }, [landSize, seedRate]);
 
 
-     useEffect(() => {
-        const timer = setInterval(() => {
-            setHarvestTime(prev => (prev > 0 ? prev - 1 : 0));
-        }, 1000);
-        return () => clearInterval(timer);
-    }, []);
-
     useEffect(() => {
         setRequiredSeed(landSize * seedRate);
     }, [landSize, seedRate]);
 
-    const formatTime = (seconds: number) => {
-        const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
-        const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
-        const s = (seconds % 60).toString().padStart(2, '0');
-        return `${h}:${m}:${s}`;
-    };
 
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
@@ -163,8 +150,11 @@ export default function SowingHarvestPage() {
                         <CardDescription>Optimal harvest time remaining based on maturity.</CardDescription>
                     </CardHeader>
                     <CardContent className="flex items-center justify-center h-full">
-                        <div className="text-6xl font-bold font-mono text-primary tabular-nums">
-                            {formatTime(harvestTime)}
+                        <div className="text-center">
+                            <p className="text-6xl font-bold font-mono text-primary tabular-nums">
+                                {harvestTimeInDays}
+                            </p>
+                             <p className="text-xl text-muted-foreground">Days</p>
                         </div>
                     </CardContent>
                 </Card>
