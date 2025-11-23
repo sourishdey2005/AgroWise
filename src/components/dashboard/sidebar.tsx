@@ -1,9 +1,8 @@
-
 "use client";
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield, Workflow } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield, Workflow, Siren } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -36,6 +35,7 @@ const navItems = {
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
     { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
+    { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
