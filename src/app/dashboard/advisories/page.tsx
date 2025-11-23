@@ -91,12 +91,43 @@ export default function AdvisoriesPage() {
                             <Select>
                                 <SelectTrigger><SelectValue placeholder="Select Region" /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="punjab">Punjab</SelectItem>
-                                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
-                                    <SelectItem value="karnataka">Karnataka</SelectItem>
-                                    <SelectItem value="gujarat">Gujarat</SelectItem>
                                     <SelectItem value="all">All India</SelectItem>
+                                    <SelectItem value="andaman-nicobar">Andaman &amp; Nicobar Islands</SelectItem>
+                                    <SelectItem value="andhra-pradesh">Andhra Pradesh</SelectItem>
+                                    <SelectItem value="arunachal-pradesh">Arunachal Pradesh</SelectItem>
+                                    <SelectItem value="assam">Assam</SelectItem>
+                                    <SelectItem value="bihar">Bihar</SelectItem>
+                                    <SelectItem value="chandigarh">Chandigarh</SelectItem>
+                                    <SelectItem value="chhattisgarh">Chhattisgarh</SelectItem>
+                                    <SelectItem value="dadra-nagar-haveli">Dadra &amp; Nagar Haveli and Daman &amp; Diu</SelectItem>
+                                    <SelectItem value="delhi">Delhi</SelectItem>
+                                    <SelectItem value="goa">Goa</SelectItem>
+                                    <SelectItem value="gujarat">Gujarat</SelectItem>
+                                    <SelectItem value="haryana">Haryana</SelectItem>
+                                    <SelectItem value="himachal-pradesh">Himachal Pradesh</SelectItem>
+                                    <SelectItem value="jammu-kashmir">Jammu &amp; Kashmir</SelectItem>
+                                    <SelectItem value="jharkhand">Jharkhand</SelectItem>
+                                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                                    <SelectItem value="kerala">Kerala</SelectItem>
+                                    <SelectItem value="ladakh">Ladakh</SelectItem>
+                                    <SelectItem value="lakshadweep">Lakshadweep</SelectItem>
+                                    <SelectItem value="madhya-pradesh">Madhya Pradesh</SelectItem>
+                                    <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                                    <SelectItem value="manipur">Manipur</SelectItem>
+                                    <SelectItem value="meghalaya">Meghalaya</SelectItem>
+                                    <SelectItem value="mizoram">Mizoram</SelectItem>
+                                    <SelectItem value="nagaland">Nagaland</SelectItem>
+                                    <SelectItem value="odisha">Odisha</SelectItem>
+                                    <SelectItem value="puducherry">Puducherry</SelectItem>
+                                    <SelectItem value="punjab">Punjab</SelectItem>
+                                    <SelectItem value="rajasthan">Rajasthan</SelectItem>
+                                    <SelectItem value="sikkim">Sikkim</SelectItem>
+                                    <SelectItem value="tamil-nadu">Tamil Nadu</SelectItem>
+                                    <SelectItem value="telangana">Telangana</SelectItem>
+                                    <SelectItem value="tripura">Tripura</SelectItem>
+                                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                                    <SelectItem value="uttarakhand">Uttarakhand</SelectItem>
+                                    <SelectItem value="west-bengal">West Bengal</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
