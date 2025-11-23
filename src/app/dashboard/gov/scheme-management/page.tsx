@@ -32,6 +32,15 @@ const disbursementData = [
     { scheme: 'KCC', status: 88 },
 ];
 
+const benefitUtilizationData = [
+    { name: 'Maharashtra', value: 400 },
+    { name: 'Punjab', value: 300 },
+    { name: 'Uttar Pradesh', value: 250 },
+    { name: 'Karnataka', value: 200 },
+];
+const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+
+
 export default function SchemeManagementPage() {
 
     return (
@@ -155,15 +164,30 @@ export default function SchemeManagementPage() {
             
              <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Map/> Benefit Utilization Map</CardTitle>
-                    <CardDescription>Mock visualization showing where scheme benefits are being most utilized.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><Map/> Benefit Utilization by State</CardTitle>
+                    <CardDescription>Visualization showing where scheme benefits are being most utilized (in arbitrary units).</CardDescription>
                 </CardHeader>
                 <CardContent>
-                     <div className="grid grid-cols-4 grid-rows-3 gap-1 bg-secondary/50 p-2 rounded-md aspect-video">
-                        {['bg-green-700', 'bg-green-600', 'bg-green-700', 'bg-red-400', 'bg-green-500', 'bg-amber-400', 'bg-red-500', 'bg-green-800', 'bg-green-600', 'bg-amber-500', 'bg-green-700', 'bg-green-600'].map((color, i) => (
-                             <div key={i} className={`rounded-sm ${color}/80`}></div>
-                        ))}
-                    </div>
+                     <ResponsiveContainer width="100%" height={300}>
+                        <PieChart>
+                            <Pie
+                                data={benefitUtilizationData}
+                                cx="50%"
+                                cy="50%"
+                                labelLine={false}
+                                label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+                                outerRadius={120}
+                                fill="#8884d8"
+                                dataKey="value"
+                            >
+                                {benefitUtilizationData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }}/>
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </CardContent>
             </Card>
         </div>
