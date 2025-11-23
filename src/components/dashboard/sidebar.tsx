@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Tooltip, TooltipContent, TooltipTrigger, TooltipProvider } from '@/components/ui/tooltip';
-import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield, Workflow, Siren } from 'lucide-react';
+import { Leaf, Users, BarChart, Banknote, LayoutDashboard, Settings, Landmark, FileText, Bell, Thermometer, TrendingUp, ClipboardList, Combine, Atom, Truck, Recycle, Map, ShieldCheck, Book, Coins, ShieldAlert, BrainCircuit, Shield, Workflow, Siren, AreaChart as AreaChartIcon } from 'lucide-react';
 import type { User } from '@/lib/types';
 
 const navItems = {
@@ -33,6 +33,7 @@ const navItems = {
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories & Governance' },
+    { href: '/dashboard/gov/national-monitoring', icon: AreaChartIcon, label: 'National Monitoring' },
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
     { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
     { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
