@@ -1,193 +1,124 @@
-
 "use client";
 
 import { useState } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Textarea } from '@/components/ui/textarea';
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Bug, Send, Check, Eye, Map, Siren } from 'lucide-react';
-import StatCard from '@/components/shared/stat-card';
-import cropsData from "@/data/crops.json";
 import { useToast } from '@/hooks/use-toast';
-import { ResponsiveContainer, PieChart, Pie, Cell, Tooltip, Legend } from 'recharts';
+import AdminAdvisoryTool from '@/components/dashboard/gov/admin-advisory-tool';
+import { Kanban, FileUp, ArrowRight, Flag } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 
-const cropOptions = cropsData.crops.map(c => ({ value: c.name, label: c.name }));
-
-const heatmapData = [
-    { id: 1, risk: 'high', size: 'large' }, { id: 2, risk: 'low', size: 'small' }, { id: 3, risk: 'medium', size: 'medium' }, { id: 4, risk: 'low', size: 'small' },
-    { id: 5, risk: 'medium', size: 'medium' }, { id: 6, risk: 'high', size: 'large' }, { id: 7, risk: 'low', size: 'small' }, { id: 8, risk: 'low', size: 'small' },
-    { id: 9, risk: 'low', size: 'small' }, { id: 10, risk: 'medium', size: 'medium' }, { id: 11, risk: 'low', size: 'small' }, { id: 12, risk: 'high', size: 'large' },
+const escalatedIssues = [
+    { id: 1, issue: "Widespread pest attack", village: "Village B", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 2, issue: "Critical water shortage", village: "Village D", agent: "Anjali Mehta", status: "Actioned" },
 ];
 
-const riskDistribution = [
-    { name: 'Low Risk', value: heatmapData.filter(p => p.risk === 'low').length },
-    { name: 'Medium Risk', value: heatmapData.filter(p => p.risk === 'medium').length },
-    { name: 'High Risk', value: heatmapData.filter(p => p.risk === 'high').length },
-];
-
-const COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
+const tasks = {
+    todo: [{ id: 1, title: "Review Punjab drought report" }],
+    inProgress: [{ id: 2, title: "Draft MSP policy update" }],
+    done: [{ id: 3, title: "Approve Q2 subsidy disbursal" }],
+};
 
 export default function AdvisoriesPage() {
-    const [selectedCrop, setSelectedCrop] = useState<string>('');
-    const [advisoryMessage, setAdvisoryMessage] = useState('');
-    const [advisoryTarget, setAdvisoryTarget] = useState('all');
     const { toast } = useToast();
 
-    const cropDetails = cropsData.crops.find(c => c.name === selectedCrop);
-
-    const handleSendAdvisory = () => {
-        if (!advisoryMessage.trim()) {
-            toast({
-                variant: 'destructive',
-                title: 'Error',
-                description: 'Advisory message cannot be empty.',
-            });
-            return;
-        }
+    const handleGenerateReport = () => {
         toast({
-            title: 'Advisory Sent',
-            description: `Your advisory has been broadcast to the selected group: ${advisoryTarget}.`,
+            title: 'Report Generated',
+            description: 'The selected report has been created and is ready for download (mock).',
         });
-        setAdvisoryMessage('');
     };
 
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
             <div>
-                <h1 className="text-2xl font-bold tracking-tight">Crop Advisory Tools</h1>
+                <h1 className="text-2xl font-bold tracking-tight">Advisories &amp; Governance Tools</h1>
                 <p className="text-muted-foreground">
-                    Detect issues, create advisories, and analyze delivery.
+                    Create advisories, manage escalated issues, and oversee governance tasks.
                 </p>
             </div>
 
-            <div className="grid gap-6 md:grid-cols-3">
-                <StatCard
-                    title="Advisories Sent"
-                    value="152"
-                    icon={<Send className="h-6 w-6 text-muted-foreground" />}
-                    description="Total advisories broadcast this month"
-                />
-                <StatCard
-                    title="Read Rate"
-                    value="78%"
-                    icon={<Eye className="h-6 w-6 text-muted-foreground" />}
-                    description="Percentage of farmers who viewed"
-                />
-                <StatCard
-                    title="Acknowledged"
-                    value="45%"
-                    icon={<Check className="h-6 w-6 text-muted-foreground" />}
-                    description="Farmers who confirmed receipt"
-                />
-            </div>
+            <AdminAdvisoryTool />
 
             <div className="grid gap-6 lg:grid-cols-2">
-                 <Card>
+                <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Siren /> Crop Issue Detection</CardTitle>
-                        <CardDescription>Select a crop to view its common diseases and pests.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Flag /> Agent Issue Escalations</CardTitle>
+                        <CardDescription>Critical issues escalated by field agents for immediate attention.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <Select onValueChange={setSelectedCrop} value={selectedCrop}>
-                            <SelectTrigger>
-                                <SelectValue placeholder="Select a crop..." />
-                            </SelectTrigger>
-                            <SelectContent>
-                                {cropOptions.map(crop => (
-                                    <SelectItem key={crop.value} value={crop.value}>{crop.label}</SelectItem>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Issue</TableHead>
+                                    <TableHead>Location</TableHead>
+                                    <TableHead>Status</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {escalatedIssues.map(issue => (
+                                    <TableRow key={issue.id}>
+                                        <TableCell className="font-medium">{issue.issue}</TableCell>
+                                        <TableCell>{issue.village}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={issue.status === 'Actioned' ? 'secondary' : 'destructive'}>{issue.status}</Badge>
+                                        </TableCell>
+                                    </TableRow>
                                 ))}
-                            </SelectContent>
-                        </Select>
-
-                        {cropDetails && (
-                            <div className="mt-6 space-y-4 animate-in fade-in duration-300">
-                                <Alert>
-                                    <Bug className="h-4 w-4" />
-                                    <AlertTitle>Common Diseases</AlertTitle>
-                                    <AlertDescription>
-                                        <ul className="list-disc list-inside">
-                                            {cropDetails.diseases.map(d => <li key={d}>{d}</li>)}
-                                        </ul>
-                                    </AlertDescription>
-                                </Alert>
-                                <Alert>
-                                    <Bug className="h-4 w-4" />
-                                    <AlertTitle>Common Pests</AlertTitle>
-                                    <AlertDescription>
-                                        <ul className="list-disc list-inside">
-                                            {cropDetails.pest_control.map(p => <li key={p}>{p}</li>)}
-                                        </ul>
-                                    </AlertDescription>
-                                </Alert>
-                            </div>
-                        )}
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
-
-                 <Card>
+                <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Map /> High-Risk Villages</CardTitle>
-                        <CardDescription>Distribution of at-risk areas.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><FileUp /> Report Generator</CardTitle>
+                        <CardDescription>Generate district or state-wise reports on demand.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <ResponsiveContainer width="100%" height={250}>
-                            <PieChart>
-                                <Pie
-                                    data={riskDistribution}
-                                    cx="50%"
-                                    cy="50%"
-                                    labelLine={false}
-                                    outerRadius={100}
-                                    fill="#8884d8"
-                                    dataKey="value"
-                                    nameKey="name"
-                                >
-                                    {riskDistribution.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))', borderRadius: 'var(--radius)' }} />
-                                <Legend />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </CardContent>
-                </Card>
-            </div>
-           
-            <Card>
-                <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Send /> Custom Advisory Creator</CardTitle>
-                    <CardDescription>Create and broadcast a custom advisory message to farmers.</CardDescription>
-                </CardHeader>
-                <CardContent className="space-y-4">
-                    <Textarea
-                        placeholder="Write your advisory message here. E.g., 'Heatwave expected. Ensure crops are irrigated properly.'"
-                        className="min-h-[120px]"
-                        value={advisoryMessage}
-                        onChange={(e) => setAdvisoryMessage(e.target.value)}
-                    />
-                    <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
-                        <div className="flex items-center gap-2">
-                             <label className="text-sm font-medium">Target:</label>
-                            <Select onValueChange={setAdvisoryTarget} defaultValue="all">
-                                <SelectTrigger className="w-[200px]">
-                                    <SelectValue />
-                                </SelectTrigger>
+                    <CardContent className="space-y-4">
+                        <div className="grid grid-cols-2 gap-4">
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Select Report Type" /></SelectTrigger>
                                 <SelectContent>
-                                    <SelectItem value="all">All Farmers</SelectItem>
+                                    <SelectItem value="yield">Crop Yield Report</SelectItem>
+                                    <SelectItem value="subsidy">Subsidy Utilization</SelectItem>
+                                </SelectContent>
+                            </Select>
+                            <Select>
+                                <SelectTrigger><SelectValue placeholder="Select Region" /></SelectTrigger>
+                                <SelectContent>
                                     <SelectItem value="punjab">Punjab</SelectItem>
                                     <SelectItem value="maharashtra">Maharashtra</SelectItem>
-                                    <SelectItem value="high_risk">High-Risk Villages</SelectItem>
+                                    <SelectItem value="all">All India</SelectItem>
                                 </SelectContent>
                             </Select>
                         </div>
-                        <Button className="w-full sm:w-auto" onClick={handleSendAdvisory}>
-                            <Send className="mr-2 h-4 w-4" />
-                            Broadcast Advisory
+                        <Button className="w-full" onClick={handleGenerateReport}>
+                            Generate Report <ArrowRight className="ml-2 h-4 w-4" />
                         </Button>
-                    </div>
+                    </CardContent>
+                </Card>
+            </div>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Kanban /> Officer Task Board</CardTitle>
+                    <CardDescription>Track governance-related tasks and initiatives.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid lg:grid-cols-3 gap-6">
+                    {Object.entries(tasks).map(([status, taskItems]) => (
+                        <div key={status} className="space-y-4">
+                            <h3 className="font-semibold text-center capitalize">{status.replace(/([A-Z])/g, ' $1')}</h3>
+                            <div className="space-y-3 p-2 rounded-lg bg-secondary/50 min-h-[100px]">
+                                {taskItems.map(task => (
+                                    <Card key={task.id} className="p-3 shadow-sm">
+                                        <p className="font-semibold text-sm">{task.title}</p>
+                                    </Card>
+                                ))}
+                            </div>
+                        </div>
+                    ))}
                 </CardContent>
             </Card>
 

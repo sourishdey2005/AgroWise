@@ -5,7 +5,6 @@ import StatCard from "../shared/stat-card";
 import { AreaChart, Bell, Droplets, Globe, Siren, Map, Bug, Leaf, Award } from "lucide-react";
 import { GovernmentScheme } from "@/lib/types";
 import schemeData from "@/data/schemes.json";
-import AdminAdvisoryTool from "./gov/admin-advisory-tool";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
 
@@ -38,6 +37,13 @@ const cropDiversityData = [
     { name: 'Low (Monoculture)', value: 5 },
 ];
 const DIVERSITY_COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
+
+const soilHealthData = [
+    { name: 'Good', value: 450 },
+    { name: 'Moderate', value: 300 },
+    { name: 'Poor', value: 150 },
+];
+const SOIL_COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
 
 
 export default function GovernmentDashboard() {
@@ -83,7 +89,7 @@ export default function GovernmentDashboard() {
                 <CardContent className="space-y-3">
                      <Alert variant="destructive">
                         <AlertTitle>Heatwave Alert</AlertTitle>
-                        <AlertDescription>Punjab, Haryana, Rajasthan. Temps {' > '} 42°C.</AlertDescription>
+                        <AlertDescription>Punjab, Haryana, Rajasthan. Temps > 42°C.</AlertDescription>
                     </Alert>
                     <Alert>
                         <AlertTitle>Flood Warning</AlertTitle>
@@ -194,17 +200,23 @@ export default function GovernmentDashboard() {
                     </div>
                 </CardContent>
             </Card>
-             <Card>
+            <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><Leaf/> Soil Health Index Map</CardTitle>
-                    <CardDescription>District-wise soil health ratings.</CardDescription>
+                    <CardTitle className="flex items-center gap-2"><Leaf/> Soil Health Index</CardTitle>
+                    <CardDescription>Distribution of soil quality categories.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                    <div className="grid grid-cols-4 grid-rows-3 gap-1 bg-secondary/50 p-2 rounded-md aspect-video">
-                        {['bg-amber-600', 'bg-amber-500', 'bg-green-400', 'bg-amber-700', 'bg-green-300', 'bg-amber-400', 'bg-red-400', 'bg-green-500', 'bg-amber-500', 'bg-amber-400', 'bg-green-400', 'bg-green-300'].map((color, i) => (
-                             <div key={i} className={`rounded-sm ${color}/80`}></div>
-                        ))}
-                    </div>
+                    <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                            <Pie data={soilHealthData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={5}>
+                                {soilHealthData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={SOIL_COLORS[index % SOIL_COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value} farms`} />
+                            <Legend />
+                        </PieChart>
+                    </ResponsiveContainer>
                 </CardContent>
             </Card>
             <Card>
@@ -227,8 +239,6 @@ export default function GovernmentDashboard() {
                 </CardContent>
             </Card>
         </div>
-
-      <AdminAdvisoryTool />
     </div>
   );
 }
