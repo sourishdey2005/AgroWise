@@ -7,7 +7,7 @@ import StatCard from '@/components/shared/stat-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
-import { Banknote, FileCheck, DollarSign, AlertTriangle, TrendingUp, HandCoins, Landmark } from 'lucide-react';
+import { Banknote, FileCheck, DollarSign, AlertTriangle, TrendingUp, HandCoins, Landmark, Shield, Package } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 
@@ -38,6 +38,11 @@ const loanDisbursalData = [
     { bank: 'HDFC Bank', target: 200, disbursed: 210 },
 ];
 
+const emergencyProcurementData = [
+    { crop: 'Onion', state: 'Maharashtra', reason: 'Anticipated shortage' },
+    { crop: 'Tomato', state: 'Karnataka', reason: 'Price surge in North' },
+]
+
 
 export default function MarketEconomicsPage() {
 
@@ -50,7 +55,7 @@ export default function MarketEconomicsPage() {
 
              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 <StatCard title="Total Subsidy Disbursed" value="₹1.2 Lakh Cr" icon={<HandCoins className="h-6 w-6 text-muted-foreground" />} description="Current fiscal year" />
-                <StatCard title="Avg. Farmer Income" value="₹10,218" icon={<DollarSign className="h-6 w-6 text-muted-foreground" />} description="Monthly (NSSO)" />
+                <StatCard title="Food Security Indicator" value="Stable" icon={<Shield className="h-6 w-6 text-muted-foreground" />} description="National food supply is secure" />
                 <StatCard title="Agri-Loan Disbursal" value="₹18 Lakh Cr" icon={<Landmark className="h-6 w-6 text-muted-foreground" />} description="Annual Target" />
                 <Alert variant="destructive">
                     <AlertTriangle className="h-4 w-4" />
@@ -60,6 +65,45 @@ export default function MarketEconomicsPage() {
                     </AlertDescription>
                 </Alert>
             </div>
+            
+            <div className="grid gap-6 md:grid-cols-2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Package /> Emergency Procurement Recommendations</CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Crop</TableHead>
+                                    <TableHead>State</TableHead>
+                                    <TableHead>Reason</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {emergencyProcurementData.map(item => (
+                                    <TableRow key={item.crop}>
+                                        <TableCell>{item.crop}</TableCell>
+                                        <TableCell>{item.state}</TableCell>
+                                        <TableCell>{item.reason}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    </CardContent>
+                </Card>
+                 <Card>
+                    <CardHeader>
+                        <CardTitle className="flex items-center gap-2"><Banknote /> Price Stabilisation Fund Predictor</CardTitle>
+                    </CardHeader>
+                    <CardContent className="text-center">
+                        <p className="text-muted-foreground">Required fund to stabilize Tomato prices</p>
+                        <p className="text-4xl font-bold text-primary mt-2">~ ₹2,500 Cr</p>
+                        <p className="text-xs text-muted-foreground mt-1">Based on current market volatility and supply chain data.</p>
+                    </CardContent>
+                </Card>
+            </div>
+
 
             <Card>
                 <CardHeader>
