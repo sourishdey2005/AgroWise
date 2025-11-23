@@ -10,10 +10,27 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CheckCircle, Shield, ChevronsRight, GitCompareArrows, SlidersHorizontal, CalendarClock, Timer, LayoutGrid, BarChart, PercentCircle } from "lucide-react";
 import cropsData from '@/data/crops.json';
 
-const varietyComparisonData: Record<string, { hyv: { name: string; yield: string; resistance: string; cost: string; }; local: { name: string; yield: string; resistance: string; cost: string; }; }> = {
-    wheat: { hyv: { name: "HYV Wheat", yield: "25-30 Quintal/Acre", resistance: "High (Rust, Smut)", cost: "High" }, local: { name: "Local Wheat", yield: "15-20 Quintal/Acre", resistance: "Moderate", cost: "Low" } },
-    rice: { hyv: { name: "HYV Basmati", yield: "22-25 Quintal/Acre", resistance: "High (Blast)", cost: "High" }, local: { name: "Local Basmati", yield: "14-18 Quintal/Acre", resistance: "Low", cost: "Low" } },
-    maize: { hyv: { name: "Hybrid Maize", yield: "30-35 Quintal/Acre", resistance: "High (Stalk Rot)", cost: "High" }, local: { name: "Desi Maize", yield: "18-22 Quintal/Acre", resistance: "High (Local Pests)", cost: "Low" } },
+const varietyComparisonData: Record<string, { hyv: { name: string; yield: string; resistance: string; cost: string; duration: string; water: string; }; local: { name: string; yield: string; resistance: string; cost: string; duration: string; water: string; }; }> = {
+    wheat: { 
+        hyv: { name: "HYV Wheat", yield: "25-30 Quintal/Acre", resistance: "High (Rust, Smut)", cost: "High", duration: "120-130 days", water: "Medium" }, 
+        local: { name: "Local Wheat", yield: "15-20 Quintal/Acre", resistance: "Moderate", cost: "Low", duration: "140-150 days", water: "Low" } 
+    },
+    rice: { 
+        hyv: { name: "HYV Basmati", yield: "22-25 Quintal/Acre", resistance: "High (Blast)", cost: "High", duration: "130-140 days", water: "High" }, 
+        local: { name: "Local Basmati", yield: "14-18 Quintal/Acre", resistance: "Low", cost: "Low", duration: "150-160 days", water: "Medium-High" } 
+    },
+    maize: { 
+        hyv: { name: "Hybrid Maize", yield: "30-35 Quintal/Acre", resistance: "High (Stalk Rot)", cost: "High", duration: "110-120 days", water: "Medium" }, 
+        local: { name: "Desi Maize", yield: "18-22 Quintal/Acre", resistance: "High (Local Pests)", cost: "Low", duration: "120-130 days", water: "Low-Medium" } 
+    },
+    soybean: {
+        hyv: { name: "HYV Soybean", yield: "12-15 Quintal/Acre", resistance: "High (Mosaic Virus)", cost: "High", duration: "90-100 days", water: "Low-Medium" },
+        local: { name: "Local Soybean", yield: "8-10 Quintal/Acre", resistance: "Medium", cost: "Low", duration: "105-115 days", water: "Low" }
+    },
+    cotton: {
+        hyv: { name: "Bt Cotton", yield: "10-12 Quintal/Acre", resistance: "High (Bollworm)", cost: "High", duration: "160-180 days", water: "Medium" },
+        local: { name: "Desi Cotton", yield: "6-8 Quintal/Acre", resistance: "High (Drought)", cost: "Low", duration: "180-200 days", water: "Low" }
+    }
 };
 
 const sowingWindow = {
@@ -91,6 +108,8 @@ export default function SowingHarvestPage() {
                                 <SelectItem value="wheat">Wheat</SelectItem>
                                 <SelectItem value="rice">Rice</SelectItem>
                                 <SelectItem value="maize">Maize</SelectItem>
+                                <SelectItem value="soybean">Soybean</SelectItem>
+                                <SelectItem value="cotton">Cotton</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -112,9 +131,19 @@ export default function SowingHarvestPage() {
                                 <TableCell>{varietyComparisonData[selectedVariety].local.yield}</TableCell>
                             </TableRow>
                             <TableRow>
+                                <TableCell className="font-medium">Growth Duration</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].hyv.duration}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].local.duration}</TableCell>
+                            </TableRow>
+                            <TableRow>
                                 <TableCell className="font-medium">Disease Resistance</TableCell>
                                 <TableCell>{varietyComparisonData[selectedVariety].hyv.resistance}</TableCell>
                                 <TableCell>{varietyComparisonData[selectedVariety].local.resistance}</TableCell>
+                            </TableRow>
+                            <TableRow>
+                                <TableCell className="font-medium">Water Requirement</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].hyv.water}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].local.water}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className="font-medium">Seed Cost</TableCell>
