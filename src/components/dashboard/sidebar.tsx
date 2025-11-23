@@ -38,6 +38,7 @@ const navItems = {
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
     { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
     { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
+    { href: '/dashboard/gov/disaster-management', icon: Siren, label: 'Disaster Management' },
     { href: '/dashboard/gov/regulatory-monitoring', icon: ShieldCheck, label: 'Regulatory Monitoring' },
   ],
   bank: [
