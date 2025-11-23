@@ -69,8 +69,12 @@ export default function FarmerDashboard() {
       setYieldPrediction(p => Math.min(100, Math.max(0, p + getRandom(-0.5, 0.5))));
       setHarvestReadiness(p => Math.min(100, Math.max(0, p + 0.1)));
       setSoilPh(p => Math.min(8, Math.max(5, p + getRandom(-0.05, 0.05))));
-      setWaterTankLevel(p => Math.min(100, Math.max(0, p + getRandom(-1, 1))));
-
+      
+      // Simulate water tank level change based on pump status
+      setWaterTankLevel(p => {
+          const change = waterPumpOn ? getRandom(1, 2.5) : getRandom(-1, -0.5);
+          return Math.min(100, Math.max(0, p + change));
+      });
       
       // Simulate growth stage progress
       setGrowthStage(prev => {
@@ -84,7 +88,7 @@ export default function FarmerDashboard() {
     }, 3000); // Update every 3 seconds
 
     return () => clearInterval(interval);
-  }, []);
+  }, [waterPumpOn]);
   
   const { score: healthRiskScore, label: riskLabel, color: riskColor } = calculateHealthRisk(weather);
   const healthRiskStroke = healthRiskScore;
@@ -216,7 +220,7 @@ export default function FarmerDashboard() {
                 <CardContent>
                     <div className="text-center">
                         <p className="text-5xl font-bold text-blue-500">{Math.round(waterTankLevel)}%</p>
-                        <p className="text-sm text-muted-foreground">Est. 3 days until empty</p>
+                        <p className="text-sm text-muted-foreground">Est. {Math.round(waterTankLevel/10)} days until empty</p>
                     </div>
                 </CardContent>
             </Card>
@@ -382,5 +386,3 @@ export default function FarmerDashboard() {
     </div>
   );
 }
-
-    
