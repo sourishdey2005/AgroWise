@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -61,6 +60,20 @@ type CalculatorResult = {
   advice: string;
 };
 
+// More detailed mock data for ideal crop conditions
+const cropIdealConditions: Record<string, { temp: [number, number]; humidity: [number, number] }> = {
+    rice: { temp: [21, 37], humidity: [60, 80] },
+    wheat: { temp: [15, 25], humidity: [50, 60] },
+    sugarcane: { temp: [20, 30], humidity: [70, 80] },
+    cotton: { temp: [21, 30], humidity: [55, 65] },
+    maize: { temp: [21, 27], humidity: [60, 70] },
+    soybean: { temp: [25, 32], humidity: [60, 70] },
+    potato: { temp: [15, 20], humidity: [60, 70] },
+    tomato: { temp: [21, 24], humidity: [60, 75] },
+    mustard: { temp: [10, 25], humidity: [40, 60] },
+};
+
+
 export default function CropRiskCalculator() {
   const [isLoading, setIsLoading] = React.useState(false);
   const [result, setResult] = React.useState<CalculatorResult | null>(null);
@@ -80,27 +93,47 @@ export default function CropRiskCalculator() {
     setIsLoading(true);
     setResult(null);
 
-    // Mock calculation for risk
+    // More detailed mock calculation for risk
     let riskScore = 0;
-    if (values.cropName === "rice" || values.cropName === "sugarcane") riskScore += 10;
-    
-    if (values.temperature > 38) riskScore += 25;
-    else if(values.temperature > 32) riskScore += 15;
+    const ideal = cropIdealConditions[values.cropName];
 
-    if(values.humidity > 75) riskScore += 20;
-    else if(values.humidity < 40) riskScore += 10;
-    
-    if(values.windSpeed > 15) riskScore += 15;
+    // Temperature Risk
+    if (ideal) {
+        if (values.temperature > ideal.temp[1] + 5) riskScore += 30; // Significantly hotter
+        else if (values.temperature > ideal.temp[1]) riskScore += 15; // Hotter
+        else if (values.temperature < ideal.temp[0] - 5) riskScore += 20; // Significantly colder
+        else if (values.temperature < ideal.temp[0]) riskScore += 10; // Colder
+    } else {
+        // Generic temperature risk
+        if (values.temperature > 38) riskScore += 25;
+        else if(values.temperature > 32) riskScore += 15;
+    }
 
+    // Humidity Risk (Pest & Disease)
+     if (ideal) {
+        if (values.humidity > ideal.humidity[1] + 10) riskScore += 25; // High humidity -> disease
+        else if (values.humidity > ideal.humidity[1]) riskScore += 15;
+        else if (values.humidity < ideal.humidity[0] - 10) riskScore += 10; // Low humidity -> stress
+    } else {
+        // Generic humidity risk
+        if(values.humidity > 80) riskScore += 25;
+        if(values.humidity < 40) riskScore += 10;
+    }
+    
+    // Wind Speed Risk (Physical damage)
+    if(values.windSpeed > 25) riskScore += 20; // High wind
+    else if (values.windSpeed > 15) riskScore += 10;
+
+    // Growth Stage Vulnerability
     if (values.growthStage === "flowering" || values.growthStage === "fruiting" || values.growthStage === "development" || values.growthStage === "mid-season") riskScore += 15;
     else if (values.growthStage === "seedling" || values.growthStage === "vegetative") riskScore += 10;
     else if (values.growthStage === "germination" || values.growthStage === "initial") riskScore += 5;
     
     riskScore = Math.min(100, riskScore);
 
-    let advice = "Low risk. Standard monitoring advised.";
-    if (riskScore > 70) advice = "High risk. Potential for significant pest/disease issues. Increase monitoring and consider protective measures.";
-    else if (riskScore > 40) advice = "Medium risk. Conditions are favorable for some pests or diseases. Monitor crops closely.";
+    let advice = "Low risk. Conditions are favorable. Standard monitoring advised.";
+    if (riskScore > 70) advice = "High risk detected. Environmental conditions are unfavorable. Increase monitoring for pests, diseases, and crop stress. Consider protective measures like windbreaks or adjusted irrigation.";
+    else if (riskScore > 40) advice = "Medium risk. Conditions are suboptimal. Monitor crops closely for signs of stress or disease. Ensure proper irrigation and nutrient management.";
     
 
     setTimeout(() => {
