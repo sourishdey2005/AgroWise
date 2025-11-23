@@ -178,8 +178,8 @@ export default function SchemeManagementPage() {
                         <CardDescription>Budget allocated vs. utilized for a specific scheme.</CardDescription>
                     </CardHeader>
                     <CardContent className="text-center">
-                         <p className="text-4xl font-bold">₹{fundData.utilized.toLocaleString()}</p>
-                         <p className="text-muted-foreground">Utilized out of ₹{fundData.allocated.toLocaleString()} Allocated</p>
+                         <p className="text-4xl font-bold">₹{fundData.utilized.toLocaleString()} Cr</p>
+                         <p className="text-muted-foreground">Utilized out of ₹{fundData.allocated.toLocaleString()} Cr Allocated</p>
                          <Progress value={(fundData.utilized/fundData.allocated) * 100} className="mt-4" />
                     </CardContent>
                 </Card>
