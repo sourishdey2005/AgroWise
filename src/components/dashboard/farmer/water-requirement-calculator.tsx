@@ -1,4 +1,3 @@
-
 "use client";
 
 import * as React from "react";
@@ -157,7 +156,6 @@ export default function WaterRequirementCalculator(): JSX.Element {
                     <FormItem>
                       <FormLabel>Avg. Temp (°C)</FormLabel>
                       <FormControl>
-                        {/* react-hook-form field already manages value/onChange; keep input type=number */}
                         <Input type="number" placeholder="e.g., 35" {...field} />
                       </FormControl>
                       <FormMessage />
