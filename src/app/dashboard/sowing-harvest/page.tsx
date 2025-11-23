@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle, Shield, ChevronsRight, GitCompareArrows, SlidersHorizontal, CalendarClock, Timer, LayoutGrid, BarChart, PercentCircle } from "lucide-react";
 import cropsData from '@/data/crops.json';
+import { PieChart, Pie, Cell, Legend, Tooltip as RechartsTooltip } from 'recharts';
 
 const varietyComparisonData: Record<string, { hyv: { name: string; yield: string; resistance: string; cost: string; duration: string; water: string; }; local: { name: string; yield: string; resistance: string; cost: string; duration: string; water: string; }; }> = {
     wheat: { 
@@ -57,6 +58,15 @@ const initialHarvestSchedule = [
     { crop: 'Mustard', days: 5 },
     { crop: 'Maize', days: 35 },
 ];
+
+const farmLayoutData = [
+    { name: 'Wheat', value: 40 },
+    { name: 'Sugarcane', value: 25 },
+    { name: 'Vegetables', value: 15 },
+    { name: 'Mustard', value: 10 },
+    { name: 'Fodder', value: 10 },
+];
+const farmLayoutColors = ['#f59e0b', '#84cc16', '#22c55e', '#eab308', '#a16207'];
 
 
 const SEED_RATE_STORAGE_KEY = 'seedRateCalculatorData';
@@ -269,27 +279,31 @@ export default function SowingHarvestPage() {
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><LayoutGrid /> Multi-Crop Farm Layout Designer</CardTitle>
-                    <CardDescription>Mock-up of a visual farm planning tool.</CardDescription>
+                    <CardDescription>Visualization of land allocation.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="grid grid-cols-8 grid-rows-4 gap-1 bg-secondary/50 p-2 rounded-md aspect-video">
-                        {Array.from({ length: 32 }).map((_, i) => (
-                             <div key={i} className={`rounded-sm ${
-                                 i < 8 ? 'bg-green-300' : 
-                                 (i >= 8 && i < 16) ? 'bg-yellow-200' :
-                                 (i >= 16 && i < 24) ? 'bg-blue-200' : 'bg-orange-200'
-                             }`}>
-                                <span className="text-xs p-1 text-black/50">
-                                    { i === 0 && "Wheat" }
-                                    { i === 8 && "Mustard" }
-                                    { i === 16 && "Veg" }
-                                    { i === 24 && "Fodder" }
-                                </span>
-                             </div>
-                        ))}
-                    </div>
+                <CardContent className="flex justify-center">
+                    <PieChart width={400} height={250}>
+                        <Pie
+                            data={farmLayoutData}
+                            cx="50%"
+                            cy="50%"
+                            labelLine={false}
+                            outerRadius={100}
+                            fill="#8884d8"
+                            dataKey="value"
+                            nameKey="name"
+                            label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
+                        >
+                            {farmLayoutData.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={farmLayoutColors[index % farmLayoutColors.length]} />
+                            ))}
+                        </Pie>
+                        <RechartsTooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value}%`} />
+                        <Legend />
+                    </PieChart>
                 </CardContent>
             </Card>
 
         </div>
     );
+}
