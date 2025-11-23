@@ -1,5 +1,4 @@
 
-
 "use client";
 
 import Link from 'next/link';
@@ -35,6 +34,7 @@ const navItems = {
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
+    { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
