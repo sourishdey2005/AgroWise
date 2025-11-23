@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import StatCard from '@/components/shared/stat-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend, PieChart, Pie, Cell, LineChart, Line, CartesianGrid } from 'recharts';
 import { BookCopy, TrendingUp, Users, Target, CircleDollarSign, Coins, Map } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -15,8 +15,17 @@ import schemeData from '@/data/schemes.json';
 import farmerData from '@/data/farmers.json';
 
 const schemeOutcomes = [
-  { name: 'Before PM-KISAN', income: 8500 },
-  { name: 'After PM-KISAN', income: 9200 },
+  { name: '2021', income: 8500 },
+  { name: '2022', income: 9200 },
+  { name: '2023', income: 9800 },
+  { name: '2024', income: 10500 },
+];
+
+const participationData = [
+  { year: '2021', participants: 8.5 },
+  { year: '2022', participants: 9.8 },
+  { year: '2023', participants: 11.2 },
+  { year: '2024', participants: 11.8 },
 ];
 
 const eligibleFarmers = farmerData.farmers.slice(0, 4);
@@ -86,20 +95,34 @@ export default function SchemeManagementPage() {
                         </Table>
                     </CardContent>
                 </Card>
-                <Card>
+                 <Card>
                     <CardHeader>
                         <CardTitle className="flex items-center gap-2"><TrendingUp/> Scheme Outcome Tracker</CardTitle>
-                        <CardDescription>Impact of PM-KISAN on average monthly farmer income.</CardDescription>
+                        <CardDescription>Impact of PM-KISAN on farmer income & participation.</CardDescription>
                     </CardHeader>
-                    <CardContent>
-                        <ResponsiveContainer width="100%" height={250}>
-                            <BarChart data={schemeOutcomes}>
-                                <XAxis dataKey="name" />
-                                <YAxis unit="₹" />
-                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
-                                <Bar dataKey="income" name="Avg. Income" fill="hsl(var(--primary))" radius={4} />
-                            </BarChart>
-                        </ResponsiveContainer>
+                    <CardContent className="grid grid-cols-2 gap-4">
+                        <div>
+                            <p className="text-sm font-semibold text-center mb-2">Avg. Monthly Income (₹)</p>
+                            <ResponsiveContainer width="100%" height={200}>
+                                <BarChart data={schemeOutcomes}>
+                                    <XAxis dataKey="name" fontSize={12} />
+                                    <YAxis unit="₹" fontSize={10} domain={[8000, 11000]} />
+                                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                    <Bar dataKey="income" name="Avg. Income" fill="hsl(var(--primary))" radius={4} />
+                                </BarChart>
+                            </ResponsiveContainer>
+                        </div>
+                        <div>
+                            <p className="text-sm font-semibold text-center mb-2">Scheme Participants (Cr)</p>
+                             <ResponsiveContainer width="100%" height={200}>
+                                <LineChart data={participationData}>
+                                    <XAxis dataKey="year" fontSize={12} />
+                                    <YAxis unit=" Cr" fontSize={10} domain={[8, 12]}/>
+                                    <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                                    <Line type="monotone" dataKey="participants" name="Participants" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+                                </LineChart>
+                            </ResponsiveContainer>
+                        </div>
                     </CardContent>
                 </Card>
             </div>
@@ -165,7 +188,7 @@ export default function SchemeManagementPage() {
              <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><Map/> Benefit Utilization by State</CardTitle>
-                    <CardDescription>Visualization showing where scheme benefits are being most utilized (in arbitrary units).</CardDescription>
+                    <CardDescription>Visualization showing where scheme benefits are being most utilized.</CardDescription>
                 </CardHeader>
                 <CardContent>
                      <ResponsiveContainer width="100%" height={300}>
