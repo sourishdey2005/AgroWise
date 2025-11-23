@@ -8,17 +8,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { CheckCircle, Shield, ChevronsRight, GitCompareArrows, SlidersHorizontal, CalendarClock, Timer, LayoutGrid, BarChart, PercentCircle } from "lucide-react";
+import cropsData from '@/data/crops.json';
 
-const varietyComparisonData = {
-    hyv: { name: "HYV Wheat", yield: "25-30 Quintal/Acre", resistance: "High (Rust, Smut)", cost: "High" },
-    local: { name: "Local Wheat", yield: "15-20 Quintal/Acre", resistance: "Moderate", cost: "Low" },
+const varietyComparisonData: Record<string, { hyv: { name: string; yield: string; resistance: string; cost: string; }; local: { name: string; yield: string; resistance: string; cost: string; }; }> = {
+    wheat: { hyv: { name: "HYV Wheat", yield: "25-30 Quintal/Acre", resistance: "High (Rust, Smut)", cost: "High" }, local: { name: "Local Wheat", yield: "15-20 Quintal/Acre", resistance: "Moderate", cost: "Low" } },
+    rice: { hyv: { name: "HYV Basmati", yield: "22-25 Quintal/Acre", resistance: "High (Blast)", cost: "High" }, local: { name: "Local Basmati", yield: "14-18 Quintal/Acre", resistance: "Low", cost: "Low" } },
+    maize: { hyv: { name: "Hybrid Maize", yield: "30-35 Quintal/Acre", resistance: "High (Stalk Rot)", cost: "High" }, local: { name: "Desi Maize", yield: "18-22 Quintal/Acre", resistance: "High (Local Pests)", cost: "Low" } },
 };
 
 const sowingWindow = {
     start: "October 25th",
     end: "November 15th",
-    reason: "Optimal soil temperature and moisture.",
+    reason: "Optimal soil temperature and moisture for Wheat in this region.",
 };
+
+const initialHarvestSchedule = [
+    { crop: 'Wheat', days: 12 },
+    { crop: 'Basmati Rice', days: 25 },
+    { crop: 'Mustard', days: 5 },
+    { crop: 'Maize', days: 35 },
+];
+
 
 const SEED_RATE_STORAGE_KEY = 'seedRateCalculatorData';
 
@@ -26,8 +36,9 @@ export default function SowingHarvestPage() {
     const [landSize, setLandSize] = useState(5);
     const [seedRate, setSeedRate] = useState(40);
     const [requiredSeed, setRequiredSeed] = useState(200);
-    const [harvestTimeInDays, setHarvestTimeInDays] = useState(12);
+    const [harvestSchedule, setHarvestSchedule] = useState(initialHarvestSchedule);
     const [germination, setGermination] = useState(92);
+    const [selectedVariety, setSelectedVariety] = useState('wheat');
 
     // Load from localStorage
     useEffect(() => {
@@ -70,33 +81,45 @@ export default function SowingHarvestPage() {
 
             <Card>
                 <CardHeader>
-                    <CardTitle className="flex items-center gap-2"><GitCompareArrows /> Crop Variety Comparison</CardTitle>
-                    <CardDescription>Compare High-Yielding vs. Local wheat varieties.</CardDescription>
+                    <div className="flex justify-between items-center">
+                        <CardTitle className="flex items-center gap-2"><GitCompareArrows /> Crop Variety Comparison</CardTitle>
+                        <Select value={selectedVariety} onValueChange={setSelectedVariety}>
+                            <SelectTrigger className="w-[180px]">
+                                <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                                <SelectItem value="wheat">Wheat</SelectItem>
+                                <SelectItem value="rice">Rice</SelectItem>
+                                <SelectItem value="maize">Maize</SelectItem>
+                            </SelectContent>
+                        </Select>
+                    </div>
+                     <CardDescription>Compare High-Yielding vs. Local crop varieties.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <Table>
                         <TableHeader>
                             <TableRow>
                                 <TableHead>Feature</TableHead>
-                                <TableHead>HYV Wheat</TableHead>
-                                <TableHead>Local Wheat</TableHead>
+                                <TableHead>{varietyComparisonData[selectedVariety].hyv.name}</TableHead>
+                                <TableHead>{varietyComparisonData[selectedVariety].local.name}</TableHead>
                             </TableRow>
                         </TableHeader>
                         <TableBody>
                             <TableRow>
                                 <TableCell className="font-medium">Yield/Acre</TableCell>
-                                <TableCell>{varietyComparisonData.hyv.yield}</TableCell>
-                                <TableCell>{varietyComparisonData.local.yield}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].hyv.yield}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].local.yield}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className="font-medium">Disease Resistance</TableCell>
-                                <TableCell>{varietyComparisonData.hyv.resistance}</TableCell>
-                                <TableCell>{varietyComparisonData.local.resistance}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].hyv.resistance}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].local.resistance}</TableCell>
                             </TableRow>
                             <TableRow>
                                 <TableCell className="font-medium">Seed Cost</TableCell>
-                                <TableCell>{varietyComparisonData.hyv.cost}</TableCell>
-                                <TableCell>{varietyComparisonData.local.cost}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].hyv.cost}</TableCell>
+                                <TableCell>{varietyComparisonData[selectedVariety].local.cost}</TableCell>
                             </TableRow>
                         </TableBody>
                     </Table>
@@ -146,16 +169,26 @@ export default function SowingHarvestPage() {
              <div className="grid gap-6 md:grid-cols-2">
                  <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Timer /> Harvest Optimization Timer</CardTitle>
-                        <CardDescription>Optimal harvest time remaining based on maturity.</CardDescription>
+                        <CardTitle className="flex items-center gap-2"><Timer /> Harvest Schedule</CardTitle>
+                        <CardDescription>Estimated days remaining for harvest.</CardDescription>
                     </CardHeader>
-                    <CardContent className="flex items-center justify-center h-full">
-                        <div className="text-center">
-                            <p className="text-6xl font-bold font-mono text-primary tabular-nums">
-                                {harvestTimeInDays}
-                            </p>
-                             <p className="text-xl text-muted-foreground">Days</p>
-                        </div>
+                    <CardContent>
+                         <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Crop</TableHead>
+                                    <TableHead className="text-right">Est. Days Remaining</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {harvestSchedule.map(item => (
+                                    <TableRow key={item.crop}>
+                                        <TableCell className="font-medium">{item.crop}</TableCell>
+                                        <TableCell className="text-right font-mono text-primary font-bold">{item.days}</TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
                     </CardContent>
                 </Card>
                 <Card>
