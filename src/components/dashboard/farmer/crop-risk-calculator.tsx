@@ -3,8 +3,6 @@
 import * as React from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -14,7 +12,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-
 import {
   Card,
   CardContent,
@@ -22,7 +19,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-
 import {
   Select,
   SelectContent,
@@ -30,56 +26,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-
-import { Droplets, Info, Loader2, Calculator, Wind } from "lucide-react";
-
+import { Loader2, Calculator, AlertTriangle, ShieldCheck, Leaf } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-
-const formSchema = z.object({
-  cropName: z.string().min(1, "Please select a crop"),
-  growthStage: z.enum([
-    "germination",
-    "seedling",
-    "vegetative",
-    "flowering",
-    "fruiting",
-    "maturity",
-    "initial", 
-    "development", 
-    "mid-season", 
-    "late-season"
-  ]),
-  temperature: z.coerce.number().positive(),
-  humidity: z.coerce.number().min(0).max(100),
-  windSpeed: z.coerce.number().min(0, "Wind speed must be a positive number"),
-});
-
-type CalculatorResult = {
-  riskScore: number;
-  advice: string;
-};
-
-// More detailed mock data for ideal crop conditions
-const cropIdealConditions: Record<string, { temp: [number, number]; humidity: [number, number] }> = {
-    rice: { temp: [21, 37], humidity: [60, 80] },
-    wheat: { temp: [15, 25], humidity: [50, 60] },
-    sugarcane: { temp: [20, 30], humidity: [70, 80] },
-    cotton: { temp: [21, 30], humidity: [55, 65] },
-    maize: { temp: [21, 27], humidity: [60, 70] },
-    soybean: { temp: [25, 32], humidity: [60, 70] },
-    potato: { temp: [15, 20], humidity: [60, 70] },
-    tomato: { temp: [21, 24], humidity: [60, 75] },
-    mustard: { temp: [10, 25], humidity: [40, 60] },
-};
-
+import { assessCropRisk, CropRiskInputSchema, type CropRiskOutput } from "@/ai/flows/crop-risk-flow";
 
 export default function CropRiskCalculator() {
   const [isLoading, setIsLoading] = React.useState(false);
-  const [result, setResult] = React.useState<CalculatorResult | null>(null);
+  const [result, setResult] = React.useState<CropRiskOutput | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
+  const form = useForm<z.infer<typeof CropRiskInputSchema>>({
+    resolver: zodResolver(CropRiskInputSchema),
     defaultValues: {
       cropName: "",
       growthStage: "vegetative",
@@ -89,57 +47,26 @@ export default function CropRiskCalculator() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
+  async function onSubmit(values: z.infer<typeof CropRiskInputSchema>) {
     setIsLoading(true);
     setResult(null);
+    setError(null);
 
-    // More detailed mock calculation for risk
-    let riskScore = 0;
-    const ideal = cropIdealConditions[values.cropName];
-
-    // Temperature Risk
-    if (ideal) {
-        if (values.temperature > ideal.temp[1] + 5) riskScore += 30; // Significantly hotter
-        else if (values.temperature > ideal.temp[1]) riskScore += 15; // Hotter
-        else if (values.temperature < ideal.temp[0] - 5) riskScore += 20; // Significantly colder
-        else if (values.temperature < ideal.temp[0]) riskScore += 10; // Colder
-    } else {
-        // Generic temperature risk
-        if (values.temperature > 38) riskScore += 25;
-        else if(values.temperature > 32) riskScore += 15;
+    try {
+        const response = await assessCropRisk(values);
+        setResult(response);
+    } catch(e) {
+        console.error(e);
+        setError("Failed to generate risk analysis. Please try again.");
+    } finally {
+        setIsLoading(false);
     }
+  }
 
-    // Humidity Risk (Pest & Disease)
-     if (ideal) {
-        if (values.humidity > ideal.humidity[1] + 10) riskScore += 25; // High humidity -> disease
-        else if (values.humidity > ideal.humidity[1]) riskScore += 15;
-        else if (values.humidity < ideal.humidity[0] - 10) riskScore += 10; // Low humidity -> stress
-    } else {
-        // Generic humidity risk
-        if(values.humidity > 80) riskScore += 25;
-        if(values.humidity < 40) riskScore += 10;
-    }
-    
-    // Wind Speed Risk (Physical damage)
-    if(values.windSpeed > 25) riskScore += 20; // High wind
-    else if (values.windSpeed > 15) riskScore += 10;
-
-    // Growth Stage Vulnerability
-    if (values.growthStage === "flowering" || values.growthStage === "fruiting" || values.growthStage === "development" || values.growthStage === "mid-season") riskScore += 15;
-    else if (values.growthStage === "seedling" || values.growthStage === "vegetative") riskScore += 10;
-    else if (values.growthStage === "germination" || values.growthStage === "initial") riskScore += 5;
-    
-    riskScore = Math.min(100, riskScore);
-
-    let advice = "Low risk. Conditions are favorable. Standard monitoring advised.";
-    if (riskScore > 70) advice = "High risk detected. Environmental conditions are unfavorable. Increase monitoring for pests, diseases, and crop stress. Consider protective measures like windbreaks or adjusted irrigation.";
-    else if (riskScore > 40) advice = "Medium risk. Conditions are suboptimal. Monitor crops closely for signs of stress or disease. Ensure proper irrigation and nutrient management.";
-    
-
-    setTimeout(() => {
-      setResult({ riskScore, advice });
-      setIsLoading(false);
-    }, 1000);
+  const getRiskColor = (score: number) => {
+    if (score > 70) return 'text-destructive';
+    if (score > 40) return 'text-amber-500';
+    return 'text-green-600';
   }
 
   return (
@@ -147,10 +74,10 @@ export default function CropRiskCalculator() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Calculator className="text-primary" />
-          Crop Risk Calculator
+          AI Crop Risk Calculator
         </CardTitle>
         <CardDescription>
-          Estimate crop risk based on environmental factors.
+          Get an AI-powered risk assessment for your crop based on environmental factors.
         </CardDescription>
       </CardHeader>
 
@@ -260,46 +187,68 @@ export default function CropRiskCalculator() {
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                    Calculating...
+                    Analyzing...
                   </>
                 ) : (
                   <>
                     <Calculator className="h-4 w-4 mr-2" />
-                    Calculate Risk
+                    Analyze Risk
                   </>
                 )}
               </Button>
             </form>
           </Form>
 
-          <div className="bg-secondary/50 p-6 rounded-lg flex items-center justify-center">
-            {!result && !isLoading && (
+          <div className="bg-secondary/50 p-6 rounded-lg flex flex-col justify-center min-h-[300px]">
+            {isLoading && (
+              <div className="text-center text-muted-foreground animate-in fade-in duration-500">
+                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+                <p>AI is analyzing conditions...</p>
+              </div>
+            )}
+            
+            {error && <p className="text-destructive text-center">{error}</p>}
+
+            {!result && !isLoading && !error && (
               <div className="text-center text-muted-foreground">
-                <Calculator className="mx-auto h-12 w-12" />
+                <Leaf className="mx-auto h-12 w-12" />
                 <p className="mt-4">Risk analysis will appear here.</p>
               </div>
             )}
 
-            {isLoading && (
-              <div className="text-center text-muted-foreground">
-                <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
-                Processing...
-              </div>
-            )}
-
             {result && (
-              <div className="text-center">
-                <p className="text-muted-foreground">Estimated Risk Score</p>
-                <p className={`text-6xl font-bold my-2 ${result.riskScore > 70 ? 'text-destructive' : result.riskScore > 40 ? 'text-amber-500' : 'text-green-600'}`}>
-                  {result.riskScore}
-                  <span className="text-xl"> / 100</span>
-                </p>
+              <div className="text-center animate-in fade-in duration-500 space-y-4">
+                <div>
+                  <p className="text-muted-foreground">AI Estimated Risk Score</p>
+                  <p className={`text-6xl font-bold my-2 ${getRiskColor(result.riskScore)}`}>
+                    {result.riskScore}
+                    <span className="text-xl"> / 100</span>
+                  </p>
+                </div>
 
-                <Alert className="text-left mt-4" variant={result.riskScore > 70 ? "destructive" : "default"}>
-                  <Info className="h-4 w-4" />
-                  <AlertTitle>Risk Analysis</AlertTitle>
-                  <AlertDescription>{result.advice}</AlertDescription>
+                <Alert className="text-left" variant={result.riskScore > 70 ? "destructive" : "default"}>
+                  <AlertTriangle className="h-4 w-4" />
+                  <AlertTitle>Overall Assessment</AlertTitle>
+                  <AlertDescription>{result.overallAdvice}</AlertDescription>
                 </Alert>
+
+                 <div>
+                    <h4 className="font-semibold text-left mb-2">Key Risk Factors</h4>
+                    <div className="space-y-2 text-left">
+                        {result.riskFactors.map((factor, index) => (
+                             <div key={index} className="p-3 rounded-md border bg-background/50">
+                                <div className="flex justify-between items-center">
+                                    <span className="font-medium text-sm">{factor.factor}</span>
+                                    <span className={`text-xs font-bold px-2 py-1 rounded-full ${factor.level === 'High' || factor.level === 'Extreme' ? 'bg-destructive/20 text-destructive' : factor.level === 'Medium' ? 'bg-amber-500/20 text-amber-600' : 'bg-green-500/20 text-green-600'}`}>
+                                        {factor.level}
+                                    </span>
+                                </div>
+                                <p className="text-xs text-muted-foreground mt-1">{factor.advice}</p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+
               </div>
             )}
           </div>
