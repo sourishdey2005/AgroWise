@@ -72,7 +72,9 @@ export default function FarmerDashboard() {
       
       // Simulate water tank level change based on pump status
       setWaterTankLevel(p => {
-          const change = waterPumpOn ? getRandom(1, 2.5) : getRandom(-0.5, -0.2);
+          // Increase by 1-2.5% every 3s if pump is on
+          // Decrease by ~1% every 30 mins if pump is off
+          const change = waterPumpOn ? getRandom(1, 2.5) : getRandom(-0.002, -0.0015);
           return Math.min(100, Math.max(0, p + change));
       });
       
