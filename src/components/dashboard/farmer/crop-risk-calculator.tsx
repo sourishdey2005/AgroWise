@@ -29,7 +29,9 @@ import {
 import { Loader2, Calculator, AlertTriangle, ShieldCheck, Leaf } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { assessCropRisk, CropRiskInputSchema, type CropRiskOutput } from "@/ai/flows/crop-risk-flow";
+import { assessCropRisk } from "@/ai/flows/crop-risk-flow";
+import { CropRiskInputSchema, type CropRiskOutput } from "@/ai/schemas/crop-risk-schemas";
+import type { z } from "zod";
 
 export default function CropRiskCalculator() {
   const [isLoading, setIsLoading] = React.useState(false);
