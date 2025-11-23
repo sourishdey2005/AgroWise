@@ -6,7 +6,7 @@ import StatCard from '@/components/shared/stat-card';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
-import { Target, TrendingUp, Tractor, Sprout, ClipboardList, BookOpen, Scaling, Woman, Percent, FilePieChart, FileText } from 'lucide-react';
+import { Target, TrendingUp, Tractor, Sprout, ClipboardList, BookOpen, Scaling, Users, Percent, FilePieChart, FileText } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 
 const mspComplianceData = [
@@ -153,7 +153,7 @@ export default function PolicyImpactPage() {
                 </Card>
                  <Card>
                     <CardHeader>
-                        <CardTitle className="flex items-center gap-2"><Woman/> Women Farmers Empowerment</CardTitle>
+                        <CardTitle className="flex items-center gap-2"><Users/> Women Farmers Empowerment</CardTitle>
                     </CardHeader>
                     <CardContent className="grid grid-cols-2 gap-4 text-center">
                         <div>
