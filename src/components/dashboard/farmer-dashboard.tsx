@@ -4,14 +4,14 @@
 import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal, FlaskConical, Power, AlertTriangle, Droplets } from "lucide-react";
+import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal, FlaskConical, Power, AlertTriangle, Droplets, Wind, Sun, Bug } from "lucide-react";
 import StatCard from "../shared/stat-card";
 import mandiData from '@/data/mandi_prices.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather, MandiPrice } from "@/lib/types";
 import weatherData from '@/data/weather.json';
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
-import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip } from "recharts";
+import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from "recharts";
 import { Switch } from "../ui/switch";
 import { Badge } from "../ui/badge";
 
@@ -45,6 +45,24 @@ const profitProjectionData = [
     { name: 'Profit', expected: 75000, potential: 95000 }
 ];
 
+const soilNutrientData = [
+    { name: 'Nitrogen (N)', level: 75, goal: 80 },
+    { name: 'Phosphorus (P)', level: 60, goal: 70 },
+    { name: 'Potassium (K)', level: 85, goal: 80 },
+];
+
+const pestRiskData = [
+    { name: 'Fungal', probability: 65 },
+    { name: 'Insects', probability: 40 },
+    { name: 'Mites', probability: 25 },
+];
+
+const waterUsageData = [
+    { day: 'Mon', usage: 350 }, { day: 'Tue', usage: 400 }, { day: 'Wed', usage: 320 },
+    { day: 'Thu', usage: 410 }, { day: 'Fri', usage: 380 }, { day: 'Sat', usage: 420 },
+    { day: 'Sun', usage: 390 },
+]
+
 
 export default function FarmerDashboard() {
   const [marketPrices, setMarketPrices] = useState<MandiPrice[]>(initialMarketPrices);
@@ -72,9 +90,8 @@ export default function FarmerDashboard() {
       
       // Simulate water tank level change based on pump status
       setWaterTankLevel(p => {
-          // Increase by 1-2.5% every 3s if pump is on
-          // Decrease by ~1% every 30 mins if pump is off
-          const change = waterPumpOn ? getRandom(1, 2.5) : getRandom(-0.002, -0.0015);
+          // ~1% per 30 minutes = 1/1800 per second. Per 3s interval: 3/1800 = 1/600.
+          const change = waterPumpOn ? getRandom(1, 2.5) : - (1/6);
           return Math.min(100, Math.max(0, p + change));
       });
       
@@ -187,6 +204,50 @@ export default function FarmerDashboard() {
           </Card>
         </div>
       </div>
+
+       <Card>
+        <CardHeader>
+            <CardTitle>Farm Analytics Overview</CardTitle>
+            <CardDescription>A quick glance at key farm metrics.</CardDescription>
+        </CardHeader>
+        <CardContent className="grid gap-6 md:grid-cols-3">
+            <div>
+                <h3 className="font-semibold text-center mb-2">Soil Nutrient Levels</h3>
+                 <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={soilNutrientData} layout="vertical" margin={{ left: 10 }}>
+                        <XAxis type="number" domain={[0, 100]} hide />
+                        <YAxis type="category" dataKey="name" width={80} fontSize={12} axisLine={false} tickLine={false} />
+                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} cursor={{ fill: 'hsl(var(--muted))' }} />
+                        <Legend />
+                        <Bar dataKey="level" name="Current" fill="hsl(var(--primary))" radius={4} />
+                        <Bar dataKey="goal" name="Goal" fill="hsl(var(--secondary))" radius={4} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+             <div>
+                <h3 className="font-semibold text-center mb-2">Pest & Disease Probability</h3>
+                <ResponsiveContainer width="100%" height={200}>
+                    <BarChart data={pestRiskData}>
+                        <XAxis dataKey="name" fontSize={12} axisLine={false} tickLine={false}/>
+                        <YAxis domain={[0, 100]} unit="%" hide />
+                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} cursor={{ fill: 'hsl(var(--muted))' }} />
+                        <Bar dataKey="probability" name="Risk" fill="hsl(var(--destructive) / 0.6)" radius={4} />
+                    </BarChart>
+                </ResponsiveContainer>
+            </div>
+             <div>
+                <h3 className="font-semibold text-center mb-2">Weekly Water Usage</h3>
+                 <ResponsiveContainer width="100%" height={200}>
+                    <LineChart data={waterUsageData}>
+                        <XAxis dataKey="day" fontSize={12} axisLine={false} tickLine={false}/>
+                        <YAxis domain={[300, 500]} unit="L" hide/>
+                        <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} />
+                        <Line type="monotone" dataKey="usage" name="Liters" stroke="hsl(var(--chart-2))" strokeWidth={2} />
+                    </LineChart>
+                </ResponsiveContainer>
+            </div>
+        </CardContent>
+      </Card>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
             <Card>
@@ -388,3 +449,5 @@ export default function FarmerDashboard() {
     </div>
   );
 }
+
+    
