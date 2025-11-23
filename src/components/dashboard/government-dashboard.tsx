@@ -212,19 +212,19 @@ export default function GovernmentDashboard() {
                     <CardTitle className="flex items-center gap-2"><Droplets/> Crop Diversity Index</CardTitle>
                     <CardDescription>Regional diversity in crop cultivation.</CardDescription>
                 </CardHeader>
-                 <CardContent>
-                        <ResponsiveContainer width="100%" height={200}>
-                            <PieChart>
-                                <Pie data={cropDiversityData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={5}>
-                                    {cropDiversityData.map((entry, index) => (
-                                        <Cell key={`cell-${index}`} fill={DIVERSITY_COLORS[index % DIVERSITY_COLORS.length]} />
-                                    ))}
-                                </Pie>
-                                <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value} Regions`} />
-                                <Legend layout="vertical" align="right" verticalAlign="middle" wrapperStyle={{fontSize: "12px"}}/>
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </CardContent>
+                 <CardContent className="flex justify-center items-center">
+                    <ResponsiveContainer width="100%" height={200}>
+                        <PieChart>
+                            <Pie data={cropDiversityData} dataKey="value" nameKey="name" cx="50%" cy="50%" innerRadius={50} outerRadius={80} paddingAngle={5}>
+                                {cropDiversityData.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={DIVERSITY_COLORS[index % DIVERSITY_COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip contentStyle={{ backgroundColor: 'hsl(var(--background))' }} formatter={(value) => `${value} Regions`} />
+                            <Legend layout="vertical" align="right" verticalAlign="middle" iconSize={10} wrapperStyle={{fontSize: "12px", paddingLeft: "20px"}}/>
+                        </PieChart>
+                    </ResponsiveContainer>
+                </CardContent>
             </Card>
         </div>
 
