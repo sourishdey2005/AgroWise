@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from "react";
@@ -6,12 +7,15 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Wheat, Droplets, Thermometer } from "lucide-react";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import cropsData from "@/data/crops.json";
 import type { Crop } from "@/lib/types";
 
 export default function MyCropsPage() {
   const [searchTerm, setSearchTerm] = useState("");
   const [soilFilter, setSoilFilter] = useState("all");
+  const [selectedCrop, setSelectedCrop] = useState<Crop | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
   
   const allCrops: Crop[] = cropsData.crops;
 
@@ -20,6 +24,11 @@ export default function MyCropsPage() {
     const matchesSoil = soilFilter === 'all' || crop.soil_type.toLowerCase().includes(soilFilter.toLowerCase());
     return matchesSearch && matchesSoil;
   });
+
+  const handleViewDetails = (crop: Crop) => {
+    setSelectedCrop(crop);
+    setIsDialogOpen(true);
+  };
 
   return (
     <div className="space-y-6">
@@ -84,7 +93,7 @@ export default function MyCropsPage() {
                     </div>
                   </CardContent>
                   <CardFooter>
-                    <Button variant="outline" className="w-full">View Details</Button>
+                    <Button variant="outline" className="w-full" onClick={() => handleViewDetails(crop)}>View Details</Button>
                   </CardFooter>
                 </Card>
               ))}
@@ -96,6 +105,50 @@ export default function MyCropsPage() {
           )}
         </CardContent>
       </Card>
+      
+      {selectedCrop && (
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+            <DialogContent className="sm:max-w-2xl">
+                <DialogHeader>
+                    <DialogTitle className="text-2xl font-bold font-headline">{selectedCrop.name}</DialogTitle>
+                    <DialogDescription>
+                        {selectedCrop.description}
+                    </DialogDescription>
+                </DialogHeader>
+                <div className="grid gap-6 py-4">
+                    <div className="grid grid-cols-2 gap-6">
+                        <div className="space-y-4">
+                            <h4 className="font-semibold text-primary">Ideal Growing Conditions</h4>
+                            <ul className="space-y-2 text-sm text-muted-foreground">
+                                <li className="flex items-start gap-3">
+                                    <Thermometer className="h-4 w-4 mt-1 flex-shrink-0" />
+                                    <div><strong>Temperature:</strong> {selectedCrop.ideal_temperature}</div>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Droplets className="h-4 w-4 mt-1 flex-shrink-0" />
+                                    <div><strong>Rainfall:</strong> {selectedCrop.rainfall}</div>
+                                </li>
+                                <li className="flex items-start gap-3">
+                                    <Wheat className="h-4 w-4 mt-1 flex-shrink-0" />
+                                    <div><strong>Soil Type:</strong> {selectedCrop.soil_type}</div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div className="space-y-4">
+                            <h4 className="font-semibold text-primary">Management</h4>
+                            <p className="text-sm"><strong>Recommended Fertilizers:</strong> {selectedCrop.fertilizers.join(', ')}</p>
+                             <p className="text-sm"><strong>Common Diseases:</strong> {selectedCrop.diseases.join(', ')}</p>
+                             <p className="text-sm"><strong>Pest Control:</strong> {selectedCrop.pest_control.join(', ')}</p>
+                        </div>
+                    </div>
+                </div>
+                <DialogFooter>
+                    <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Close</Button>
+                </DialogFooter>
+            </DialogContent>
+        </Dialog>
+      )}
+
     </div>
   );
 }

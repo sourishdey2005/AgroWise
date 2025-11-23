@@ -4,6 +4,7 @@
     {
       "id": 1,
       "name": "Basmati Rice",
+      "description": "A long-grain aromatic rice, primarily grown in the Indian subcontinent.",
       "ideal_temperature": "20°C - 35°C",
       "soil_type": "Alluvial Soil, Clay Loam",
       "rainfall": "110-150 cm",
@@ -14,6 +15,7 @@
     {
       "id": 2,
       "name": "Wheat",
+      "description": "A staple cereal grain, a key source of carbohydrates.",
       "ideal_temperature": "15°C - 25°C",
       "soil_type": "Loamy Soil",
       "rainfall": "50-90 cm",
@@ -24,6 +26,7 @@
     {
       "id": 3,
       "name": "Sugarcane",
+      "description": "A tall perennial grass used for sugar production.",
       "ideal_temperature": "20°C - 30°C",
       "soil_type": "Heavy Loam, Black Cotton Soil",
       "rainfall": "75-120 cm",
@@ -34,6 +37,7 @@
     {
       "id": 4,
       "name": "Cotton",
+      "description": "A soft, fluffy staple fiber that grows in a boll.",
       "ideal_temperature": "21°C - 30°C",
       "soil_type": "Black Soil, Alluvial Soil",
       "rainfall": "50-100 cm",
@@ -44,6 +48,7 @@
     {
       "id": 5,
       "name": "Soybean",
+      "description": "A species of legume native to East Asia, widely grown for its edible bean.",
       "ideal_temperature": "25°C - 32°C",
       "soil_type": "Sandy Loam, Clay Loam",
       "rainfall": "60-75 cm",
@@ -54,6 +59,7 @@
     {
       "id": 6,
       "name": "Maize (Corn)",
+      "description": "A large grain plant first domesticated by indigenous peoples in southern Mexico.",
       "ideal_temperature": "21°C - 27°C",
       "soil_type": "Well-drained Loamy Soil",
       "rainfall": "50-100 cm",
@@ -64,6 +70,7 @@
     {
       "id": 7,
       "name": "Potato",
+      "description": "A starchy tuber of the nightshade family Solanaceae, and the plant itself.",
       "ideal_temperature": "15°C - 20°C",
       "soil_type": "Sandy Loam",
       "rainfall": "50-75 cm",
@@ -74,6 +81,7 @@
     {
       "id": 8,
       "name": "Tomato",
+      "description": "A glossy red, or occasionally yellow, pulpy edible fruit that is eaten as a vegetable.",
       "ideal_temperature": "21°C - 24°C",
       "soil_type": "Sandy Loam",
       "rainfall": "40-60 cm",
@@ -84,6 +92,7 @@
     {
       "id": 9,
       "name": "Onion",
+      "description": "A vegetable which is the most widely cultivated species of the genus Allium.",
       "ideal_temperature": "13°C - 24°C",
       "soil_type": "Red Loam to Clay Loam",
       "rainfall": "65-75 cm",
@@ -94,6 +103,7 @@
     {
       "id": 10,
       "name": "Mustard",
+      "description": "A plant species in the genera Brassica and Sinapis in the family Brassicaceae.",
       "ideal_temperature": "10°C - 25°C",
       "soil_type": "Light to Heavy Loam",
       "rainfall": "25-40 cm",
@@ -104,6 +114,7 @@
     {
       "id": 11,
       "name": "Jowar (Sorghum)",
+      "description": "A genus of flowering plants in the grass family Poaceae. Most species are native to Australia.",
       "ideal_temperature": "26°C - 34°C",
       "soil_type": "Sandy Loam to Clay Loam",
       "rainfall": "40-60 cm",
@@ -114,6 +125,7 @@
     {
       "id": 12,
       "name": "Bajra (Pearl Millet)",
+      "description": "The most widely grown type of millet. It has been grown in Africa and the Indian subcontinent since prehistoric times.",
       "ideal_temperature": "25°C - 35°C",
       "soil_type": "Sandy Loam",
       "rainfall": "40-50 cm",
@@ -124,6 +136,7 @@
     {
       "id": 13,
       "name": "Gram (Chickpea)",
+      "description": "An annual legume of the family Fabaceae, subfamily Faboideae.",
       "ideal_temperature": "18°C - 30°C",
       "soil_type": "Light to heavy soils",
       "rainfall": "60-100 cm",
@@ -134,6 +147,7 @@
     {
       "id": 14,
       "name": "Groundnut (Peanut)",
+      "description": "A legume crop grown mainly for its edible seeds. It is widely grown in the tropics and subtropics.",
       "ideal_temperature": "25°C - 35°C",
       "soil_type": "Sandy Loam",
       "rainfall": "50-125 cm",
@@ -144,6 +158,7 @@
     {
       "id": 15,
       "name": "Lentil (Masoor)",
+      "description": "An edible legume. It is an annual plant known for its lens-shaped seeds.",
       "ideal_temperature": "18°C - 30°C",
       "soil_type": "Alluvial Loam, Black Cotton",
       "rainfall": "80-100 cm",
@@ -154,6 +169,7 @@
     {
       "id": 16,
       "name": "Barley (Jau)",
+      "description": "A member of the grass family, it is a major cereal grain grown in temperate climates globally.",
       "ideal_temperature": "12°C - 15°C",
       "soil_type": "Sandy Loam",
       "rainfall": "30-50 cm",
@@ -164,6 +180,7 @@
     {
       "id": 17,
       "name": "Sunflower",
+      "description": "A large annual forb of the genus Helianthus grown as a crop for its edible oil and edible fruits.",
       "ideal_temperature": "20°C - 25°C",
       "soil_type": "Sandy Loam, Black Soil",
       "rainfall": "50-75 cm",
@@ -174,6 +191,7 @@
     {
       "id": 18,
       "name": "Turmeric",
+      "description": "A flowering plant, Curcuma longa of the ginger family, Zingiberaceae, the roots of which are used in cooking.",
       "ideal_temperature": "20°C - 30°C",
       "soil_type": "Well-drained sandy or clay loam",
       "rainfall": "150-225 cm",
@@ -184,6 +202,7 @@
     {
       "id": 19,
       "name": "Ginger",
+      "description": "A flowering plant whose rhizome, ginger root or ginger, is widely used as a spice and a folk medicine.",
       "ideal_temperature": "20°C - 30°C",
       "soil_type": "Loam, Sandy Loam",
       "rainfall": "130-150 cm",
@@ -194,6 +213,7 @@
     {
       "id": 20,
       "name": "Ragi (Finger Millet)",
+      "description": "An annual herbaceous plant widely grown as a cereal crop in the arid and semiarid areas in Africa and Asia.",
       "ideal_temperature": "20°C - 30°C",
       "soil_type": "Red Loam, Sandy Loam",
       "rainfall": "70-100 cm",

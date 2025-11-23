@@ -1,3 +1,4 @@
+
 export type UserRole = "farmer" | "agent" | "government" | "bank";
 
 export interface User {
@@ -12,13 +13,13 @@ export interface User {
 export interface Crop {
   id: number;
   name: string;
+  description: string;
   ideal_temperature: string;
   soil_type: string;
   rainfall: string;
   fertilizers: string[];
   diseases: string[];
   pest_control: string[];
-  image: string;
 }
 
 export interface Soil {
