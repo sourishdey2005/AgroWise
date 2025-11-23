@@ -40,6 +40,7 @@ const navItems = {
     { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
     { href: '/dashboard/gov/disaster-management', icon: Siren, label: 'Disaster Management' },
     { href: '/dashboard/gov/regulatory-monitoring', icon: ShieldCheck, label: 'Regulatory Monitoring' },
+    { href: '/dashboard/gov/rural-economy', icon: Users, label: 'Rural Economy Analysis' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
