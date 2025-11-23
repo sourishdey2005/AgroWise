@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -10,6 +11,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar, Legend, LineChart, Line, XAxis, YAxis, Tooltip as RechartsTooltip } from 'recharts';
 import { ShieldCheck, CircleUser, GitCommitHorizontal, Smile, Frown, Meh, Search, FileWarning, Package, FlaskConical } from 'lucide-react';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 
 const supplierData = [
   { subject: 'Consistency', A: 85, fullMark: 100 },
@@ -26,12 +28,23 @@ const qualityHistory = [
 ];
 
 const disputeData = [
-    { id: 'D-001', supplier: 'Farmer A', issue: 'Weight Mismatch', status: 'In Review' },
-    { id: 'D-002', supplier: 'Buyer X', issue: 'Late Payment', status: 'Resolved' },
+    { id: 'D-001', supplier: 'Farmer A', issue: 'Weight Mismatch', status: 'In Review', details: "Farmer A claims 100kg of onions were sent, but buyer recorded 95kg. Awaiting weighbridge slip." },
+    { id: 'D-002', supplier: 'Buyer X', issue: 'Late Payment', status: 'Resolved', details: "Payment was delayed by 3 days due to a bank holiday. The issue is now resolved." },
+    { id: 'D-003', supplier: 'Farmer C', issue: 'Quality Complaint', status: 'In Review', details: "Buyer rejected consignment of tomatoes, citing poor quality. Requesting photographic evidence." },
+    { id: 'D-004', supplier: 'Buyer Y', issue: 'Damaged Goods', status: 'Resolved', details: "Goods were damaged in transit. Insurance claim has been filed and processed." },
 ];
+
+type Dispute = typeof disputeData[0];
 
 export default function QualityInsightsPage() {
     const [sentimentScore, setSentimentScore] = useState(72);
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+    const [selectedDispute, setSelectedDispute] = useState<Dispute | null>(null);
+
+    const handleViewDetails = (dispute: Dispute) => {
+        setSelectedDispute(dispute);
+        setIsDialogOpen(true);
+    };
     
     const getSentimentIcon = (score: number) => {
         if (score > 75) return <Smile className="text-green-500 w-12 h-12" />;
@@ -171,13 +184,53 @@ export default function QualityInsightsPage() {
                                     <TableCell>{d.supplier}</TableCell>
                                     <TableCell>{d.issue}</TableCell>
                                     <TableCell><Badge variant={d.status === 'Resolved' ? 'secondary' : 'outline'}>{d.status}</Badge></TableCell>
-                                    <TableCell><Button variant="outline" size="sm">View Details</Button></TableCell>
+                                    <TableCell>
+                                        <Button variant="outline" size="sm" onClick={() => handleViewDetails(d)}>View Details</Button>
+                                    </TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>
                     </Table>
                 </CardContent>
             </Card>
+
+            {selectedDispute && (
+                <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle>Dispute Details: {selectedDispute.id}</DialogTitle>
+                            <DialogDescription>
+                                Reviewing dispute between agent and {selectedDispute.supplier}.
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="grid gap-4 py-4">
+                             <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Entity:</span>
+                                <span className="col-span-3 font-semibold">{selectedDispute.supplier}</span>
+                            </div>
+                            <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Issue:</span>
+                                <span className="col-span-3">{selectedDispute.issue}</span>
+                            </div>
+                             <div className="grid grid-cols-4 items-center gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium">Status:</span>
+                                <div className="col-span-3">
+                                    <Badge variant={selectedDispute.status === 'Resolved' ? 'secondary' : 'outline'}>
+                                        {selectedDispute.status}
+                                    </Badge>
+                                </div>
+                            </div>
+                            <div className="grid grid-cols-4 items-start gap-4">
+                                <span className="text-right col-span-1 text-sm font-medium pt-1">Details:</span>
+                                <p className="col-span-3 text-sm text-muted-foreground bg-secondary/50 p-3 rounded-md">{selectedDispute.details}</p>
+                            </div>
+                        </div>
+                        <DialogFooter>
+                            <Button variant="outline" onClick={() => setIsDialogOpen(false)}>Close</Button>
+                        </DialogFooter>
+                    </DialogContent>
+                </Dialog>
+            )}
 
         </div>
     );
