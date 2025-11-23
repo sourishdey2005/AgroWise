@@ -8,9 +8,9 @@ export const CropRiskInputSchema = z.object({
     .describe(
       'The current growth stage of the crop (e.g., germination, vegetative, flowering).'
     ),
-  temperature: z.number().describe('The current average temperature in Celsius.'),
-  humidity: z.number().describe('The current average relative humidity in percent.'),
-  windSpeed: z.number().describe('The current average wind speed in km/h.'),
+  temperature: z.coerce.number().describe('The current average temperature in Celsius.'),
+  humidity: z.coerce.number().describe('The current average relative humidity in percent.'),
+  windSpeed: z.coerce.number().describe('The current average wind speed in km/h.'),
 });
 export type CropRiskInput = z.infer<typeof CropRiskInputSchema>;
 
