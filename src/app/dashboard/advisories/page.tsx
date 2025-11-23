@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useState } from 'react';
@@ -12,24 +13,48 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Input } from '@/components/ui/input';
 
 const escalatedIssues = [
-    { id: 1, issue: "Widespread pest attack", village: "Village B", agent: "Vijay Verma", status: "Pending Review" },
-    { id: 2, issue: "Critical water shortage", village: "Village D", agent: "Anjali Mehta", status: "Actioned" },
+    { id: 1, issue: "Widespread pest attack", village: "Rampur", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 2, issue: "Critical water shortage", village: "Sitapur", agent: "Anjali Mehta", status: "Actioned" },
     { id: 3, issue: "MSP procurement issue", village: "Ludhiana", agent: "Rajesh Gupta", status: "Pending Review" },
     { id: 4, issue: "Counterfeit fertilizer sales", village: "Guntur", agent: "Sandeep Reddy", status: "Actioned" },
+    { id: 5, issue: "Locust swarm spotted", village: "Jaisalmer", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 6, issue: "Irrigation canal breach", village: "Tanjore", agent: "Anjali Mehta", status: "Actioned" },
+    { id: 7, issue: "Delayed subsidy payment", village: "Amravati", agent: "Rajesh Gupta", status: "Pending Review" },
+    { id: 8, issue: "Disease outbreak in poultry", village: "Hisar", agent: "Sandeep Reddy", status: "Actioned" },
+    { id: 9, issue: "Hailstorm damage assessment", village: "Shimla", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 10, issue: "Poor seed quality complaint", village: "Warangal", agent: "Anjali Mehta", status: "Actioned" },
+    { id: 11, issue: "Soil erosion concern", village: "Idukki", agent: "Rajesh Gupta", status: "Pending Review" },
+    { id: 12, issue: "Storage facility fire", village: "Indore", agent: "Sandeep Reddy", status: "Actioned" },
+    { id: 13, issue: "Unseasonal rainfall damage", village: "Kurnool", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 14, issue: "Wild animal crop damage", village: "Mysore", agent: "Anjali Mehta", status: "Actioned" },
+    { id: 15, issue: "Labor shortage for harvest", village: "Nashik", agent: "Rajesh Gupta", status: "Pending Review" },
+    { id: 16, issue: "Electricity supply issue for pumps", village: "Erode", agent: "Sandeep Reddy", status: "Actioned" },
+    { id: 17, issue: "Road access blocked to mandi", village: "Solan", agent: "Vijay Verma", status: "Pending Review" },
+    { id: 18, issue: "Adulterated pesticide reports", village: "Bathinda", agent: "Anjali Mehta", status: "Actioned" },
+    { id: 19, issue: "Cold storage malfunction", village: "Agra", agent: "Rajesh Gupta", status: "Pending Review" },
+    { id: 20, issue: "Cattle disease outbreak", village: "Anand", agent: "Sandeep Reddy", status: "Actioned" },
 ];
 
 const initialTasks = {
     todo: [
         { id: 1, title: "Review Punjab drought report" },
         { id: 4, title: "Analyze fertilizer subsidy data" },
+        { id: 7, title: "Plan for Kharif season preparedness" },
+        { id: 8, title: "Check on PM-KISAN disbursal status" },
+        { id: 9, title: "Evaluate new soil health card proposals" },
     ],
     inProgress: [
         { id: 2, title: "Draft MSP policy update for pulses" },
         { id: 5, title: "Coordinate with banks for KCC saturation drive" },
+        { id: 10, title: "Finalize pest advisory for cotton belt" },
+        { id: 11, title: "Organize webinar on new irrigation tech" },
     ],
     done: [
         { id: 3, title: "Approve Q2 subsidy disbursal" },
-        { id: 6, title: "Finalize pest advisory for cotton belt" },
+        { id: 6, title: "Launch new crop insurance scheme portal" },
+        { id: 12, title: "Submit report on West Bengal flood damage" },
+        { id: 13, title: "Release funds for drought relief in Rajasthan" },
+        { id: 14, title: "Conduct training for new field agents" },
     ],
 };
 
