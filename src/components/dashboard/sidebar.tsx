@@ -34,6 +34,7 @@ const navItems = {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories & Governance' },
     { href: '/dashboard/gov/national-monitoring', icon: AreaChartIcon, label: 'National Monitoring' },
+    { href: '/dashboard/gov/policy-impact', icon: ClipboardList, label: 'Policy Impact & Metrics' },
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
     { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
     { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
