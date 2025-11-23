@@ -83,6 +83,9 @@ export default function AdvisoriesPage() {
                                 <SelectContent>
                                     <SelectItem value="yield">Crop Yield Report</SelectItem>
                                     <SelectItem value="subsidy">Subsidy Utilization</SelectItem>
+                                    <SelectItem value="market">Market Price Analysis</SelectItem>
+                                    <SelectItem value="weather">Weather Impact Report</SelectItem>
+                                    <SelectItem value="pest">Pest Outbreak Report</SelectItem>
                                 </SelectContent>
                             </Select>
                             <Select>
@@ -90,6 +93,9 @@ export default function AdvisoriesPage() {
                                 <SelectContent>
                                     <SelectItem value="punjab">Punjab</SelectItem>
                                     <SelectItem value="maharashtra">Maharashtra</SelectItem>
+                                    <SelectItem value="uttar-pradesh">Uttar Pradesh</SelectItem>
+                                    <SelectItem value="karnataka">Karnataka</SelectItem>
+                                    <SelectItem value="gujarat">Gujarat</SelectItem>
                                     <SelectItem value="all">All India</SelectItem>
                                 </SelectContent>
                             </Select>
