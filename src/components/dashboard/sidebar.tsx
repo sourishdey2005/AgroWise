@@ -32,10 +32,11 @@ const navItems = {
   ],
   government: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
-    { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
+    { href: '/dashboard/advisories', icon: Bell, label: 'Advisories & Governance' },
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
     { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
     { href: '/dashboard/gov/risk-monitoring', icon: Siren, label: 'Disaster & Risk Monitoring' },
+    { href: '/dashboard/gov/regulatory-monitoring', icon: ShieldCheck, label: 'Regulatory Monitoring' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
