@@ -1,3 +1,4 @@
+
 "use client";
 
 import * as React from "react";
@@ -32,6 +33,8 @@ import { Input } from "@/components/ui/input";
 import { assessCropRisk } from "@/ai/flows/crop-risk-flow";
 import { CropRiskInputSchema, type CropRiskOutput } from "@/ai/schemas/crop-risk-schemas";
 import type { z } from "zod";
+import cropsData from "@/data/crops.json";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export default function CropRiskCalculator() {
   const [isLoading, setIsLoading] = React.useState(false);
@@ -100,15 +103,11 @@ export default function CropRiskCalculator() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="rice">Basmati Rice</SelectItem>
-                        <SelectItem value="wheat">Wheat</SelectItem>
-                        <SelectItem value="sugarcane">Sugarcane</SelectItem>
-                        <SelectItem value="cotton">Cotton</SelectItem>
-                        <SelectItem value="maize">Maize</SelectItem>
-                        <SelectItem value="soybean">Soybean</SelectItem>
-                        <SelectItem value="potato">Potato</SelectItem>
-                        <SelectItem value="tomato">Tomato</SelectItem>
-                        <SelectItem value="mustard">Mustard</SelectItem>
+                        <ScrollArea className="h-72">
+                          {cropsData.crops.map(crop => (
+                            <SelectItem key={crop.id} value={crop.name.toLowerCase()}>{crop.name}</SelectItem>
+                          ))}
+                        </ScrollArea>
                       </SelectContent>
                     </Select>
                     <FormMessage />
