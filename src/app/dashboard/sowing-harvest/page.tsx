@@ -30,6 +30,18 @@ const varietyComparisonData: Record<string, { hyv: { name: string; yield: string
     cotton: {
         hyv: { name: "Bt Cotton", yield: "10-12 Quintal/Acre", resistance: "High (Bollworm)", cost: "High", duration: "160-180 days", water: "Medium" },
         local: { name: "Desi Cotton", yield: "6-8 Quintal/Acre", resistance: "High (Drought)", cost: "Low", duration: "180-200 days", water: "Low" }
+    },
+    sugarcane: {
+        hyv: { name: "HYV Sugarcane", yield: "40-50 Tonnes/Acre", resistance: "High (Red Rot)", cost: "High", duration: "10-12 months", water: "Very High" },
+        local: { name: "Local Sugarcane", yield: "25-30 Tonnes/Acre", resistance: "Medium", cost: "Low", duration: "12-14 months", water: "High" }
+    },
+    potato: {
+        hyv: { name: "Kufri Chipsona", yield: "120-150 Quintal/Acre", resistance: "High (Late Blight)", cost: "High", duration: "90-100 days", water: "Medium" },
+        local: { name: "Local Potato", yield: "80-100 Quintal/Acre", resistance: "Low", cost: "Low", duration: "110-120 days", water: "Medium" }
+    },
+    tomato: {
+        hyv: { name: "Hybrid Tomato", yield: "250-300 Quintal/Acre", resistance: "High (Wilt, Virus)", cost: "High", duration: "130-140 days", water: "Medium" },
+        local: { name: "Desi Tomato", yield: "150-200 Quintal/Acre", resistance: "Medium", cost: "Low", duration: "140-150 days", water: "Medium-High" }
     }
 };
 
@@ -110,6 +122,9 @@ export default function SowingHarvestPage() {
                                 <SelectItem value="maize">Maize</SelectItem>
                                 <SelectItem value="soybean">Soybean</SelectItem>
                                 <SelectItem value="cotton">Cotton</SelectItem>
+                                <SelectItem value="sugarcane">Sugarcane</SelectItem>
+                                <SelectItem value="potato">Potato</SelectItem>
+                                <SelectItem value="tomato">Tomato</SelectItem>
                             </SelectContent>
                         </Select>
                     </div>
@@ -278,4 +293,3 @@ export default function SowingHarvestPage() {
 
         </div>
     );
-}
