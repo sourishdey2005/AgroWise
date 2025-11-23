@@ -35,6 +35,7 @@ const navItems = {
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
     { href: '/dashboard/advisories', icon: Bell, label: 'Advisories' },
     { href: '/dashboard/gov/market-economics', icon: Banknote, label: 'Market & Economic Analytics' },
+    { href: '/dashboard/gov/scheme-management', icon: Book, label: 'Scheme Management' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
