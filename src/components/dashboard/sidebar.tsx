@@ -1,3 +1,4 @@
+
 "use client";
 
 import Link from 'next/link';
@@ -42,6 +43,7 @@ const navItems = {
     { href: '/dashboard/gov/regulatory-monitoring', icon: ShieldCheck, label: 'Regulatory Monitoring' },
     { href: '/dashboard/gov/rural-economy', icon: Users, label: 'Rural Economy Analysis' },
     { href: '/dashboard/gov/trilink-analytics', icon: GitCompareArrows, label: 'Tri-Link Analytics' },
+    { href: '/dashboard/gov/sustainability', icon: Recycle, label: 'Sustainability' },
   ],
   bank: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },
