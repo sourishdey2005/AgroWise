@@ -53,6 +53,9 @@ export default function CropRiskCalculator() {
     },
   });
 
+  const { watch, handleSubmit, formState } = form;
+  const watchedValues = watch();
+
   async function onSubmit(values: z.infer<typeof CropRiskInputSchema>) {
     setIsLoading(true);
     setResult(null);
@@ -68,6 +71,19 @@ export default function CropRiskCalculator() {
         setIsLoading(false);
     }
   }
+
+  React.useEffect(() => {
+    const subscription = watch(async (value, { name, type }) => {
+      if (name === 'cropName' && value.cropName) {
+        const isValid = await form.trigger();
+        if (isValid) {
+          handleSubmit(onSubmit)();
+        }
+      }
+    });
+    return () => subscription.unsubscribe();
+  }, [watch, handleSubmit, form.trigger]);
+
 
   const getRiskColor = (score: number) => {
     if (score > 70) return 'text-destructive';
@@ -104,7 +120,7 @@ export default function CropRiskCalculator() {
                     <Select onValueChange={field.onChange} value={field.value}>
                       <FormControl>
                         <SelectTrigger>
-                          <SelectValue placeholder="Select crop" />
+                          <SelectValue placeholder="Select crop to analyze risk..." />
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
@@ -189,7 +205,7 @@ export default function CropRiskCalculator() {
                 />
               </div>
 
-              <Button type="submit" disabled={isLoading}>
+              <Button type="submit" disabled={isLoading} className="hidden">
                 {isLoading ? (
                   <>
                     <Loader2 className="h-4 w-4 animate-spin mr-2" />
@@ -218,7 +234,7 @@ export default function CropRiskCalculator() {
             {!result && !isLoading && !error && (
               <div className="text-center text-muted-foreground">
                 <Leaf className="mx-auto h-12 w-12" />
-                <p className="mt-4">Risk analysis will appear here.</p>
+                <p className="mt-4">Select a crop to see its risk analysis.</p>
               </div>
             )}
 
