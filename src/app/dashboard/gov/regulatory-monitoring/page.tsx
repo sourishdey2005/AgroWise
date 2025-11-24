@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { ShieldCheck, Package, AlertTriangle, Building, BookText, Droplets, FlaskConical, CircleDot } from 'lucide-react';
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
+import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip, Legend } from 'recharts';
 
 const fertilizerData = [
   { region: 'Punjab', allocated: 120, distributed: 110 },
