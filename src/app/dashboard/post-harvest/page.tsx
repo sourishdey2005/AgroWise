@@ -8,15 +8,13 @@ import { Input } from '@/components/ui/input';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip, Legend } from 'recharts';
 import { MapPin, Truck, Percent, Box, CalendarCheck, Lightbulb } from 'lucide-react';
-import historicalPriceData from '@/data/historical-price-trends.json';
+import { useData } from '@/hooks/use-data';
 
 const coldStorages = [
   { id: 1, name: "FreshKeep Cold Storage", distance: "12 km", capacity: "500 MT", contact: "9876543210" },
   { id: 2, name: "Himalaya Cold Chain", distance: "18 km", capacity: "1000 MT", contact: "9876543211" },
   { id: 3, name: "AgriCool Solutions", distance: "25 km", capacity: "750 MT", contact: "9876543212" },
 ];
-
-const priceTrends = historicalPriceData.wheat_5_year;
 
 const POST_HARVEST_STORAGE_KEY = 'postHarvestData';
 
@@ -27,6 +25,8 @@ type PostHarvestState = {
 };
 
 export default function PostHarvestPage() {
+  const { data, loading } = useData();
+
   const [calculators, setCalculators] = useState<PostHarvestState>({
     transportCost: { distance: 50, costPerKm: 15, total: 750 },
     commission: { price: 2150, rate: 8, total: 172 },
@@ -90,6 +90,10 @@ export default function PostHarvestPage() {
         return newState;
     });
   };
+
+  if (loading || !data) return null;
+  
+  const priceTrends = data.historicalPriceTrends.wheat_5_year;
 
   return (
     <div className="grid gap-6 animate-in fade-in duration-500">

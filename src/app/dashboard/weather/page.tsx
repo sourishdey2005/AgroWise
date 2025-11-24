@@ -6,18 +6,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { AlertTriangle, Cloud, Droplets, Thermometer, Bug, Wind, Sun } from "lucide-react";
 import { LineChart, Line, XAxis, YAxis, ResponsiveContainer, Tooltip as RechartsTooltip, CartesianGrid, AreaChart, Area } from "recharts";
 import StatCard from "@/components/shared/stat-card";
-import weatherData from '@/data/weather.json';
-import rainfallData from '@/data/rainfall.json';
-import weatherForecastData from '@/data/weather-forecast.json';
 import type { Weather } from "@/lib/types";
 import WaterRequirementCalculator from "@/components/dashboard/farmer/water-requirement-calculator";
 import EvapotranspirationCalculator from "@/components/dashboard/farmer/evapotranspiration-calculator";
 import { useAuth } from "@/hooks/use-auth";
-
-const initialRainfallPrediction = rainfallData.prediction;
-const initialTempForecast = weatherForecastData.forecasts.temperature;
-const initialHumidityForecast = weatherForecastData.forecasts.humidity;
-
+import { useData } from "@/hooks/use-data";
 
 // Function to generate a random number within a range
 const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -30,40 +23,52 @@ const getPestForecast = (weather: Weather) => {
     return { level: 'Low', color: 'bg-green-500' };
 }
 
-const getInitialWeather = (region?: string) => {
+const getInitialWeather = (weatherData: Weather[], region?: string) => {
     if (region === "Punjab") {
-        return weatherData.weather.find(w => w.district === "Ludhiana") || weatherData.weather[0];
+        return weatherData.find(w => w.district === "Ludhiana") || weatherData[0];
     }
     if (region === "Maharashtra") {
-        return weatherData.weather.find(w => w.district === "Pune") || weatherData.weather[0];
+        return weatherData.find(w => w.district === "Pune") || weatherData[0];
     }
     // Fallback for other regions or if user has no region
-    return weatherData.weather[0];
+    return weatherData[0];
 };
 
 
 export default function WeatherPage() {
   const { user } = useAuth();
+  const { data, loading } = useData();
   
-  const initialWeather = getInitialWeather(user?.region);
-
-  const [weather, setWeather] = useState<Weather>(initialWeather);
-  const [rainfallPrediction, setRainfallPrediction] = useState(initialRainfallPrediction);
-  const [tempForecast, setTempForecast] = useState(initialTempForecast);
-  const [humidityForecast, setHumidityForecast] = useState(initialHumidityForecast);
+  const [weather, setWeather] = useState<Weather | null>(null);
+  const [rainfallPrediction, setRainfallPrediction] = useState<any[]>([]);
+  const [tempForecast, setTempForecast] = useState<any[]>([]);
+  const [humidityForecast, setHumidityForecast] = useState<any[]>([]);
   const [soilMoisture, setSoilMoisture] = useState(45);
   const [windSpeed, setWindSpeed] = useState(15);
   const [uvIndex, setUvIndex] = useState(9);
   
   useEffect(() => {
+    if (data && !loading) {
+      const initialWeather = getInitialWeather(data.weather, user?.region);
+      setWeather(initialWeather);
+      setRainfallPrediction(data.rainfall.prediction);
+      setTempForecast(data.weatherForecast.forecasts.temperature);
+      setHumidityForecast(data.weatherForecast.forecasts.humidity);
+    }
+  }, [data, loading, user]);
+
+  useEffect(() => {
     const interval = setInterval(() => {
       // Simulate weather changes
-      setWeather(prevWeather => ({
-        ...prevWeather,
-        temperature: `${getRandomInt(30, 42)}°C`,
-        humidity: `${getRandomInt(20, 80)}%`,
-        rainfall_probability: `${getRandomInt(0, 100)}%`,
-      }));
+      setWeather(prevWeather => {
+        if (!prevWeather) return null;
+        return {
+          ...prevWeather,
+          temperature: `${getRandomInt(30, 42)}°C`,
+          humidity: `${getRandomInt(20, 80)}%`,
+          rainfall_probability: `${getRandomInt(0, 100)}%`,
+        }
+      });
 
       // Simulate rainfall prediction changes
       setRainfallPrediction(prev => prev.map((p, i) => ({ ...p, rainfall: getRandomInt(0, i === 0 ? 5 : 20) })));
@@ -81,11 +86,10 @@ export default function WeatherPage() {
 
     return () => clearInterval(interval);
   }, []);
-
-  useEffect(() => {
-    setWeather(getInitialWeather(user?.region));
-  }, [user]);
-
+  
+  if (loading || !data || !weather) {
+    return null; // Or a loading spinner
+  }
   
   const pestForecast = getPestForecast(weather);
 

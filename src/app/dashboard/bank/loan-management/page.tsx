@@ -10,7 +10,6 @@ import { Input } from '@/components/ui/input';
 import { Progress } from '@/components/ui/progress';
 import { Calculator, FileText, Link as LinkIcon, BarChart, Banknote, CheckCircle, XCircle } from 'lucide-react';
 import { LoanApplication } from "@/lib/types";
-import loanData from "@/data/loans.json";
 import {
   Dialog,
   DialogContent,
@@ -20,6 +19,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useToast } from "@/hooks/use-toast";
+import { useData } from '@/hooks/use-data';
 
 
 const getStatusVariant = (status: LoanApplication['status']) => {
@@ -31,13 +31,17 @@ const getStatusVariant = (status: LoanApplication['status']) => {
 };
 
 export default function LoanManagementPage() {
-    const [loans, setLoans] = useState<LoanApplication[]>(loanData.applications);
+    const { data, setData, loading } = useData();
     const [loanAmount, setLoanAmount] = useState(150000);
     const [creditScore, setCreditScore] = useState(720);
     const [eligible, setEligible] = useState<boolean | null>(null);
     const [selectedLoan, setSelectedLoan] = useState<LoanApplication | null>(null);
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const { toast } = useToast();
+    
+    if (loading || !data) return null;
+
+    const loans = data.loans;
 
     const calculateEligibility = () => {
         if (loanAmount <= 200000 && creditScore >= 650) {
@@ -55,7 +59,8 @@ export default function LoanManagementPage() {
     };
 
     const handleLoanStatusChange = (loanId: number, status: 'approved' | 'rejected') => {
-        setLoans(loans.map(l => l.id === loanId ? { ...l, status: status } : l));
+        const updatedLoans = loans.map(l => l.id === loanId ? { ...l, status: status } : l);
+        setData('loans', updatedLoans);
         setIsDialogOpen(false);
         toast({
             title: `Loan ${status.charAt(0).toUpperCase() + status.slice(1)}`,

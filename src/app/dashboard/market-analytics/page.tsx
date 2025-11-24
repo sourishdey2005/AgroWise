@@ -11,17 +11,12 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { DollarSign, BarChart, AlertTriangle, CheckCircle, Calculator, Truck } from "lucide-react";
 import StatCard from "@/components/shared/stat-card";
-import mandiData from '@/data/mandi_prices.json';
-import priceTrendData from '@/data/price-trends.json';
 import type { MandiPrice } from "@/lib/types";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Progress } from "@/components/ui/progress";
-
-const initialMarketPrices = mandiData.prices.slice(0, 5);
-const trend7Day = priceTrendData.trends.wheat_7_day;
-const trend30Day = priceTrendData.trends.wheat_30_day;
+import { useData } from "@/hooks/use-data";
 
 // Function to generate a random number within a range
 const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
@@ -36,7 +31,8 @@ const PROFITABILITY_STORAGE_KEY = 'profitabilityCalculatorData';
 
 
 export default function MarketAnalyticsPage() {
-  const [marketPrices, setMarketPrices] = useState<MandiPrice[]>(initialMarketPrices);
+  const { data, loading } = useData();
+  const [marketPrices, setMarketPrices] = useState<MandiPrice[]>([]);
   const [volatility, setVolatility] = useState(25);
   const [profit, setProfit] = useState<number | null>(null);
 
@@ -48,6 +44,12 @@ export default function MarketAnalyticsPage() {
       price: 2150,
     },
   });
+
+  useEffect(() => {
+    if (data && !loading) {
+      setMarketPrices(data.mandi_prices.slice(0, 5));
+    }
+  }, [data, loading]);
 
   // Load from localStorage on mount
   useEffect(() => {
@@ -95,6 +97,9 @@ export default function MarketAnalyticsPage() {
     setProfit(netProfit);
   }
 
+  if (loading || !data) return null;
+
+  const { wheat_7_day: trend7Day, wheat_30_day: trend30Day } = data.priceTrends.trends;
 
   return (
     <div className="grid gap-6 animate-in fade-in duration-500">

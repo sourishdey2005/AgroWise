@@ -10,9 +10,10 @@ import { Badge } from '@/components/ui/badge';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Check, Handshake, Lightbulb, Calculator, Book, UserCheck } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import schemeData from '@/data/schemes.json';
+import { useData } from '@/hooks/use-data';
 
 export default function SchemeCoordinationPage() {
+    const { data, loading } = useData();
     const { toast } = useToast();
     const [farmerId, setFarmerId] = useState('');
     const [schemeId, setSchemeId] = useState('');
@@ -20,6 +21,11 @@ export default function SchemeCoordinationPage() {
     const [eligibility, setEligibility] = useState<boolean | null>(null);
     const [combinedBenefit, setCombinedBenefit] = useState<number | null>(null);
     const [recommendedSchemes, setRecommendedSchemes] = useState<string[]>([]);
+
+    if (loading || !data) {
+        return null;
+    }
+    const { schemes, farmers } = data;
 
     const checkEligibility = () => {
         if (!farmerId || !schemeId) {
@@ -70,15 +76,13 @@ export default function SchemeCoordinationPage() {
                     <Select onValueChange={setFarmerId}>
                         <SelectTrigger><SelectValue placeholder="Select Farmer" /></SelectTrigger>
                         <SelectContent>
-                            <SelectItem value="1">Ramesh Kumar</SelectItem>
-                            <SelectItem value="2">Sita Devi</SelectItem>
-                            <SelectItem value="3">Arjun Singh</SelectItem>
+                            {farmers.map(f => <SelectItem key={f.id} value={String(f.id)}>{f.name}</SelectItem>)}
                         </SelectContent>
                     </Select>
                     <Select onValueChange={setSchemeId}>
                         <SelectTrigger><SelectValue placeholder="Select Scheme" /></SelectTrigger>
                         <SelectContent>
-                            {schemeData.schemes.map(s => <SelectItem key={s.id} value={String(s.id)}>{s.title}</SelectItem>)}
+                            {schemes.map(s => <SelectItem key={s.id} value={String(s.id)}>{s.title}</SelectItem>)}
                         </SelectContent>
                     </Select>
                     <Button onClick={checkEligibility}><Check className="mr-2 h-4 w-4" /> Check</Button>
@@ -104,7 +108,7 @@ export default function SchemeCoordinationPage() {
                         <Select onValueChange={setSchemeId}>
                             <SelectTrigger><SelectValue placeholder="Select Scheme" /></SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="1">PM-KISAN</SelectItem>
+                                {schemes.map(s => <SelectItem key={s.id} value={String(s.id)}>{s.title}</SelectItem>)}
                             </SelectContent>
                         </Select>
                     </div>
@@ -128,8 +132,9 @@ export default function SchemeCoordinationPage() {
                         <Select onValueChange={setFarmerId}>
                             <SelectTrigger><SelectValue placeholder="Select Farmer for Recommendation" /></SelectTrigger>
                             <SelectContent>
-                                <SelectItem value="1">Ramesh Kumar (Punjab, Rice)</SelectItem>
-                                <SelectItem value="2">Sita Devi (Maharashtra, Soybean)</SelectItem>
+                                {farmers.map(f => (
+                                    <SelectItem key={f.id} value={String(f.id)}>{f.name} ({f.region})</SelectItem>
+                                ))}
                             </SelectContent>
                         </Select>
                     </div>

@@ -8,16 +8,21 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Search, Filter, Wheat, Droplets, Thermometer } from "lucide-react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import cropsData from "@/data/crops.json";
 import type { Crop } from "@/lib/types";
+import { useData } from "@/hooks/use-data";
 
 export default function MyCropsPage() {
+  const { data, loading } = useData();
   const [searchTerm, setSearchTerm] = useState("");
   const [soilFilter, setSoilFilter] = useState("all");
   const [selectedCrop, setSelectedCrop] = useState<Crop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   
-  const allCrops: Crop[] = cropsData.crops;
+  if (loading || !data) {
+    return null; // Or a loading spinner
+  }
+
+  const allCrops: Crop[] = data.crops;
 
   const filteredCrops = allCrops.filter(crop => {
     const matchesSearch = crop.name.toLowerCase().includes(searchTerm.toLowerCase());

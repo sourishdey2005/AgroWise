@@ -1,3 +1,5 @@
+
+"use client";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -5,10 +7,8 @@ import { Button } from "@/components/ui/button";
 import StatCard from "../shared/stat-card";
 import { HandCoins, Hourglass, CheckCircle, XCircle } from "lucide-react";
 import { LoanApplication } from "@/lib/types";
-import loanData from "@/data/loans.json";
 import Link from "next/link";
-
-const loans: LoanApplication[] = loanData.applications;
+import { useData } from "@/hooks/use-data";
 
 const getStatusVariant = (status: LoanApplication['status']) => {
   switch (status) {
@@ -21,12 +21,20 @@ const getStatusVariant = (status: LoanApplication['status']) => {
   }
 };
 
-const totalLoans = loans.length;
-const pendingLoans = loans.filter(l => l.status === 'pending').length;
-const approvedLoans = loans.filter(l => l.status === 'approved').length;
-const rejectedLoans = loans.filter(l => l.status === 'rejected').length;
-
 export default function BankDashboard() {
+  const { data, loading } = useData();
+
+  if (loading || !data) {
+    return null; // Or a loading spinner
+  }
+  
+  const loans: LoanApplication[] = data.loans;
+  const totalLoans = loans.length;
+  const pendingLoans = loans.filter(l => l.status === 'pending').length;
+  const approvedLoans = loans.filter(l => l.status === 'approved').length;
+  const rejectedLoans = loans.filter(l => l.status === 'rejected').length;
+
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

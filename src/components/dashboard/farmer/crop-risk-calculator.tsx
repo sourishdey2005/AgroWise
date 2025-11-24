@@ -33,10 +33,11 @@ import { Input } from "@/components/ui/input";
 import { assessCropRisk } from "@/ai/flows/crop-risk-flow";
 import { CropRiskInputSchema, type CropRiskOutput } from "@/ai/schemas/crop-risk-schemas";
 import type { z } from "zod";
-import cropsData from "@/data/crops.json";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { useData } from "@/hooks/use-data";
 
 export default function CropRiskCalculator() {
+  const { data, loading: dataLoading } = useData();
   const [isLoading, setIsLoading] = React.useState(false);
   const [result, setResult] = React.useState<CropRiskOutput | null>(null);
   const [error, setError] = React.useState<string | null>(null);
@@ -74,6 +75,10 @@ export default function CropRiskCalculator() {
     return 'text-green-600';
   }
 
+  if (dataLoading) {
+    return <Card className="rounded-2xl shadow-sm"><CardHeader><CardTitle>Loading Crop Data...</CardTitle></CardHeader></Card>;
+  }
+
   return (
     <Card className="rounded-2xl shadow-sm">
       <CardHeader>
@@ -104,7 +109,7 @@ export default function CropRiskCalculator() {
                       </FormControl>
                       <SelectContent>
                         <ScrollArea className="h-72">
-                          {cropsData.crops.map(crop => (
+                          {data?.crops.map(crop => (
                             <SelectItem key={crop.id} value={crop.name.toLowerCase()}>{crop.name}</SelectItem>
                           ))}
                         </ScrollArea>

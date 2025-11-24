@@ -11,8 +11,7 @@ import { BookCopy, TrendingUp, Users, Target, CircleDollarSign, Coins, Map } fro
 import { Progress } from '@/components/ui/progress';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
-import schemeData from '@/data/schemes.json';
-import farmerData from '@/data/farmers.json';
+import { useData } from '@/hooks/use-data';
 
 const schemeOutcomes = [
   { name: '2021', income: 8500 },
@@ -27,8 +26,6 @@ const participationData = [
   { year: '2023', participants: 11.2 },
   { year: '2024', participants: 11.8 },
 ];
-
-const eligibleFarmers = farmerData.farmers.slice(0, 4);
 
 const fundData = {
     allocated: 50000,
@@ -51,6 +48,12 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 
 export default function SchemeManagementPage() {
+    const { data, loading } = useData();
+
+    if (loading || !data) return null;
+    
+    const { schemes, farmers } = data;
+    const eligibleFarmers = farmers.slice(0, 4);
 
     return (
         <div className="grid gap-6 animate-in fade-in duration-500">
@@ -60,7 +63,7 @@ export default function SchemeManagementPage() {
             </div>
 
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-                <StatCard title="Total Schemes" value={schemeData.schemes.length.toString()} icon={<BookCopy className="h-6 w-6 text-muted-foreground" />} description="Active nationwide" />
+                <StatCard title="Total Schemes" value={schemes.length.toString()} icon={<BookCopy className="h-6 w-6 text-muted-foreground" />} description="Active nationwide" />
                 <StatCard title="Total Beneficiaries" value="11.8 Cr" icon={<Users className="h-6 w-6 text-muted-foreground" />} description="Farmers enrolled" />
                 <StatCard title="Total Funds Allocated" value="₹5.5 Lakh Cr" icon={<CircleDollarSign className="h-6 w-6 text-muted-foreground" />} description="Current fiscal year" />
                 <StatCard title="Overall Utilization" value="82%" icon={<Target className="h-6 w-6 text-muted-foreground" />} description="Funds utilized vs. allocated" />
@@ -82,7 +85,7 @@ export default function SchemeManagementPage() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {schemeData.schemes.map(scheme => (
+                                {schemes.map(scheme => (
                                     <TableRow key={scheme.id}>
                                         <TableCell className="font-medium">{scheme.title}</TableCell>
                                         <TableCell><Badge variant="secondary">Active</Badge></TableCell>

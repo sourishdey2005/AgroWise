@@ -2,25 +2,20 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { ShieldCheck, TrendingUp, CalendarDays, Tractor, Sprout, Recycle, Calculator, BarChartHorizontal, FlaskConical, Power, AlertTriangle, Droplets, Wind, Sun, Bug } from "lucide-react";
-import StatCard from "../shared/stat-card";
-import mandiData from '@/data/mandi_prices.json';
 import { Progress } from "@/components/ui/progress";
 import type { Weather, MandiPrice } from "@/lib/types";
-import weatherData from '@/data/weather.json';
 import CropRiskCalculator from "./farmer/crop-risk-calculator";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Legend, LineChart, Line } from "recharts";
 import { Switch } from "../ui/switch";
-import { Badge } from "../ui/badge";
+import { useData } from "@/hooks/use-data";
 
 
 // Function to generate a random number within a range
 const getRandom = (min: number, max: number) => Math.random() * (max - min) + min;
 
-const initialMarketPrices = mandiData.prices.slice(0, 5);
-const initialWeather = weatherData.weather[0];
 
 // Mock function to calculate risk score
 const calculateHealthRisk = (weather: Weather): { score: number; label: string, color: string } => {
@@ -65,14 +60,22 @@ const waterUsageData = [
 
 
 export default function FarmerDashboard() {
-  const [marketPrices, setMarketPrices] = useState<MandiPrice[]>(initialMarketPrices);
+  const { data: appData, loading } = useData();
+  const [marketPrices, setMarketPrices] = useState<MandiPrice[]>([]);
   const [yieldPrediction, setYieldPrediction] = useState(85);
   const [harvestReadiness, setHarvestReadiness] = useState(75);
   const [growthStage, setGrowthStage] = useState({ current: 5, total: 10, label: "Vegetative Stage" });
-  const [weather, setWeather] = useState<Weather>(initialWeather);
+  const [weather, setWeather] = useState<Weather | null>(null);
   const [soilPh, setSoilPh] = useState(6.8);
   const [waterPumpOn, setWaterPumpOn] = useState(false);
   const [waterTankLevel, setWaterTankLevel] = useState(70);
+
+  useEffect(() => {
+    if (appData && !loading) {
+      setMarketPrices(appData.mandi_prices.slice(0, 5));
+      setWeather(appData.weather[0]);
+    }
+  }, [appData, loading]);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -90,8 +93,7 @@ export default function FarmerDashboard() {
       
       // Simulate water tank level change based on pump status
       setWaterTankLevel(p => {
-          // ~1% per 30 minutes = 1/1800 per second. Per 3s interval: 3/1800 = 1/600.
-          const change = waterPumpOn ? getRandom(1, 2.5) : - (1/6);
+          const change = waterPumpOn ? 1/6 : - (1 / (30 * 60 / 3)); // 1% over 30 mins
           return Math.min(100, Math.max(0, p + change));
       });
       
@@ -108,6 +110,8 @@ export default function FarmerDashboard() {
 
     return () => clearInterval(interval);
   }, [waterPumpOn]);
+  
+  if (loading || !weather) return null;
   
   const { score: healthRiskScore, label: riskLabel, color: riskColor } = calculateHealthRisk(weather);
   const healthRiskStroke = healthRiskScore;
@@ -449,5 +453,3 @@ export default function FarmerDashboard() {
     </div>
   );
 }
-
-    

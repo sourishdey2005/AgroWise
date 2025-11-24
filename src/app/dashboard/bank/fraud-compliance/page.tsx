@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { ShieldAlert, Users, ListTodo, Workflow, MessageSquare, ArrowRight } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import loanData from "@/data/loans.json";
+import { useData } from '@/hooks/use-data';
 
 const initialTasks = [
   { id: 1, text: 'Review new loan applications (3)', completed: false },
@@ -23,16 +23,21 @@ const duplicateApplications = [
   { id: 1, name: 'Ramesh Kumar', phone: '9876543210', reason: 'Multiple applications within 30 days' },
 ];
 
-const loanPipeline = {
-  review: loanData.applications.filter(l => l.status === 'pending').slice(0, 2),
-  verification: loanData.applications.filter(l => l.status === 'pending').slice(2, 3),
-  approval: loanData.applications.filter(l => l.status === 'approved').slice(0, 2),
-};
-
 
 export default function FraudCompliancePage() {
+    const { data, loading } = useData();
     const { toast } = useToast();
     const [tasks, setTasks] = useState(initialTasks);
+
+    if (loading || !data) {
+        return null; // Or a loading spinner
+    }
+
+    const loanPipeline = {
+      review: data.loans.filter(l => l.status === 'pending').slice(0, 2),
+      verification: data.loans.filter(l => l.status === 'pending').slice(2, 3),
+      approval: data.loans.filter(l => l.status === 'approved').slice(0, 2),
+    };
 
     const handleTaskToggle = (taskId: number) => {
         setTasks(tasks.map(t => t.id === taskId ? { ...t, completed: !t.completed } : t));
@@ -126,7 +131,7 @@ export default function FraudCompliancePage() {
                                 <SelectValue placeholder="Select an application to comment on..." />
                             </SelectTrigger>
                             <SelectContent>
-                                {loanData.applications.map(l => (
+                                {data.loans.map(l => (
                                      <SelectItem key={l.id} value={String(l.id)}>
                                         {l.farmerName} - ID: {l.id}
                                     </SelectItem>

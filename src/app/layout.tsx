@@ -5,6 +5,7 @@ import { FarmerProvider } from '@/context/farmer-context';
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from '@/lib/utils';
 import Chatbot from '@/components/shared/chatbot';
+import { DataProvider } from '@/context/data-context';
 
 export const metadata: Metadata = {
   title: 'AgroWise',
@@ -24,13 +25,15 @@ export default function RootLayout({
         <link href="https://fonts.googleapis.com/css2?family=PT+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
       </head>
       <body className={cn("font-body antialiased", "min-h-screen bg-background font-sans")}>
-        <AuthProvider>
-          <FarmerProvider>
-            {children}
-            <Chatbot />
-            <Toaster />
-          </FarmerProvider>
-        </AuthProvider>
+        <DataProvider>
+          <AuthProvider>
+            <FarmerProvider>
+              {children}
+              <Chatbot />
+              <Toaster />
+            </FarmerProvider>
+          </AuthProvider>
+        </DataProvider>
       </body>
     </html>
   );

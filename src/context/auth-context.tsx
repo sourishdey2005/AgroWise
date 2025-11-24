@@ -2,12 +2,13 @@
 
 import React, { createContext, useState, useEffect, useCallback } from 'react';
 import type { User } from '@/lib/types';
-import usersData from '@/data/users.json';
 import { useRouter } from 'next/navigation';
+import { useData } from '@/hooks/use-data';
 
 interface AuthContextType {
   user: User | null;
   login: (phone: string, password?: string) => Promise<boolean>;
+  signup: (newUser: Omit<User, 'id'>) => Promise<boolean>;
   logout: () => void;
   loading: boolean;
 }
@@ -18,6 +19,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
+  const dataContext = useData();
 
   useEffect(() => {
     try {
@@ -34,15 +36,15 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const login = useCallback(async (phone: string, password?: string): Promise<boolean> => {
-    // In a real app, you'd have password hashing and secure checks.
-    // For this mock app, we'll just check the phone number and optionally a plain-text password.
-    const foundUser = usersData.users.find(
+    if (!dataContext || dataContext.loading) return false;
+
+    const foundUser = dataContext.data.users.find(
       (u) => u.phone === phone && (password ? u.password === password : true)
     );
 
     if (foundUser) {
       const userToStore: User = { ...foundUser };
-      delete userToStore.password; // Do not store password in local storage
+      delete userToStore.password; 
 
       setUser(userToStore);
       localStorage.setItem('agro-user', JSON.stringify(userToStore));
@@ -50,7 +52,30 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     }
 
     return false;
-  }, []);
+  }, [dataContext]);
+
+  const signup = useCallback(async (newUser: Omit<User, 'id'>): Promise<boolean> => {
+    if (!dataContext || dataContext.loading) return false;
+
+    const existingUser = dataContext.data.users.find(u => u.phone === newUser.phone);
+    if (existingUser) {
+      return false; // User already exists
+    }
+
+    const newId = Math.max(0, ...dataContext.data.users.map(u => u.id)) + 1;
+    const userWithId: User = { ...newUser, id: newId };
+
+    const updatedUsers = [...dataContext.data.users, userWithId];
+    dataContext.setData('users', updatedUsers);
+    
+    // Automatically log in the new user
+    const userToStore = { ...userWithId };
+    delete userToStore.password;
+    setUser(userToStore);
+    localStorage.setItem('agro-user', JSON.stringify(userToStore));
+    
+    return true;
+  }, [dataContext]);
 
   const logout = useCallback(() => {
     setUser(null);
@@ -59,7 +84,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [router]);
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, loading }}>
+    <AuthContext.Provider value={{ user, login, logout, loading, signup }}>
       {children}
     </AuthContext.Provider>
   );

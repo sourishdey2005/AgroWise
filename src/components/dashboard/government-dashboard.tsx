@@ -1,14 +1,15 @@
+
+"use client";
+
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Bar, BarChart, ResponsiveContainer, XAxis, YAxis, Tooltip, Pie, PieChart, Cell, Legend } from "recharts";
 import StatCard from "../shared/stat-card";
 import { AreaChart, Bell, Droplets, Globe, Siren, Map, Bug, Leaf, Award } from "lucide-react";
 import { GovernmentScheme } from "@/lib/types";
-import schemeData from "@/data/schemes.json";
 import { Alert, AlertTitle, AlertDescription } from "../ui/alert";
 import { Badge } from "../ui/badge";
-
-const schemes: GovernmentScheme[] = schemeData.schemes;
+import { useData } from "@/hooks/use-data";
 
 const productionData = [
   { name: 'Wheat', total: 107.6 },
@@ -47,6 +48,14 @@ const SOIL_COLORS = ['#22c55e', '#f59e0b', '#ef4444'];
 
 
 export default function GovernmentDashboard() {
+  const { data, loading } = useData();
+
+  if (loading || !data) {
+    return null; // or a loading spinner
+  }
+
+  const schemes: GovernmentScheme[] = data.schemes;
+
   return (
     <div className="grid gap-6">
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">

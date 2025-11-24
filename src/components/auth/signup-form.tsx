@@ -28,6 +28,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { Loader2, Info } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import type { User, UserRole } from "@/lib/types";
+import { useData } from "@/hooks/use-data";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -37,18 +38,21 @@ const formSchema = z.object({
   region: z.string().optional(),
 });
 
-const hardcodedCredentials: Record<Exclude<UserRole, 'farmer'>, Omit<User, 'id' | 'role' | 'name'>> = {
+
+export function SignupForm() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const { data } = useData();
+  const { login, signup } = useAuth();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [selectedRole, setSelectedRole] = React.useState<UserRole | ''>('');
+
+  const hardcodedCredentials: Record<Exclude<UserRole, 'farmer'>, Omit<User, 'id' | 'role' | 'name'>> = {
     agent: { phone: '8765432109', password: 'password', region: 'Maharashtra' },
     bank: { phone: '6543210987', password: 'password' },
     government: { phone: '7654321098', password: 'password' },
 };
 
-export function SignupForm() {
-  const router = useRouter();
-  const { toast } = useToast();
-  const { login } = useAuth(); // We'll use login after "creating" a user
-  const [isLoading, setIsLoading] = React.useState(false);
-  const [selectedRole, setSelectedRole] = React.useState<UserRole | ''>('');
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -78,14 +82,17 @@ export function SignupForm() {
     }
     
     setIsLoading(true);
-    // This is a mock signup. In a real app, you would have an API call
-    // to a backend to create a new user. Here we'll just log them in
-    // as if the user was created. For this demo, we can't add new users
-    // to the `users.json` file, so we'll just log in a pre-existing farmer.
     
-    // We will simulate a successful signup and then login.
-    // For the demo, let's just log in the first farmer.
-    const success = await login("9876543210", "password");
+    const newUser: Omit<User, 'id'> = {
+      name: values.name,
+      phone: values.phone,
+      password: values.password,
+      role: 'farmer',
+      region: values.region,
+    };
+    
+    const success = await signup(newUser);
+    
     setIsLoading(false);
 
     if (success) {
@@ -98,7 +105,7 @@ export function SignupForm() {
       toast({
         variant: "destructive",
         title: "Signup Failed",
-        description: "Could not sign you up. Please try again.",
+        description: "This phone number is already registered.",
       });
     }
   }

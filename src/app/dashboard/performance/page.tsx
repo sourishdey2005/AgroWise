@@ -5,11 +5,16 @@ import StatCard from '@/components/shared/stat-card';
 import { BarChart as BarChartIcon, Star, Trophy, Target } from 'lucide-react';
 import { ResponsiveContainer, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import performanceData from '@/data/performance.json';
-
-const { visitData, leaderboard } = performanceData;
+import { useData } from '@/hooks/use-data';
 
 export default function PerformancePage() {
+  const { data, loading } = useData();
+
+  if (loading || !data) {
+    return null;
+  }
+  
+  const { visitData, leaderboard } = data.performance;
   const activityScore = 88;
   const satisfactionRating = 4.5;
 
