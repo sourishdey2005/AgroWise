@@ -17,6 +17,7 @@ const navItems = {
     { href: '/dashboard/livestock', icon: Users, label: 'Livestock' },
     { href: '/dashboard/smart-farming', icon: Atom, label: 'Smart Farming' },
     { href: '/dashboard/sustainability', icon: Recycle, label: 'Sustainability' },
+    { href: '/dashboard/plant-doctor', icon: BrainCircuit, label: 'AI Plant Doctor' },
   ],
   agent: [
     { href: '/dashboard', icon: LayoutDashboard, label: 'Dashboard' },

@@ -254,6 +254,17 @@ export default function FarmerDashboard() {
       </Card>
       
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+      <Card>
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2"><Bug className="text-primary" /> AI Plant Doctor</CardTitle>
+                </CardHeader>
+                <CardContent className="text-center">
+                    <p className="text-sm text-muted-foreground">Detect plant diseases with your phone camera.</p>
+                    <a href="https://agri-doctor-kappa.vercel.app/" target="_blank" rel="noopener noreferrer" className="mt-4 inline-block bg-primary text-primary-foreground py-2 px-4 rounded-lg hover:bg-primary/90">
+                        Open Scanner
+                    </a>
+                </CardContent>
+            </Card>
             <Card>
                 <CardHeader>
                     <CardTitle className="flex items-center gap-2"><FlaskConical className="text-primary" /> Soil pH Monitor</CardTitle>
